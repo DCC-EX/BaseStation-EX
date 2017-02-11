@@ -1,0 +1,3 @@
+
+512Mbit+512Mbit
+$ esptool.exe -cp COM3 -cb 115200 -ca 0x00000 -cf boot_v1.6.bin -ca 0x01000 -cf user1.1024.new.2.bin -ca 0x7c000 -cf esp_init_data_default.bin -ca 0xfe000 -cf blank.bin -ca 0x81000 -cf user2.1024.new.2.bin

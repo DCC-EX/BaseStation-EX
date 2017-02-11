@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>DCCpp</name>
+	<name>DCCppESP</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -34,32 +34,42 @@
 		<link>
 			<name>core/core</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.6.17/cores/arduino</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/cores/esp8266</locationURI>
 		</link>
 		<link>
 			<name>core/variant</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.6.17/variants/mega</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/variants/generic</locationURI>
 		</link>
 		<link>
-			<name>libraries/EEPROM</name>
+			<name>libraries/ArduinoOTA</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.6.17/libraries/EEPROM</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/libraries/ArduinoOTA</locationURI>
 		</link>
 		<link>
-			<name>libraries/Ethernet</name>
+			<name>libraries/ESP8266WiFi</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Ethernet/1.1.2</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/libraries/ESP8266WiFi</locationURI>
 		</link>
 		<link>
-			<name>libraries/SPI</name>
+			<name>libraries/ESP8266mDNS</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.6.17/libraries/SPI</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/libraries/ESP8266mDNS</locationURI>
 		</link>
 		<link>
-			<name>libraries/SoftwareSerial</name>
+			<name>libraries/ESPAsyncTCP</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.6.17/libraries/SoftwareSerial</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ESPAsyncTCP/36b6b5a</locationURI>
+		</link>
+		<link>
+			<name>libraries/ESPAsyncWebServer</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ESPAsyncWebServer/bab5457</locationURI>
+		</link>
+		<link>
+			<name>libraries/Hash</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/libraries/Hash</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

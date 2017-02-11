@@ -82,6 +82,19 @@ Part of DCC++ BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 7
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 8
 
+#elif MOTOR_SHIELD_TYPE == 1
+
+  #define MOTOR_SHIELD_NAME "BTS7960B BASED MOTOR SHIELD"
+
+  #define SIGNAL_ENABLE_PIN_MAIN 9
+  #define SIGNAL_ENABLE_PIN_PROG 11
+
+  #define CURRENT_MONITOR_PIN_MAIN A0
+  #define CURRENT_MONITOR_PIN_PROG A1
+
+  #define DIRECTION_MOTOR_CHANNEL_PIN_A 7
+  #define DIRECTION_MOTOR_CHANNEL_PIN_B 8
+
 #else
 
   #error CANNOT COMPILE - PLEASE SELECT A PROPER MOTOR SHIELD TYPE
@@ -102,7 +115,12 @@ Part of DCC++ BASE STATION for the Arduino
   #define COMM_TYPE 1
   #define INTERFACE eServer
   #define SDCARD_CS 4
-  
+
+#elif COMM_INTERFACE == 4
+
+  #define COMM_TYPE 1
+  #define INTERFACE WIFI_SERIAL_LINK
+
 #else
 
   #error CANNOT COMPILE - Please select a proper value for COMM_INTERFACE in CONFIG.H file

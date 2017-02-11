@@ -1,0 +1,96 @@
+
+
+input[type='range'] {
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;  
+  left: 50%;
+  border: none;
+  padding: 0 1em;
+  width: 15.5em;
+  height: 4em;
+  border-radius: .5em;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  box-shadow: inset -1px 0 0.125em #333, inset 1px 0 0.125em rgba(221, 221, 221, 0.4), inset 0 0 0 0.375em #4c555c, inset 0 0 0.125em 0.375em #1d262d, inset 0 0 0.25em 0.375em #1d262d;
+  background: linear-gradient(-90deg, #445463 1em, rgba(68, 84, 99, 0) 1.5em, rgba(40, 50, 59, 0) calc(100% - 1.5em), #28323b calc(100% - 1em)), linear-gradient(90deg, #4d5d6a 0.125em, rgba(0, 0, 0, 0) 0.125em) repeat-x 4px 25%, linear-gradient(90deg, #4d5d6a 0.125em, rgba(0, 0, 0, 0) 0.125em) repeat-x 4px 75%, linear-gradient(-90deg, #445463, #28323b);
+  background-size: 100% 100%, .625em 23%, .625em 23%, 100% 100%;
+  font-size: .8em;
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  height: 0.4375em;
+  border-radius: 0.21875em;
+  box-shadow: inset 0 0 0 1px #373b40;
+  background: linear-gradient(-90deg, #1d252e, #171c22);
+}
+input[type='range']::-moz-range-track {
+  height: 0.4375em;
+  border-radius: 0.21875em;
+  box-shadow: inset 0 0 0 1px #373b40;
+  background: linear-gradient(-90deg, #1d252e, #171c22);
+}
+input[type='range']::-ms-track {
+  height: 0.4375em;
+  border-radius: 0.21875em;
+  box-shadow: inset 0 0 0 1px #373b40;
+  background: linear-gradient(-90deg, #1d252e, #171c22);
+  color: transparent;
+}
+input[type='range']::-ms-fill-lower, input[type='range']::-ms-fill-upper {
+  background: transparent;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  margin-top: -1.65625em;
+  border: none;
+  width: 2.5em;
+  height: 3.75em;
+  border-radius: .25em;
+  box-shadow: inset 0 0 1px #fff,  0 0 .125em,  -.3125em 0 1em -.5em,  0 .25em 1em -.5em,  0 -.25em 1em -.5em;
+  background: radial-gradient(at 50% 0, #eeeeee, rgba(238, 238, 238, 0) 70%) no-repeat 50% 0, radial-gradient(at 50% 100%, #eeeeee, rgba(238, 238, 238, 0) 70%) no-repeat 50% 100%, linear-gradient(90deg, #d8d6d7, #878787 25%, #c0bfbd 25%, #ccccce 47%, #d0d2d1 48%, #dbdfe2, #cdd4da, #a6bfb4 52%, #dfe7ea 53%, #fafafa 75%, #cbcbcb 75%, #fdfdfd);
+  background-size: 100% .5em, 100% .5em,  100% 100%;
+  color: #111;
+}
+input[type='range']::-moz-range-thumb {
+  border: none;
+  width: 2.5em;
+  height: 3.75em;
+  border-radius: .25em;
+  box-shadow: inset 0 0 1px #fff,  0 0 .125em,  -.3125em 0 1em -.5em,  0 .25em 1em -.5em,  0 -.25em 1em -.5em;
+  background: radial-gradient(at 50% 0, #eeeeee, rgba(238, 238, 238, 0) 70%) no-repeat 50% 0, radial-gradient(at 50% 100%, #eeeeee, rgba(238, 238, 238, 0) 70%) no-repeat 50% 100%, linear-gradient(90deg, #d8d6d7, #878787 25%, #c0bfbd 25%, #ccccce 47%, #d0d2d1 48%, #dbdfe2, #cdd4da, #a6bfb4 52%, #dfe7ea 53%, #fafafa 75%, #cbcbcb 75%, #fdfdfd);
+  background-size: 100% .5em, 100% .5em,  100% 100%;
+  color: #111;
+  cursor: ns-resize;
+}
+input[type='range']::-ms-thumb {
+  border: none;
+  width: 2.5em;
+  height: 3.75em;
+  border-radius: .25em;
+  box-shadow: inset 0 0 1px #fff,  0 0 .125em,  -.3125em 0 1em -.5em,  0 .25em 1em -.5em,  0 -.25em 1em -.5em;
+  background: radial-gradient(at 50% 0, #eeeeee, rgba(238, 238, 238, 0) 70%) no-repeat 50% 0, radial-gradient(at 50% 100%, #eeeeee, rgba(238, 238, 238, 0) 70%) no-repeat 50% 100%, linear-gradient(90deg, #d8d6d7, #878787 25%, #c0bfbd 25%, #ccccce 47%, #d0d2d1 48%, #dbdfe2, #cdd4da, #a6bfb4 52%, #dfe7ea 53%, #fafafa 75%, #cbcbcb 75%, #fdfdfd);
+  background-size: 100% .5em, 100% .5em,  100% 100%;
+  color: #111;
+}
+input[type='range']::-ms-tooltip {
+  display: none;
+}
+input[type='range']:focus {
+  outline: none;
+  box-shadow: inset -1px 0 0.125em #333, inset 1px 0 0.125em rgba(221, 221, 221, 0.4), inset 0 0 0 0.375em #4c555c, inset 0 0 0.125em 0.375em #1d262d, inset 0 0 0.25em 0.375em #1d262d, 0 0 0.5em rgba(173, 216, 230, 0.35);
+}
+
+
+
+
+<!--
+Copyright (c) 2016 by Ana Tudor (http://codepen.io/thebabydino/pen/VYyYzL)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
