@@ -238,7 +238,7 @@ environment/project/io.sloeber.core.toolChain.release.923621751/A.RECIPE.AR.PATT
 environment/project/io.sloeber.core.toolChain.release.923621751/A.RECIPE.AR.PATTERN/value="${A.COMPILER.PATH}${A.COMPILER.AR.CMD}" ${A.COMPILER.AR.FLAGS} ${A.COMPILER.AR.EXTRA_FLAGS} "${A.ARCHIVE_FILE_PATH}" "${A.OBJECT_FILE}"
 environment/project/io.sloeber.core.toolChain.release.923621751/A.RECIPE.C.COMBINE.PATTERN.1/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.923621751/A.RECIPE.C.COMBINE.PATTERN.1/operation=replace
-environment/project/io.sloeber.core.toolChain.release.923621751/A.RECIPE.C.COMBINE.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/bin/avr-gcc" -Wall -Wextra -Os -Wl,--gc-sections,--relax -mmcu\=atmega2560 -o "C\:\\trains\\BaseStation\\DCCpp_Uno/Release/DCCpp.elf" 
+environment/project/io.sloeber.core.toolChain.release.923621751/A.RECIPE.C.COMBINE.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/bin/avr-gcc" -Wall -Wextra -Os -Wl,--gc-sections,--relax -mmcu\=atmega2560 -o "C\:\\trains\\BaseStation\\DCCpp_Uno/Release/DCCpp.elf"
 environment/project/io.sloeber.core.toolChain.release.923621751/A.RECIPE.C.COMBINE.PATTERN.2/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.923621751/A.RECIPE.C.COMBINE.PATTERN.2/operation=replace
 environment/project/io.sloeber.core.toolChain.release.923621751/A.RECIPE.C.COMBINE.PATTERN.2/value=\ 

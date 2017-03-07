@@ -60,11 +60,11 @@ the directions of any Turnouts being monitored or controlled by a separate inter
 **********************************************************************/
 
 #include "Accessories.h"
+#include "CommInterface.h"
 #include "SerialCommand.h"
 #include "DCCpp_Uno.h"
 #include "EEStore.h"
 #include <EEPROM.h>
-#include "Comm.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -75,12 +75,7 @@ void Turnout::activate(int s){
   SerialCommand::parse(c);
   if(num>0)
     EEPROM.put(num,data.tStatus);
-  INTERFACE.print("<H");
-  INTERFACE.print(data.id);
-  if(data.tStatus==0)
-    INTERFACE.print(" 0>");
-  else
-    INTERFACE.print(" 1>"); 
+  CommManager::printf("<H %d %d>", data.id, data.tStatus);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,7 +93,7 @@ void Turnout::remove(int n){
   for(tt=firstTurnout;tt!=NULL && tt->data.id!=n;pp=tt,tt=tt->nextTurnout);
 
   if(tt==NULL){
-    INTERFACE.print("<X>");
+    CommManager::printf("<X>");
     return;
   }
   
@@ -109,7 +104,7 @@ void Turnout::remove(int n){
 
   free(tt);
 
-  INTERFACE.print("<O>");
+  CommManager::printf("<O>");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,29 +113,22 @@ void Turnout::show(int n){
   Turnout *tt;
 
   if(firstTurnout==NULL){
-    INTERFACE.print("<X>");
+    CommManager::printf("<X>");
     return;
   }
     
   for(tt=firstTurnout;tt!=NULL;tt=tt->nextTurnout){
-    INTERFACE.print("<H");
-    INTERFACE.print(tt->data.id);
-    if(n==1){
-      INTERFACE.print(" ");
-      INTERFACE.print(tt->data.address);
-      INTERFACE.print(" ");
-      INTERFACE.print(tt->data.subAddress);
+    if(n==1) {
+      CommManager::printf("<H %d %d %d %d>", tt->data.id, tt->data.address, tt->data.subAddress, tt->data.tStatus);
+    } else {
+      CommManager::printf("<H %d %d>", tt->data.id, tt->data.tStatus);
     }
-    if(tt->data.tStatus==0)
-       INTERFACE.print(" 0>");
-     else
-       INTERFACE.print(" 1>"); 
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void Turnout::parse(char *c){
+void Turnout::parse(const char *c){
   int n,s,m;
   Turnout *t;
   
@@ -151,7 +139,7 @@ void Turnout::parse(char *c){
       if(t!=NULL)
         t->activate(s);
       else
-        INTERFACE.print("<X>");
+        CommManager::printf("<X>");
       break;
 
     case 3:                     // argument is string with id number of turnout followed by an address and subAddress
@@ -218,7 +206,7 @@ Turnout *Turnout::create(int id, int add, int subAdd, int v){
 
   if(tt==NULL){       // problem allocating memory
     if(v==1)
-      INTERFACE.print("<X>");
+      CommManager::printf("<X>");
     return(tt);
   }
   
@@ -227,7 +215,7 @@ Turnout *Turnout::create(int id, int add, int subAdd, int v){
   tt->data.subAddress=subAdd;
   tt->data.tStatus=0;
   if(v==1)
-    INTERFACE.print("<O>");
+    CommManager::printf("<O>");
   return(tt);
   
 }

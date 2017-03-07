@@ -59,7 +59,7 @@ decide to ignore the <q ID> return and only react to <Q ID> triggers.
 #include "Sensor.h"
 #include "EEStore.h"
 #include <EEPROM.h>
-#include "Comm.h"
+#include "CommInterface.h"
 
 ///////////////////////////////////////////////////////////////////////////////
   
@@ -71,14 +71,10 @@ void Sensor::check(){
     
     if(!tt->active && tt->signal<0.5){
       tt->active=true;
-      INTERFACE.print("<Q");
-      INTERFACE.print(tt->data.snum);
-      INTERFACE.print(">");
+      CommManager::printf("<Q %d>", tt->data.snum);
     } else if(tt->active && tt->signal>0.9){
       tt->active=false;
-      INTERFACE.print("<q");
-      INTERFACE.print(tt->data.snum);
-      INTERFACE.print(">");
+      CommManager::printf("<q %d>", tt->data.snum);
     }
   } // loop over all sensors
     
@@ -102,7 +98,7 @@ Sensor *Sensor::create(int snum, int pin, int pullUp, int v){
 
   if(tt==NULL){       // problem allocating memory
     if(v==1)
-      INTERFACE.print("<X>");
+      CommManager::printf("<X>");
     return(tt);
   }
   
@@ -115,7 +111,7 @@ Sensor *Sensor::create(int snum, int pin, int pullUp, int v){
   digitalWrite(pin,pullUp);   // don't use Arduino's internal pull-up resistors for external infrared sensors --- each sensor must have its own 1K external pull-up resistor
 
   if(v==1)
-    INTERFACE.print("<O>");
+    CommManager::printf("<O>");
   return(tt);
   
 }
@@ -135,7 +131,7 @@ void Sensor::remove(int n){
   for(tt=firstSensor;tt!=NULL && tt->data.snum!=n;pp=tt,tt=tt->nextSensor);
 
   if(tt==NULL){
-    INTERFACE.print("<X>");
+    CommManager::printf("<X>");
     return;
   }
   
@@ -146,7 +142,7 @@ void Sensor::remove(int n){
 
   free(tt);
 
-  INTERFACE.print("<O>");
+  CommManager::printf("<O>");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,18 +151,12 @@ void Sensor::show(){
   Sensor *tt;
 
   if(firstSensor==NULL){
-    INTERFACE.print("<X>");
+    CommManager::printf("<X>");
     return;
   }
     
   for(tt=firstSensor;tt!=NULL;tt=tt->nextSensor){
-    INTERFACE.print("<Q");
-    INTERFACE.print(tt->data.snum);
-    INTERFACE.print(" ");
-    INTERFACE.print(tt->data.pin);
-    INTERFACE.print(" ");
-    INTERFACE.print(tt->data.pullUp);
-    INTERFACE.print(">");
+    CommManager::printf("<Q %d %d %d>", tt->data.snum, tt->data.pin, tt->data.pullUp);
   }
 }
 
@@ -176,20 +166,18 @@ void Sensor::status(){
   Sensor *tt;
 
   if(firstSensor==NULL){
-    INTERFACE.print("<X>");
+    CommManager::printf("<X>");
     return;
   }
     
   for(tt=firstSensor;tt!=NULL;tt=tt->nextSensor){
-    INTERFACE.print(tt->active?"<Q":"<q");
-    INTERFACE.print(tt->data.snum);
-    INTERFACE.print(">");
+    CommManager::printf("<%c %d>", tt->active?'Q':'q', tt->data.snum);
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void Sensor::parse(char *c){
+void Sensor::parse(const char *c){
   int n,s,m;
   Sensor *t;
   
@@ -208,7 +196,7 @@ void Sensor::parse(char *c){
     break;
 
     case 2:                     // invalid number of arguments
-      INTERFACE.print("<X>");
+      CommManager::printf("<X>");
       break;
   }
 }

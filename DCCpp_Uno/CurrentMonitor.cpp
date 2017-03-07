@@ -9,11 +9,11 @@ Part of DCC++ BASE STATION for the Arduino
 
 #include "DCCpp_Uno.h"
 #include "CurrentMonitor.h"
-#include "Comm.h"
+#include "CommInterface.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
-CurrentMonitor::CurrentMonitor(int sensePin, int enablePin, char *msg){
+CurrentMonitor::CurrentMonitor(int sensePin, int enablePin, const char *msg){
     this->sensePin=sensePin;
     this->enablePin=enablePin;
     this->msg=msg;
@@ -35,7 +35,7 @@ void CurrentMonitor::check(){
   if(current > CURRENT_SAMPLE_MAX && digitalRead(enablePin)) {
     digitalWrite(enablePin, LOW);
     // print corresponding error message
-    INTERFACE.print(msg);
+    CommManager::printf(msg);
     triggered=true;
   } else if(current < CURRENT_SAMPLE_MAX && triggered) {
     digitalWrite(enablePin, HIGH);

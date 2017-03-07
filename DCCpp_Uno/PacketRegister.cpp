@@ -9,7 +9,7 @@ Part of DCC++ BASE STATION for the Arduino
 
 #include "DCCpp_Uno.h"
 #include "PacketRegister.h"
-#include "Comm.h"
+#include "CommInterface.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -98,7 +98,7 @@ void RegisterList::loadPacket(int nReg, byte *b, int nBytes, int nRepeat, int pr
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void RegisterList::setThrottle(char *s) volatile{
+void RegisterList::setThrottle(const char *s) volatile{
   byte b[5];                      // save space for checksum byte
   int nReg;
   int cab;
@@ -126,19 +126,15 @@ void RegisterList::setThrottle(char *s) volatile{
        
   loadPacket(nReg,b,nB,0,1);
   
-  INTERFACE.print("<T");
-  INTERFACE.print(nReg); INTERFACE.print(" ");
-  INTERFACE.print(tSpeed); INTERFACE.print(" ");
-  INTERFACE.print(tDirection);
-  INTERFACE.print(">");
-  
+  CommManager::printf("<T %d %d %d>", nReg, tSpeed, tDirection);
+
   speedTable[nReg]=tDirection==1?tSpeed:-tSpeed;
     
 } // RegisterList::setThrottle()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void RegisterList::setFunction(char *s) volatile{
+void RegisterList::setFunction(const char *s) volatile{
   byte b[5];                      // save space for checksum byte
   int cab;
   int fByte, eByte;
@@ -168,7 +164,7 @@ void RegisterList::setFunction(char *s) volatile{
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void RegisterList::setAccessory(char *s) volatile{
+void RegisterList::setAccessory(const char *s) volatile{
   byte b[3];                      // save space for checksum byte
   int aAdd;                       // the accessory address (0-511 = 9 bits) 
   int aNum;                       // the accessory number within that address (0-3)
@@ -186,34 +182,31 @@ void RegisterList::setAccessory(char *s) volatile{
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void RegisterList::writeTextPacket(char *s) volatile{
+void RegisterList::writeTextPacket(const char *s) volatile{
   
   int nReg;
   byte b[6];
   int nBytes;
-  volatile RegisterList *regs;
-    
   nBytes=sscanf(s,"%d %x %x %x %x %x",&nReg,b,b+1,b+2,b+3,b+4)-1;
   
   if(nBytes<2 || nBytes>5){    // invalid valid packet
-    INTERFACE.print("<mInvalid Packet>");
+    CommManager::printf("<mInvalid Packet>");
     return;
   }
-         
   loadPacket(nReg,b,nBytes,0,1);
-    
 } // RegisterList::writeTextPacket()
   
 ///////////////////////////////////////////////////////////////////////////////
 
-void RegisterList::readCV(char *s) volatile{
+void RegisterList::readCV(const char *s) volatile{
   byte bRead[4];
   int bValue;
   int c,d,base;
   int cv, callBack, callBackSub;
 
-  if(sscanf(s,"%d %d %d",&cv,&callBack,&callBackSub)!=3)          // cv = 1-1024
-    return;    
+  if(sscanf(s,"%d %d %d",&cv,&callBack,&callBackSub) != 3) {         // cv = 1-1024
+    return;
+  }
   cv--;                              // actual CV addresses are cv-1 (0-1023)
   
   bRead[0]=0x78+(highByte(cv)&0x03);   // any CV>1023 will become modulus(1024) due to bit-mask of 0x03
@@ -221,17 +214,16 @@ void RegisterList::readCV(char *s) volatile{
   
   bValue=0;
   
-  for(int i=0;i<8;i++){
-    
+  for(int i=0;i<8;i++) {
     c=0;
     d=0;
     base=0;
-
-    for(int j=0;j<ACK_BASE_COUNT;j++)
+    for(int j=0;j<ACK_BASE_COUNT;j++) {
       base+=analogRead(CURRENT_MONITOR_PIN_PROG);
+    }
     base/=ACK_BASE_COUNT;
 
-    bRead[2]=0xE8+i;  
+    bRead[2]=0xE8+i;
 
     loadPacket(0,resetPacket,2,3);          // NMRA recommends starting with 3 reset packets
     loadPacket(0,bRead,3,5);                // NMRA recommends 5 verfy packets
@@ -239,19 +231,21 @@ void RegisterList::readCV(char *s) volatile{
 
     for(int j=0;j<ACK_SAMPLE_COUNT;j++){
       c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
-      if(c>ACK_SAMPLE_THRESHOLD)
+      if(c>ACK_SAMPLE_THRESHOLD) {
         d=1;
+      }
     }
 
     bitWrite(bValue,i,d);
   }
-    
+
   c=0;
   d=0;
   base=0;
 
-  for(int j=0;j<ACK_BASE_COUNT;j++)
+  for(int j=0;j<ACK_BASE_COUNT;j++) {
     base+=analogRead(CURRENT_MONITOR_PIN_PROG);
+  }
   base/=ACK_BASE_COUNT;
   
   bRead[0]=0x74+(highByte(cv)&0x03);   // set-up to re-verify entire byte
@@ -260,31 +254,22 @@ void RegisterList::readCV(char *s) volatile{
   loadPacket(0,resetPacket,2,3);          // NMRA recommends starting with 3 reset packets
   loadPacket(0,bRead,3,5);                // NMRA recommends 5 verfy packets
   loadPacket(0,resetPacket,2,1);          // forces code to wait until all repeats of bRead are completed (and decoder begins to respond)
-    
+
   for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
     if(c>ACK_SAMPLE_THRESHOLD)
       d=1;
   }
-    
+
   if(d==0)    // verify unsuccessful
     bValue=-1;
 
-  INTERFACE.print("<r");
-  INTERFACE.print(callBack);
-  INTERFACE.print("|");
-  INTERFACE.print(callBackSub);
-  INTERFACE.print("|");
-  INTERFACE.print(cv+1);
-  INTERFACE.print(" ");
-  INTERFACE.print(bValue);
-  INTERFACE.print(">");
-        
+  CommManager::printf("<r%d|%d|%d %d>", callBack, callBackSub, cv+1, bValue);
 } // RegisterList::readCV()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void RegisterList::writeCVByte(char *s) volatile{
+void RegisterList::writeCVByte(const char *s) volatile{
   byte bWrite[4];
   int bValue;
   int c,d,base;
@@ -326,21 +311,12 @@ void RegisterList::writeCVByte(char *s) volatile{
   if(d==0)    // verify unsuccessful
     bValue=-1;
 
-  INTERFACE.print("<r");
-  INTERFACE.print(callBack);
-  INTERFACE.print("|");
-  INTERFACE.print(callBackSub);
-  INTERFACE.print("|");
-  INTERFACE.print(cv+1);
-  INTERFACE.print(" ");
-  INTERFACE.print(bValue);
-  INTERFACE.print(">");
-
+  CommManager::printf("<r%d|%d|%d %d>", callBack, callBackSub, cv+1, bValue);
 } // RegisterList::writeCVByte()
   
 ///////////////////////////////////////////////////////////////////////////////
 
-void RegisterList::writeCVBit(char *s) volatile{
+void RegisterList::writeCVBit(const char *s) volatile{
   byte bWrite[4];
   int bNum,bValue;
   int c,d,base;
@@ -383,24 +359,12 @@ void RegisterList::writeCVBit(char *s) volatile{
     
   if(d==0)    // verify unsuccessful
     bValue=-1;
-  
-  INTERFACE.print("<r");
-  INTERFACE.print(callBack);
-  INTERFACE.print("|");
-  INTERFACE.print(callBackSub);
-  INTERFACE.print("|");
-  INTERFACE.print(cv+1);
-  INTERFACE.print(" ");
-  INTERFACE.print(bNum);
-  INTERFACE.print(" ");
-  INTERFACE.print(bValue);
-  INTERFACE.print(">");
-
+  CommManager::printf("<r%d|%d|%d %d %d>", callBack, callBackSub, cv+1, bNum, bValue);
 } // RegisterList::writeCVBit()
   
 ///////////////////////////////////////////////////////////////////////////////
 
-void RegisterList::writeCVByteMain(char *s) volatile{
+void RegisterList::writeCVByteMain(const char *s) volatile{
   byte b[6];                      // save space for checksum byte
   int cab;
   int cv;
@@ -425,7 +389,7 @@ void RegisterList::writeCVByteMain(char *s) volatile{
   
 ///////////////////////////////////////////////////////////////////////////////
 
-void RegisterList::writeCVBitMain(char *s) volatile{
+void RegisterList::writeCVBitMain(const char *s) volatile{
   byte b[6];                      // save space for checksum byte
   int cab;
   int cv;
@@ -455,17 +419,11 @@ void RegisterList::writeCVBitMain(char *s) volatile{
 ///////////////////////////////////////////////////////////////////////////////
 
 void RegisterList::printPacket(int nReg, byte *b, int nBytes, int nRepeat) volatile {
-  
-  INTERFACE.print("<*");
-  INTERFACE.print(nReg);
-  INTERFACE.print(":");
+  CommManager::printf("<*%d:", nReg);
   for(int i=0;i<nBytes;i++){
-    INTERFACE.print(" ");
-    INTERFACE.print(b[i],HEX);
+    CommManager::printf(" %02x", b[i]);
   }
-  INTERFACE.print(" / ");
-  INTERFACE.print(nRepeat);
-  INTERFACE.print(">");
+  CommManager::printf(" / %d>", nRepeat);
 } // RegisterList::printPacket()
 
 ///////////////////////////////////////////////////////////////////////////////

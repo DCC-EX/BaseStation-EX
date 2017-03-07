@@ -49,15 +49,15 @@ struct RegisterList{
   static byte bitMask[];
   RegisterList(int);
   void loadPacket(int, byte *, int, int, int=0) volatile;
-  void setThrottle(char *) volatile;
-  void setFunction(char *) volatile;  
-  void setAccessory(char *) volatile;
-  void writeTextPacket(char *) volatile;
-  void readCV(char *) volatile;
-  void writeCVByte(char *) volatile;
-  void writeCVBit(char *) volatile;
-  void writeCVByteMain(char *) volatile;
-  void writeCVBitMain(char *s) volatile;  
+  void setThrottle(const char *) volatile;
+  void setFunction(const char *) volatile;
+  void setAccessory(const char *) volatile;
+  void writeTextPacket(const char *) volatile;
+  void readCV(const char *) volatile;
+  void writeCVByte(const char *) volatile;
+  void writeCVBit(const char *) volatile;
+  void writeCVByteMain(const char *) volatile;
+  void writeCVBitMain(const char *s) volatile;
   void printPacket(int, byte *, int, int) volatile;
 };
 

@@ -33,7 +33,7 @@ struct Sensor{
   static void remove(int);  
   static void show();
   static void status();
-  static void parse(char *c);
+  static void parse(const char *c);
   static void check();   
 }; // Sensor
 

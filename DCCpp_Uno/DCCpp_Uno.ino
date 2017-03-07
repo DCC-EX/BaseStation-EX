@@ -176,21 +176,16 @@ DCC++ BASE STATION is configured through the Config.h file that contains all use
 #include "Accessories.h"
 #include "EEStore.h"
 #include "Config.h"
-#include "Comm.h"
+#include "CommInterface.h"
+#include "CommInterfaceSerial.h"
+#include "CommInterfaceESP.h"
+
+#ifdef ENABLE_LCD
+bool lcdEnabled = false;
+LiquidCrystal_PCF8574 lcdDisplay(LCD_ADDRESS);
+#endif
 
 void showConfiguration();
-
-// SET UP COMMUNICATIONS INTERFACE - FOR STANDARD SERIAL, NOTHING NEEDS TO BE DONE
-
-#if COMM_TYPE == 1
-  IPAddress localAddress;
-  #if COMM_INTERFACE != 4
-    byte mac[] =  MAC_ADDRESS;                                  // Create MAC address (to be used for DHCP when initializing server)
-    EthernetServer INTERFACE(ETHERNET_PORT);                  // Create and instance of an EthernetServer
-  #elif !defined(HAVE_HWSERIAL1) && defined(WIFI_SERIAL_RX) && defined(WIFI_SERIAL_TX)
-    SoftwareSerial wifiSerial(WIFI_SERIAL_RX, WIFI_SERIAL_TX);
-  #endif
-#endif
 
 // NEXT DECLARE GLOBAL OBJECTS TO PROCESS AND STORE DCC PACKETS AND MONITOR TRACK CURRENTS.
 // NOTE REGISTER LISTS MUST BE DECLARED WITH "VOLATILE" QUALIFIER TO ENSURE THEY ARE PROPERLY UPDATED BY INTERRUPT ROUTINES
@@ -206,36 +201,62 @@ CurrentMonitor progMonitor(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, "<p
 ///////////////////////////////////////////////////////////////////////////////
 
 void loop(){
-  
-  SerialCommand::process();              // check for, and process, and new serial commands
-  
+  CommManager::update();      // check for and process any new commands
+
   if(CurrentMonitor::checkTime()){      // if sufficient time has elapsed since last update, check current draw on Main and Program Tracks 
     mainMonitor.check();
     progMonitor.check();
   }
 
   Sensor::check();    // check sensors for activate/de-activate
-  
+
 } // loop
 
 ///////////////////////////////////////////////////////////////////////////////
 // INITIAL SETUP
 ///////////////////////////////////////////////////////////////////////////////
 
-void setup(){  
+void setup(){
 
-  Serial.begin(115200);            // configure serial interface
-  Serial.flush();
+#ifdef ENABLE_LCD
+  Wire.begin();
+  // Check that we can find the LCD by its address before attempting to use it.
+  Wire.beginTransmission(LCD_ADDRESS);
+  if(Wire.endTransmission() == 0) {
+    lcdEnabled = true;
+    lcdDisplay.begin(LCD_COLUMNS, LCD_LINES);
+    lcdDisplay.setBacklight(255);
+    lcdDisplay.clear();
+    lcdDisplay.setCursor(0, 0);
+    lcdDisplay.print("DCC++ v");
+    lcdDisplay.print(VERSION);
+    lcdDisplay.setCursor(0, 1);
+    #if COMM_INTERFACE >= 1
+    lcdDisplay.print("IP: PENDING");
+    #else
+    lcdDisplay.print("SERIAL: READY");
+    #endif
+    #if LCD_LINES > 2
+      lcdDisplay.setCursor(0, 3);
+      lcdDisplay.print("TRACK POWER: OFF");
+    #endif
+  }
+#endif
 
-  #ifdef SDCARD_CS
-    pinMode(SDCARD_CS,OUTPUT);
-    digitalWrite(SDCARD_CS,HIGH);     // Deselect the SD card
+#if COMM_INTERFACE != 4 || (COMM_INTERFACE == 4 && !defined(USE_SERIAL_FOR_WIFI))
+  CommManager::registerInterface(new HardwareSerialInterface(Serial));
+#endif
+#if COMM_INTERFACE >= 1 && COMM_INTERFACE <= 3
+  CommManager::registerInterface(new EthernetInterface());
+#elif COMM_INTERFACE == 4
+  #if defined(WIFI_SERIAL_RX) && defined(WIFI_SERIAL_TX)
+    CommManager::registerInterface(new ESPSoftwareSerialInterface(WIFI_SERIAL_RX, WIFI_SERIAL_TX));
+  #elif defined(USE_SERIAL_FOR_WIFI)
+    CommManager::registerInterface(new ESPHardwareSerialInterface(Serial));
+  #else
+    CommManager::registerInterface(new ESPHardwareSerialInterface(Serial1));
   #endif
-
-  #if COMM_INTERFACE == 4
-    WIFI_SERIAL_LINK.begin(WIFI_SERIAL_LINK_SPEED);
-    WIFI_SERIAL_LINK.flush();
-  #endif
+#endif
 
   EEStore::init();                                         // initialize and load Turnout and Sensor definitions stored in EEPROM
 
@@ -244,97 +265,11 @@ void setup(){
   if(!digitalRead(A5))
     showConfiguration();
 
-  Serial.print("<iDCC++ BASE STATION FOR ARDUINO ");       // Print Status to Serial Line regardless of COMM_TYPE setting so use can open Serial Monitor and check configurtion
-  Serial.print(ARDUINO_TYPE);
-  Serial.print(" / ");
-  Serial.print(MOTOR_SHIELD_NAME);
-  Serial.print(": V-");
-  Serial.print(VERSION);
-  Serial.print(" / ");
-  Serial.print(__DATE__);
-  Serial.print(" ");
-  Serial.print(__TIME__);
-  Serial.print(">");
-
-  #if COMM_TYPE == 1
-    #if COMM_INTERFACE == 4
-      int attempts = 10;
-      bool responseFound = false;
-      // set timeout to 500ms for reads
-      WIFI_SERIAL_LINK.setTimeout(500L);
-      while(attempts-- > 0 && !responseFound) {
-        WIFI_SERIAL_LINK.println("<iESP-reset>");
-        // give ESP some time to restart and stabilize
-        delay(250);
-        String resetStatus = WIFI_SERIAL_LINK.readStringUntil('>');
-        Serial.println(resetStatus);
-        if(resetStatus.indexOf("iESP-DCC++ init") >= 0) {
-          responseFound = true;
-        }
-      }
-      WIFI_SERIAL_LINK.println("<iESP-status>");
-      String espStatus = WIFI_SERIAL_LINK.readStringUntil('>');
-      Serial.println(espStatus);
-      #ifdef IP_ADDRESS
-        WiFi.config(IPAddress(IP_ADDRESS));   // Start networking using STATIC IP Address
-      #endif
-      WIFI_SERIAL_LINK.print("<iESP-connect ");
-      WIFI_SERIAL_LINK.print(WIFI_SSID);
-      WIFI_SERIAL_LINK.print(" ");
-      WIFI_SERIAL_LINK.print(WIFI_PASSWORD);
-      WIFI_SERIAL_LINK.println(">");
-      // discard the connecting response
-      espStatus = WIFI_SERIAL_LINK.readStringUntil('>');
-      bool connecting = true;
-      while(connecting) {
-        // wait for the connected/failed message
-        espStatus = WIFI_SERIAL_LINK.readStringUntil('>');
-        Serial.println(espStatus);
-        if(espStatus.indexOf("connected") > 0) {
-          connecting = false;
-          // connected to AP, parse the IP address out
-          String ipString = espStatus.substring(espStatus.lastIndexOf(' ') + 1, espStatus.length());
-          //Serial.println("IP: " + ipString);
-          localAddress.fromString(ipString);
-        } else if(espStatus.indexOf("connect failed") > 0 ||
-                  espStatus.indexOf("not found") > 0 ||
-                  espStatus.indexOf("timeout") > 0) {
-          // connection failed.  Abort.
-          Serial.println("<iDCC++ Unable to connect to WiFi, Halting>");
-          Serial.println(espStatus);
-          // don't continue
-          while (true);
-        }
-      }
-      WIFI_SERIAL_LINK.println("<iESP-status>");
-      Serial.println(WIFI_SERIAL_LINK.readStringUntil('>'));
-      WIFI_SERIAL_LINK.println("<iESP-start>");
-      Serial.println(WIFI_SERIAL_LINK.readStringUntil('>'));
-    #else
-      #ifdef IP_ADDRESS
-        Ethernet.begin(mac,IP_ADDRESS);           // Start networking using STATIC IP Address
-      #else
-        Ethernet.begin(mac);                      // Start networking using DHCP to get an IP Address
-      #endif
-      INTERFACE.begin();
-    #endif
-  #endif
+  CommManager::printf("<iDCC++ BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
 
   SerialCommand::init(&mainRegs, &progRegs, &mainMonitor);   // create structure to read and parse commands from serial line
 
-  Serial.print("<N");
-  Serial.print(COMM_TYPE);
-  Serial.print(": ");
-
-  #if COMM_TYPE == 0
-    Serial.print("SERIAL>");
-  #elif COMM_TYPE == 1
-    #if COMM_INTERFACE != 4
-      localAddress = Ethernet.localIP();
-    #endif
-    Serial.print(localAddress);
-    Serial.print(">");
-  #endif
+  CommManager::showInitInfo();
 
   // CONFIGURE TIMER_1 TO OUTPUT 50% DUTY CYCLE DCC SIGNALS ON OC1B INTERRUPT PINS
 
@@ -546,18 +481,6 @@ ISR(TIMER3_COMPB_vect){              // set interrupt service for OCR3B of TIMER
 // - ACTIVATED ON STARTUP IF SHOW_CONFIG_PIN IS TIED HIGH 
 
 void showConfiguration(){
-#if COMM_TYPE == 1
-  #if COMM_INTERFACE == 4
-    // set timeout to 500ms for reads
-    WIFI_SERIAL_LINK.setTimeout(500L);
-    WIFI_SERIAL_LINK.println("<iESP-reset>");
-    // give ESP some time to restart and stabilize
-    delay(250);
-    String resetStatus = WIFI_SERIAL_LINK.readStringUntil('>');
-  #else
-    int mac_address[]=MAC_ADDRESS;
-  #endif
-#endif
   Serial.print("\n*** DCC++ CONFIGURATION ***\n");
 
   Serial.print("\nVERSION:      ");
@@ -598,74 +521,14 @@ void showConfiguration(){
   Serial.print("\n     OUTPUTS: ");
   Serial.print(EEStore::eeStore->data.nOutputs);
   
-  Serial.print("\n\nINTERFACE:    ");
-  #if COMM_TYPE == 0
-    Serial.print("SERIAL");
-  #elif COMM_TYPE == 1
-    Serial.print(COMM_SHIELD_NAME);
-    #if COMM_INTERFACE != 4
-      Serial.print("\nMAC ADDRESS:  ");
-      for(int i=0;i<5;i++){
-        Serial.print(mac_address[i],HEX);
-        Serial.print(":");
-      }
-      Serial.print(mac_address[5],HEX);
-    #endif
-    Serial.print("\nPORT:         ");
-    Serial.print(ETHERNET_PORT);
-    Serial.print("\nIP ADDRESS:   ");
-
-    #if COMM_INTERFACE == 4
-      // check for the presence of the shield
-      if(resetStatus.indexOf("iESP-DCC++ init") < 0) {
-        Serial.println("N/A, ESP8266 Not Found");
-      } else {
-        WIFI_SERIAL_LINK.print("<iESP-connect ");
-        WIFI_SERIAL_LINK.print(WIFI_SSID);
-        WIFI_SERIAL_LINK.print(" ");
-        WIFI_SERIAL_LINK.print(WIFI_PASSWORD);
-        WIFI_SERIAL_LINK.println(">");
-        // discard the connecting response
-        String espStatus = WIFI_SERIAL_LINK.readStringUntil('>');
-        bool connecting = true;
-        while(connecting) {
-          // wait for the connected/failed message
-          espStatus = WIFI_SERIAL_LINK.readStringUntil('>');
-          if(espStatus.indexOf("connected") > 0) {
-            connecting = false;
-            // connected to AP, parse the IP address out
-            localAddress.fromString(espStatus.substring(espStatus.lastIndexOf(' ') + 1, espStatus.indexOf('>')));
-            Serial.print(localAddress);
-          } else if(espStatus.indexOf("connect failed") > 0 ||
-            espStatus.indexOf("not found") > 0 ||
-            espStatus.indexOf("timeout") > 0) {
-            // connection failed.  Abort.
-            Serial.println("Not Available");
-          }
-        }
-      }
-    #else
-      #ifdef IP_ADDRESS
-        Ethernet.begin(mac,IP_ADDRESS);           // Start networking using STATIC IP Address
-      #else
-        Ethernet.begin(mac);                      // Start networking using DHCP to get an IP Address
-      #endif
-      Serial.print(Ethernet.localIP());
-    #endif
-
-    #ifdef IP_ADDRESS
-      Serial.print(" (STATIC)");
-    #else
-      Serial.print(" (DHCP)");
-    #endif
-
-  #endif
+  Serial.print("\n\nINTERFACE(s):\n");
+  CommManager::showConfiguration();
   Serial.print("\n\nPROGRAM HALTED - PLEASE RESTART ARDUINO");
-
   while(true);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
 
 
 

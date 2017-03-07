@@ -86,14 +86,14 @@ Part of DCC++ BASE STATION for the Arduino
 
   #define MOTOR_SHIELD_NAME "BTS7960B BASED MOTOR SHIELD"
 
-  #define SIGNAL_ENABLE_PIN_MAIN 9
+  #define SIGNAL_ENABLE_PIN_MAIN 3
   #define SIGNAL_ENABLE_PIN_PROG 11
 
   #define CURRENT_MONITOR_PIN_MAIN A0
   #define CURRENT_MONITOR_PIN_PROG A1
 
-  #define DIRECTION_MOTOR_CHANNEL_PIN_A 7
-  #define DIRECTION_MOTOR_CHANNEL_PIN_B 8
+  #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
+  #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
 #else
 
@@ -105,26 +105,8 @@ Part of DCC++ BASE STATION for the Arduino
 // SELECT COMMUNICATION INTERACE
 /////////////////////////////////////////////////////////////////////////////////////
 
-#if COMM_INTERFACE == 0
-
-  #define COMM_TYPE 0
-  #define INTERFACE Serial
-
-#elif (COMM_INTERFACE==1) || (COMM_INTERFACE==2) || (COMM_INTERFACE==3)
-
-  #define COMM_TYPE 1
-  #define INTERFACE eServer
-  #define SDCARD_CS 4
-
-#elif COMM_INTERFACE == 4
-
-  #define COMM_TYPE 1
-  #define INTERFACE WIFI_SERIAL_LINK
-
-#else
-
+#if !defined(COMM_INTERFACE) || COMM_INTERFACE < 0 || COMM_INTERFACE > 4
   #error CANNOT COMPILE - Please select a proper value for COMM_INTERFACE in CONFIG.H file
-
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -148,6 +130,12 @@ Part of DCC++ BASE STATION for the Arduino
 
 /////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef ENABLE_LCD
+#include <Wire.h>
+#include <LiquidCrystal_PCF8574.h>
+extern bool lcdEnabled;
+extern LiquidCrystal_PCF8574 lcdDisplay;
 #endif
 
+#endif
 

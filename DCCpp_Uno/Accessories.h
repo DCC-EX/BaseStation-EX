@@ -25,7 +25,7 @@ struct Turnout{
   struct TurnoutData data;
   Turnout *nextTurnout;
   void activate(int s);
-  static void parse(char *c);
+  static void parse(const char *c);
   static Turnout* get(int);
   static void remove(int);
   static void load();

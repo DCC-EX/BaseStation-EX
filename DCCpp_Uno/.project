@@ -52,6 +52,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Ethernet/1.1.2</locationURI>
 		</link>
 		<link>
+			<name>libraries/LiquidCrystal_PCF8574</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/LiquidCrystal_PCF8574/1.1.0</locationURI>
+		</link>
+		<link>
 			<name>libraries/SPI</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.6.17/libraries/SPI</locationURI>
@@ -60,6 +65,11 @@
 			<name>libraries/SoftwareSerial</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.6.17/libraries/SoftwareSerial</locationURI>
+		</link>
+		<link>
+			<name>libraries/Wire</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.6.17/libraries/Wire</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

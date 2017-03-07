@@ -42,9 +42,9 @@ struct CurrentMonitor{
   int sensePin;
   int enablePin;
   float current;
-  char *msg;
+  const char *msg;
   bool triggered;
-  CurrentMonitor(int, int, char *);
+  CurrentMonitor(int, int, const char *);
   static boolean checkTime();
   void check();
 };

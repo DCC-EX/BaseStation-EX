@@ -20,13 +20,12 @@ Part of DCC++ BASE STATION for the Arduino
 #include "Sensor.h"
 #include "Outputs.h"
 #include "EEStore.h"
-#include "Comm.h"
+#include "CommInterface.h"
 
 extern int __heap_start, *__brkval;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-char SerialCommand::commandString[MAX_COMMAND_LENGTH+1];
 volatile RegisterList *SerialCommand::mRegs;
 volatile RegisterList *SerialCommand::pRegs;
 CurrentMonitor *SerialCommand::mMonitor;
@@ -37,48 +36,11 @@ void SerialCommand::init(volatile RegisterList *_mRegs, volatile RegisterList *_
   mRegs=_mRegs;
   pRegs=_pRegs;
   mMonitor=_mMonitor;
-  sprintf(commandString,"");
 } // SerialCommand:SerialCommand
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SerialCommand::process(){
-  char c;
-    
-  #if COMM_TYPE == 0 or (COMM_TYPE == 1 && COMM_INTERFACE == 4)
-
-    while(INTERFACE.available()>0){    // while there is data on the serial line
-     c=INTERFACE.read();
-     if(c=='<')                    // start of new command
-       sprintf(commandString,"");
-     else if(c=='>') {               // end of new command
-       parse(commandString);
-     } else if(strlen(commandString)<MAX_COMMAND_LENGTH)    // if comandString still has space, append character just read from serial line
-       sprintf(commandString,"%s%c",commandString,c);     // otherwise, character is ignored (but continue to look for '<' or '>')
-    } // while
-  
-  #elif COMM_TYPE == 1
-
-    NETWORK_CLIENT client=INTERFACE.available();
-    if(client){
-      while(client.connected() && client.available()){        // while there is data on the network
-      c=client.read();
-      if(c=='<')                    // start of new command
-        sprintf(commandString,"");
-      else if(c=='>')               // end of new command
-        parse(commandString);                    
-      else if(strlen(commandString)<MAX_COMMAND_LENGTH)    // if comandString still has space, append character just read from network
-        sprintf(commandString,"%s%c",commandString,c);     // otherwise, character is ignored (but continue to look for '<' or '>')
-      } // while
-    }
-
-  #endif
-
-} // SerialCommand:process
-   
-///////////////////////////////////////////////////////////////////////////////
-
-void SerialCommand::parse(char *com){
+void SerialCommand::parse(const char *com){
   
   switch(com[0]){
 
@@ -309,7 +271,13 @@ void SerialCommand::parse(char *com){
  */
      digitalWrite(SIGNAL_ENABLE_PIN_PROG,HIGH);
      digitalWrite(SIGNAL_ENABLE_PIN_MAIN,HIGH);
-     INTERFACE.print("<p1>");
+     CommManager::printf("<p1>");
+     #if defined(LCD_ENABLED) && LCD_LINES > 2
+     if(lcdEnabled) {
+       lcdDisplay.setCursor(12, 3);
+       lcdDisplay.print("ON ");
+     }
+     #endif
      break;
 
 /***** TURN OFF POWER FROM MOTOR SHIELD TO TRACKS  ****/
@@ -322,7 +290,13 @@ void SerialCommand::parse(char *com){
  */
      digitalWrite(SIGNAL_ENABLE_PIN_PROG,LOW);
      digitalWrite(SIGNAL_ENABLE_PIN_MAIN,LOW);
-     INTERFACE.print("<p0>");
+     CommManager::printf("<p0>");
+     #if defined(LCD_ENABLED) && LCD_LINES > 2
+     if(lcdEnabled) {
+       lcdDisplay.setCursor(12, 3);
+       lcdDisplay.print("OFF");
+     }
+     #endif
      break;
 
 /***** READ MAIN OPERATIONS TRACK CURRENT  ****/
@@ -334,9 +308,7 @@ void SerialCommand::parse(char *com){
  *    returns: <a CURRENT> 
  *    where CURRENT = 0-1024, based on exponentially-smoothed weighting scheme
  */
-      INTERFACE.print("<a");
-      INTERFACE.print(int(mMonitor->current));
-      INTERFACE.print(">");
+      CommManager::printf("<a %d>", int(mMonitor->current));
       break;
 
 /***** READ STATUS OF DCC++ BASE STATION  ****/
@@ -349,50 +321,17 @@ void SerialCommand::parse(char *com){
  *    returns: series of status messages that can be read by an interface to determine status of DCC++ Base Station and important settings
  */
       if(digitalRead(SIGNAL_ENABLE_PIN_PROG)==LOW)      // could check either PROG or MAIN
-        INTERFACE.print("<p0>");
+        CommManager::printf("<p0>");
       else
-        INTERFACE.print("<p1>");
+        CommManager::printf("<p1>");
 
       for(int i=1;i<=MAX_MAIN_REGISTERS;i++){
         if(mRegs->speedTable[i]==0)
           continue;
-        INTERFACE.print("<T");
-        INTERFACE.print(i); INTERFACE.print(" ");
-        if(mRegs->speedTable[i]>0){
-          INTERFACE.print(mRegs->speedTable[i]);
-          INTERFACE.print(" 1>");
-        } else{
-          INTERFACE.print(-mRegs->speedTable[i]);
-          INTERFACE.print(" 0>");
-        }          
+        CommManager::printf("<T%d %d %d>", i, mRegs->speedTable[i]>0 ? mRegs->speedTable[i] : -mRegs->speedTable[i], mRegs->speedTable[i]>0 ? 1 : 0);
       }
-      INTERFACE.print("<iDCC++ BASE STATION FOR ARDUINO ");
-      INTERFACE.print(ARDUINO_TYPE);
-      INTERFACE.print(" / ");
-      INTERFACE.print(MOTOR_SHIELD_NAME);
-      INTERFACE.print(": V-");
-      INTERFACE.print(VERSION);
-      INTERFACE.print(" / ");
-      INTERFACE.print(__DATE__);
-      INTERFACE.print(" ");
-      INTERFACE.print(__TIME__);
-      INTERFACE.print(">");
-
-      INTERFACE.print("<N");
-      INTERFACE.print(COMM_TYPE);
-      INTERFACE.print(": ");
-
-      #if COMM_TYPE == 0
-        INTERFACE.print("SERIAL>");
-      #elif COMM_TYPE == 1
-        #if COMM_INTERFACE == 4
-          INTERFACE.print(localAddress);
-        #else
-          INTERFACE.print(localAddress);
-        #endif
-        INTERFACE.print(">");
-      #endif
-
+      CommManager::printf("<iDCC++ BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
+      CommManager::showInitInfo();
       Turnout::show();
       Output::show();
 
@@ -408,13 +347,7 @@ void SerialCommand::parse(char *com){
 */
      
     EEStore::store();
-    INTERFACE.print("<e ");
-    INTERFACE.print(EEStore::eeStore->data.nTurnouts);
-    INTERFACE.print(" ");
-    INTERFACE.print(EEStore::eeStore->data.nSensors);
-    INTERFACE.print(" ");
-    INTERFACE.print(EEStore::eeStore->data.nOutputs);
-    INTERFACE.print(">");
+    CommManager::printf("<e %d %d %d>", EEStore::eeStore->data.nTurnouts, EEStore::eeStore->data.nSensors, EEStore::eeStore->data.nOutputs);
     break;
 
 /***** CLEAR SETTINGS IN EEPROM  ****/
@@ -427,7 +360,7 @@ void SerialCommand::parse(char *com){
 */
 
     EEStore::clear();
-    INTERFACE.print("<O>");
+    CommManager::printf("<O>");
     break;
 
 /***** PRINT CARRIAGE RETURN IN SERIAL MONITOR WINDOW  ****/
@@ -438,7 +371,7 @@ void SerialCommand::parse(char *com){
  *
  *    returns: a carriage return
 */
-      INTERFACE.println("");
+      CommManager::printf("\n");
       break;
 
 ///
@@ -530,9 +463,7 @@ void SerialCommand::parse(char *com){
  *     where MEM is the number of free bytes remaining in the Arduino's SRAM
  */
       int v; 
-      INTERFACE.print("<f");
-      INTERFACE.print((int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval));
-      INTERFACE.print(">");
+      CommManager::printf("<f%d>", (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval));
       break;
 
 /***** LISTS BIT CONTENTS OF ALL INTERNAL DCC PACKET REGISTERS  ****/
@@ -542,28 +473,22 @@ void SerialCommand::parse(char *com){
  *    lists the packet contents of the main operations track registers and the programming track registers
  *    FOR DIAGNOSTIC AND TESTING USE ONLY
  */
-      INTERFACE.println("");
+      CommManager::printf("\n");
       for(Register *p=mRegs->reg;p<=mRegs->maxLoadedReg;p++){
-        INTERFACE.print("M"); INTERFACE.print((int)(p-mRegs->reg)); INTERFACE.print(":\t");
-        INTERFACE.print((int)p); INTERFACE.print("\t");
-        INTERFACE.print((int)p->activePacket); INTERFACE.print("\t");
-        INTERFACE.print(p->activePacket->nBits); INTERFACE.print("\t");
+        CommManager::printf("M%d:\t%d\t%d\t%d\t", (int)(p-mRegs->reg), (int)p, (int)p->activePacket, p->activePacket->nBits);
         for(int i=0;i<10;i++){
-          INTERFACE.print(p->activePacket->buf[i],HEX); INTERFACE.print("\t");
+          CommManager::printf("%02x\t", p->activePacket->buf[i]);
         }
-        INTERFACE.println("");
+        CommManager::printf("\n");
       }
       for(Register *p=pRegs->reg;p<=pRegs->maxLoadedReg;p++){
-        INTERFACE.print("P"); INTERFACE.print((int)(p-pRegs->reg)); INTERFACE.print(":\t");
-        INTERFACE.print((int)p); INTERFACE.print("\t");
-        INTERFACE.print((int)p->activePacket); INTERFACE.print("\t");
-        INTERFACE.print(p->activePacket->nBits); INTERFACE.print("\t");
+        CommManager::printf("P%d:\t%d\t%d\t%d\t", (int)(p-pRegs->reg), (int)p, (int)p->activePacket, p->activePacket->nBits);
         for(int i=0;i<10;i++){
-          INTERFACE.print(p->activePacket->buf[i],HEX); INTERFACE.print("\t");
+          CommManager::printf("%02x\t", p->activePacket->buf[i]);
         }
-        INTERFACE.println("");
+        CommManager::printf("\n");
       }
-      INTERFACE.println("");
+      CommManager::printf("\n");
       break;
 
   } // switch
