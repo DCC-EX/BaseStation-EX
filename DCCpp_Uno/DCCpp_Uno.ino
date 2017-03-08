@@ -193,21 +193,13 @@ void showConfiguration();
 volatile RegisterList mainRegs(MAX_MAIN_REGISTERS);    // create list of registers for MAX_MAIN_REGISTER Main Track Packets
 volatile RegisterList progRegs(2);                     // create a shorter list of only two registers for Program Track Packets
 
-CurrentMonitor mainMonitor(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, "<p2>");  // create monitor for current on Main Track
-CurrentMonitor progMonitor(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, "<p3>");  // create monitor for current on Program Track
-
 ///////////////////////////////////////////////////////////////////////////////
 // MAIN ARDUINO LOOP
 ///////////////////////////////////////////////////////////////////////////////
 
 void loop(){
   CommManager::update();      // check for and process any new commands
-
-  if(CurrentMonitor::checkTime()){      // if sufficient time has elapsed since last update, check current draw on Main and Program Tracks 
-    mainMonitor.check();
-    progMonitor.check();
-  }
-
+  MotorBoardManager::check();
   Sensor::check();    // check sensors for activate/de-activate
 
 } // loop
@@ -243,6 +235,17 @@ void setup(){
   }
 #endif
 
+#if MOTOR_SHIELD_TYPE == 0
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::ARDUINO_SHIELD, "MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::ARDUINO_SHIELD, "PROG");
+#elif MOTOR_SHIELD_TYPE == 1
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::POLOLU, "MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::POLOLU, "PROG");
+#elif MOTOR_SHIELD_TYPE == 2
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_5A, "MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_5A, "PROG");
+#endif
+
 #if COMM_INTERFACE != 4 || (COMM_INTERFACE == 4 && !defined(USE_SERIAL_FOR_WIFI))
   CommManager::registerInterface(new HardwareSerialInterface(Serial));
 #endif
@@ -267,7 +270,7 @@ void setup(){
 
   CommManager::printf("<iDCC++ BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
 
-  SerialCommand::init(&mainRegs, &progRegs, &mainMonitor);   // create structure to read and parse commands from serial line
+  SerialCommand::init(&mainRegs, &progRegs);   // create structure to read and parse commands from serial line
 
   CommManager::showInitInfo();
 

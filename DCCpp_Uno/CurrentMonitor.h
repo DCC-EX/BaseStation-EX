@@ -12,41 +12,42 @@ Part of DCC++ BASE STATION for the Arduino
 
 #include "Arduino.h"
 
-#define  CURRENT_SAMPLE_SMOOTHING          0.01
+enum MOTOR_BOARD_TYPE { ARDUINO_SHIELD, POLOLU, BTS7960B_5A, BTS7960B_10A };
 
-// Arduino motor board: 890mA == 300*0.0049/1.65
-#define  CURRENT_SAMPLE_MAX_ARDUINO        300
-// Pololu motor board: 1.493A == 160*0.0049/0.525
-#define  CURRENT_SAMPLE_MAX_POLOLU         160
-// BTS7960B motor board: 5.133A == 11*0.0049/0.0105
-#define  CURRENT_SAMPLE_MAX_BTS7960B_5A    11
-// BTS7960B motor board: 10.266A == 22*0.0049/0.0105
-#define  CURRENT_SAMPLE_MAX_BTS7960B_10A   22
+// cap the number of motor boards at 16 as a Mega2560 has 16 analog pins
+#define MAX_MOTOR_BOARDS 16
 
-#if MOTOR_SHIELD_TYPE == 0
-  #define CURRENT_SAMPLE_MAX CURRENT_SAMPLE_MAX_ARDUINO
-#elif MOTOR_SHIELD_TYPE == 1
-  #define CURRENT_SAMPLE_MAX CURRENT_SAMPLE_MAX_POLOLU
-#elif MOTOR_SHIELD_TYPE == 2
-  #define CURRENT_SAMPLE_MAX CURRENT_SAMPLE_MAX_BTS7960B_5A
-#endif
+class MotorBoard {
+public:
+	MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name);
+	void check();
+	void powerOn(bool announce=true);
+	void powerOff(bool announce=true, bool overCurrent=false);
+	int getLastRead();
+	void showStatus();
+	const char *getName() {
+		return name;
+	}
+private:
+	int sensePin;
+	int enablePin;
+	const char *name;
+	float current;
+	bool triggered;
+	long int lastCheckTime;
+	int triggerValue;
+};
 
-#ifdef ARDUINO_AVR_UNO                        // Configuration for UNO
-  #define  CURRENT_SAMPLE_TIME        10
-#else                                         // Configuration for MEGA
-  #define  CURRENT_SAMPLE_TIME        1
-#endif
-
-struct CurrentMonitor{
-  static long int sampleTime;
-  int sensePin;
-  int enablePin;
-  float current;
-  const char *msg;
-  bool triggered;
-  CurrentMonitor(int, int, const char *);
-  static boolean checkTime();
-  void check();
+class MotorBoardManager {
+public:
+	static void registerBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name);
+	static void check();
+	static void powerOnAll();
+	static void powerOffAll();
+	static void parse(const char *command);
+	static void showStatus();
+private:
+	static MotorBoard *boards[MAX_MOTOR_BOARDS];
 };
 
 #endif

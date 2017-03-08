@@ -21,6 +21,7 @@ Part of DCC++ BASE STATION for the Arduino
 #include "Outputs.h"
 #include "EEStore.h"
 #include "CommInterface.h"
+#include "CurrentMonitor.h"
 
 extern int __heap_start, *__brkval;
 
@@ -28,14 +29,12 @@ extern int __heap_start, *__brkval;
 
 volatile RegisterList *SerialCommand::mRegs;
 volatile RegisterList *SerialCommand::pRegs;
-CurrentMonitor *SerialCommand::mMonitor;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SerialCommand::init(volatile RegisterList *_mRegs, volatile RegisterList *_pRegs, CurrentMonitor *_mMonitor){
+void SerialCommand::init(volatile RegisterList *_mRegs, volatile RegisterList *_pRegs){
   mRegs=_mRegs;
   pRegs=_pRegs;
-  mMonitor=_mMonitor;
 } // SerialCommand:SerialCommand
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -269,15 +268,7 @@ void SerialCommand::parse(const char *com){
  *
  *    returns: <p1>
  */
-     digitalWrite(SIGNAL_ENABLE_PIN_PROG,HIGH);
-     digitalWrite(SIGNAL_ENABLE_PIN_MAIN,HIGH);
-     CommManager::printf("<p1>");
-     #if defined(LCD_ENABLED) && LCD_LINES > 2
-     if(lcdEnabled) {
-       lcdDisplay.setCursor(12, 3);
-       lcdDisplay.print("ON ");
-     }
-     #endif
+     MotorBoardManager::parse(com);
      break;
 
 /***** TURN OFF POWER FROM MOTOR SHIELD TO TRACKS  ****/
@@ -288,15 +279,7 @@ void SerialCommand::parse(const char *com){
  *
  *    returns: <p0>
  */
-     digitalWrite(SIGNAL_ENABLE_PIN_PROG,LOW);
-     digitalWrite(SIGNAL_ENABLE_PIN_MAIN,LOW);
-     CommManager::printf("<p0>");
-     #if defined(LCD_ENABLED) && LCD_LINES > 2
-     if(lcdEnabled) {
-       lcdDisplay.setCursor(12, 3);
-       lcdDisplay.print("OFF");
-     }
-     #endif
+     MotorBoardManager::parse(com);
      break;
 
 /***** READ MAIN OPERATIONS TRACK CURRENT  ****/
@@ -308,7 +291,7 @@ void SerialCommand::parse(const char *com){
  *    returns: <a CURRENT> 
  *    where CURRENT = 0-1024, based on exponentially-smoothed weighting scheme
  */
-      CommManager::printf("<a %d>", int(mMonitor->current));
+      MotorBoardManager::parse(com);
       break;
 
 /***** READ STATUS OF DCC++ BASE STATION  ****/
@@ -320,11 +303,7 @@ void SerialCommand::parse(const char *com){
  *
  *    returns: series of status messages that can be read by an interface to determine status of DCC++ Base Station and important settings
  */
-      if(digitalRead(SIGNAL_ENABLE_PIN_PROG)==LOW)      // could check either PROG or MAIN
-        CommManager::printf("<p0>");
-      else
-        CommManager::printf("<p1>");
-
+      MotorBoardManager::showStatus();
       for(int i=1;i<=MAX_MAIN_REGISTERS;i++){
         if(mRegs->speedTable[i]==0)
           continue;
@@ -491,6 +470,12 @@ void SerialCommand::parse(const char *com){
       CommManager::printf("\n");
       break;
 
+    case 'p':     // <p>
+/*
+ * Lists all registered motor boards with current status.
+ */
+      MotorBoardManager::showStatus();
+      break;
   } // switch
 }; // SerialCommand::parse
 

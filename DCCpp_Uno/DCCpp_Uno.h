@@ -16,7 +16,7 @@ Part of DCC++ BASE STATION for the Arduino
 // RELEASE VERSION
 /////////////////////////////////////////////////////////////////////////////////////
 
-#define VERSION "1.2.1+"
+#define VERSION "2.0.0"
 
 /////////////////////////////////////////////////////////////////////////////////////
 // AUTO-SELECT ARDUINO BOARD
@@ -82,7 +82,7 @@ Part of DCC++ BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 7
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 8
 
-#elif MOTOR_SHIELD_TYPE == 1
+#elif MOTOR_SHIELD_TYPE == 2
 
   #define MOTOR_SHIELD_NAME "BTS7960B BASED MOTOR SHIELD"
 

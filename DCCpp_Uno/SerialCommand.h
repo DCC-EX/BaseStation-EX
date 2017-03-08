@@ -11,12 +11,10 @@ Part of DCC++ BASE STATION for the Arduino
 #define SerialCommand_h
 
 #include "PacketRegister.h"
-#include "CurrentMonitor.h"
 
 struct SerialCommand{
   static volatile RegisterList *mRegs, *pRegs;
-  static CurrentMonitor *mMonitor;
-  static void init(volatile RegisterList *, volatile RegisterList *, CurrentMonitor *);
+  static void init(volatile RegisterList *, volatile RegisterList *);
   static void parse(const char *);
 }; // SerialCommand
   
