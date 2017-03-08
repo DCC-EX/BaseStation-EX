@@ -24,14 +24,12 @@ void ESPInterface::init(IPAddress *ip) {
 		// give ESP some time to restart and stabilize
 		delay(250);
 		String resetStatus = _serialStream.readStringUntil('>');
-		Serial.println(resetStatus);
 		if(resetStatus.indexOf("iESP-DCC++ init") >= 0) {
 			responseFound = true;
 		}
 	}
 	_serialStream.println("<iESP-status>");
 	String espStatus = _serialStream.readStringUntil('>');
-	Serial.println(espStatus);
 	if(ip != NULL) {
 		// TODO: Start networking using STATIC IP Address
 	}
@@ -46,7 +44,6 @@ void ESPInterface::init(IPAddress *ip) {
 	while (connecting) {
 		// wait for the connected/failed message
 		espStatus = _serialStream.readStringUntil('>');
-		Serial.println(espStatus);
 		if (espStatus.indexOf("connected") > 0) {
 			connecting = false;
 			// connected to AP, parse the IP address out
