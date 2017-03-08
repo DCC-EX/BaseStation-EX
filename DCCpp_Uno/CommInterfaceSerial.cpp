@@ -21,9 +21,6 @@ void HardwareSerialInterface::process() {
 			inCommandPayload = true;
 			buffer = "";
 		} else if (ch == '>') {
-			Serial.print("COMMAND: [");
-			Serial.print(buffer);
-			Serial.println("]");
 			SerialCommand::parse(buffer.c_str());
 			buffer = "";
 			inCommandPayload = false;
