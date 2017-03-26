@@ -8,6 +8,7 @@
 #ifndef COMMINTERFACEETHERNET_H_
 #define COMMINTERFACEETHERNET_H_
 
+#include "Config.h"
 #include "CommInterface.h"
 
 #define SDCARD_CS 4

@@ -33,7 +33,7 @@ Part of DCC++ BASE STATION for the Arduino
 //  3 = Seeed Studio Ethernet/SD-Card Shield W5200
 //  4 = ESP8266 WiFi module
 
-#define COMM_INTERFACE   4
+#define COMM_INTERFACE   1
 
 #if COMM_INTERFACE == 4
 	/////////////////////////////////////////////////////////////////////////////////////

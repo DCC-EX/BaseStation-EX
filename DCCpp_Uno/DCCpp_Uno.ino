@@ -179,6 +179,7 @@ DCC++ BASE STATION is configured through the Config.h file that contains all use
 #include "CommInterface.h"
 #include "CommInterfaceSerial.h"
 #include "CommInterfaceESP.h"
+#include "CommInterfaceEthernet.h"
 
 #ifdef ENABLE_LCD
 bool lcdEnabled = false;

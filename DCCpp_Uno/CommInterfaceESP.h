@@ -8,11 +8,13 @@
 #ifndef COMMINTERFACEESP_H_
 #define COMMINTERFACEESP_H_
 
+#include "Config.h"
 #include "CommInterface.h"
 #include <HardwareSerial.h>
 #include <SoftwareSerial.h>
 #include <IPAddress.h>
 
+#if COMM_INTERFACE == 4
 class ESPInterface : public CommInterface {
 public:
 	ESPInterface(Stream &serialStream, IPAddress *ip=NULL);
@@ -49,5 +51,7 @@ private:
 	int _rxPin;
 	int _txPin;
 };
+
+#endif
 
 #endif /* COMMINTERFACEESP_H_ */

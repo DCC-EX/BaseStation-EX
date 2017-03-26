@@ -10,6 +10,8 @@
 #include "SerialCommand.h"
 #include "DCCpp_Uno.h"
 
+#if COMM_INTERFACE == 4
+
 ESPInterface::ESPInterface(Stream &serialStream, IPAddress *ip) : _serialStream(serialStream), _buffer(""), _inCommandPayload(false) {
 	init(ip);
 }
@@ -98,7 +100,7 @@ void ESPInterface::showConfiguration() {
 }
 
 void ESPInterface::showInitInfo() {
-	CommManager::printf("<N1:%d.%d.%d.%d>", _localAddress[0], _localAddress[1], _localAddress[2], _localAddress[3]);
+	CommManager::printf("<N1: %d.%d.%d.%d>", _localAddress[0], _localAddress[1], _localAddress[2], _localAddress[3]);
 }
 
 void ESPInterface::send(const char *buf) {
@@ -139,3 +141,5 @@ Stream &ESPSoftwareSerialInterface::initSerialStream(int rxPin, int txPin, long 
 	_serial->flush();
 	return *_serial;
 }
+
+#endif

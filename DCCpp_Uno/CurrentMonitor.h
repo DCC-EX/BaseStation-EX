@@ -14,8 +14,8 @@ Part of DCC++ BASE STATION for the Arduino
 
 enum MOTOR_BOARD_TYPE { ARDUINO_SHIELD, POLOLU, BTS7960B_5A, BTS7960B_10A };
 
-// cap the number of motor boards at 16 as a Mega2560 has 16 analog pins
-#define MAX_MOTOR_BOARDS 16
+// cap the number of motor boards at the maximum number of analog inputs
+#define MAX_MOTOR_BOARDS NUM_ANALOG_INPUTS
 
 class MotorBoard {
 public:

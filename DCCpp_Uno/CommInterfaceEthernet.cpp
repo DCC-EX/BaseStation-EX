@@ -6,9 +6,10 @@
  */
 
 #include <Arduino.h>
+#include "DCCpp_Uno.h"
+#include "CommInterface.h"
 #include "CommInterfaceEthernet.h"
 #include "SerialCommand.h"
-#include "DCCpp_Uno.h"
 
 #if COMM_INTERFACE >= 1 && COMM_INTERFACE <= 3
 EthernetInterface::EthernetInterface() : server(ETHERNET_PORT), buffer(""), inCommandPayload(false) {
@@ -24,7 +25,7 @@ EthernetInterface::EthernetInterface() : server(ETHERNET_PORT), buffer(""), inCo
 	Ethernet.begin(mac);               // Start networking using DHCP to get an IP Address
 #endif
 	server.begin();
-#if ENABLE_LCD == 1
+#ifdef ENABLE_LCD
 	if(lcdEnabled) {
 		lcdDisplay.setCursor(0, 1);
 		lcdDisplay.print(Ethernet.localIP());
@@ -65,7 +66,7 @@ void EthernetInterface::showConfiguration() {
 
 void EthernetInterface::showInitInfo() {
 	IPAddress localAddress = Ethernet.localIP();
-	CommInterfaceManager::printf("<N1:%d.%d.%d.%d>", localAddress[0], localAddress[1], localAddress[2], localAddress[3]);
+	CommManager::printf("<N1: %d.%d.%d.%d>", localAddress[0], localAddress[1], localAddress[2], localAddress[3]);
 }
 
 void EthernetInterface::send(const char *buf) {
