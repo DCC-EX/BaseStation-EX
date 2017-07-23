@@ -34,6 +34,8 @@ void ESPInterface::init(IPAddress *ip) {
 		// TODO: Start networking using STATIC IP Address
 	}
 	_serialStream.print("<iESP-connect ");
+	_serialStream.print(strlen(WIFI_SSID));
+	_serialStream.print(" ");
 	_serialStream.print(WIFI_SSID);
 	_serialStream.print(" ");
 	_serialStream.print(WIFI_PASSWORD);
