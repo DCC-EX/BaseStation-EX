@@ -311,6 +311,9 @@ void loop() {
 				if(currentDCCppCommand.indexOf("connect") > 0) {
 					size_t firstSpace = currentDCCppCommand.indexOf(' ');
 					size_t secondSpace = currentDCCppCommand.indexOf(' ', firstSpace + 1);
+					long ssidLength = currentDCCppCommand.substring(firstSpace + 1, secondSpace).toInt();
+					firstSpace = secondSpace++;
+					secondSpace += ssidLength;
 					String ssid = currentDCCppCommand.substring(firstSpace + 1, secondSpace);
 					String password = currentDCCppCommand.substring(secondSpace + 1, currentDCCppCommand.length() - 1);
 					WiFi.setAutoReconnect(false);
