@@ -363,7 +363,7 @@ void loop() {
 					SERIAL_LINK_DEV.println("<iESP ready>");
 				} else if(currentDCCppCommand.indexOf("stop") > 0) {
 					DCCppServer.stop();
-					webServer.end();
+					webServer.reset();
 					SERIAL_LINK_DEV.println("<iESP shutdown>");
 				} else if(currentDCCppCommand.indexOf("reset") > 0) {
 					ESP.restart();
