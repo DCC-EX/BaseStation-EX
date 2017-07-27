@@ -25,10 +25,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESP8266mDNS}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESP8266WiFi}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESP8266WiFi/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncTCP}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncTCP/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncWebServer}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncWebServer/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/Hash}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/Hash/src}&quot;"/>
 								</option>
@@ -42,10 +38,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESP8266mDNS}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESP8266WiFi}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESP8266WiFi/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncTCP}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncTCP/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncWebServer}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncWebServer/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/Hash}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/Hash/src}&quot;"/>
 								</option>
@@ -59,10 +51,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESP8266mDNS}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESP8266WiFi}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESP8266WiFi/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncTCP}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncTCP/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncWebServer}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/ESPAsyncWebServer/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/Hash}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DCCppESP/libraries/Hash/src}&quot;"/>
 								</option>

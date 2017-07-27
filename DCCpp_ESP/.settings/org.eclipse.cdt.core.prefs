@@ -181,13 +181,13 @@ environment/project/io.sloeber.core.toolChain.release.1788853009/A.ESP8266.NETWO
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.ESP8266.NETWORK.UPLOAD.TOOL/value=esp8266OTA
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.DTS/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.DTS/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.DTS/value=0
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.DTS/value=3600
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.LOCAL/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.LOCAL/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.LOCAL/value=1486814203
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.LOCAL/value=1501144001
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.UTC/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.UTC/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.UTC/value=1486843003
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.UTC/value=1501169201
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.ZONE/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.ZONE/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.EXTRA.TIME.ZONE/value=-28800
@@ -238,7 +238,7 @@ environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.COMB
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.COMBINE.PATTERN/value="${A.COMPILER.PATH}${A.COMPILER.C.ELF.CMD}" ${A.COMPILER.C.ELF.FLAGS} ${A.COMPILER.C.ELF.EXTRA_FLAGS} -o "${A.BUILD.PATH}/${A.BUILD.PROJECT_NAME}.elf" -Wl,--start-group ${A.OBJECT_FILES} "${A.BUILD.PATH}/arduino.ar" ${A.COMPILER.C.ELF.LIBS} -Wl,--end-group "-L${A.BUILD.PATH}"
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.O.PATTERN.1/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.O.PATTERN.1/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.O.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/esp8266/tools/xtensa-lx106-elf-gcc/1.20.0-26-gb404fb9-2/bin/xtensa-lx106-elf-gcc" -D__ets__ -DICACHE_FLASH -U__STRICT_ANSI__ "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/include" "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/lwip/include" "-IC\:\\trains\\BaseStation\\DCCpp_ESP/Release/core" -c -Wall -Wextra -Os -g -Wpointer-arith -Wno-implicit-function-declaration -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -falign-functions\=4 -std\=gnu99 -ffunction-sections -fdata-sections -DF_CPU\=80000000L -DLWIP_OPEN_SRC  -DARDUINO\=10609 -DARDUINO_ESP8266_ESP01 -DARDUINO_ARCH_ESP8266 "-DARDUINO_BOARD\=\\"ESP8266_ESP01\\"" -DESP8266 
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.O.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/esp8266/tools/xtensa-lx106-elf-gcc/1.20.0-26-gb404fb9-2/bin/xtensa-lx106-elf-gcc" -D__ets__ -DICACHE_FLASH -U__STRICT_ANSI__ "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/include" "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/lwip/include" "-IC\:\\trains\\BaseStation\\DCCpp_ESP/Release/core" -c -Wall -Wextra -Os -g -Wpointer-arith -Wno-implicit-function-declaration -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -falign-functions\=4 -std\=gnu99 -ffunction-sections -fdata-sections -DF_CPU\=80000000L -DLWIP_OPEN_SRC  -DARDUINO\=10802 -DARDUINO_ESP8266_ESP01 -DARDUINO_ARCH_ESP8266 "-DARDUINO_BOARD\=\\"ESP8266_ESP01\\"" -DESP8266 
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.O.PATTERN.2/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.O.PATTERN.2/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.O.PATTERN.2/value=\ -o 
@@ -250,7 +250,7 @@ environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.O.PA
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.C.O.PATTERN/value="${A.COMPILER.PATH}${A.COMPILER.C.CMD}" ${A.COMPILER.CPREPROCESSOR.FLAGS} ${A.COMPILER.C.FLAGS} -DF_CPU\=${A.BUILD.F_CPU} ${A.BUILD.LWIP_FLAGS} ${A.BUILD.DEBUG_PORT} ${A.BUILD.DEBUG_LEVEL} -DARDUINO\=${A.RUNTIME.IDE.VERSION} -DARDUINO_${A.BUILD.BOARD} -DARDUINO_ARCH_${A.BUILD.ARCH} "-DARDUINO_BOARD\=\\"${A.BUILD.BOARD}\\"" ${A.COMPILER.C.EXTRA_FLAGS} ${A.BUILD.EXTRA_FLAGS} ${A.INCLUDES} "${A.SOURCE_FILE}" -o "${A.OBJECT_FILE}"
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.CPP.O.PATTERN.1/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.CPP.O.PATTERN.1/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.CPP.O.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/esp8266/tools/xtensa-lx106-elf-gcc/1.20.0-26-gb404fb9-2/bin/xtensa-lx106-elf-g++" -D__ets__ -DICACHE_FLASH -U__STRICT_ANSI__ "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/include" "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/lwip/include" "-IC\:\\trains\\BaseStation\\DCCpp_ESP/Release/core" -c -Wall -Wextra -Os -g -mlongcalls -mtext-section-literals -fno-exceptions -fno-rtti -falign-functions\=4 -std\=c++11 -ffunction-sections -fdata-sections -DF_CPU\=80000000L -DLWIP_OPEN_SRC  -DARDUINO\=10609 -DARDUINO_ESP8266_ESP01 -DARDUINO_ARCH_ESP8266 "-DARDUINO_BOARD\=\\"ESP8266_ESP01\\"" -DESP8266 
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.CPP.O.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/esp8266/tools/xtensa-lx106-elf-gcc/1.20.0-26-gb404fb9-2/bin/xtensa-lx106-elf-g++" -D__ets__ -DICACHE_FLASH -U__STRICT_ANSI__ "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/include" "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/lwip/include" "-IC\:\\trains\\BaseStation\\DCCpp_ESP/Release/core" -c -Wall -Wextra -Os -g -mlongcalls -mtext-section-literals -fno-exceptions -fno-rtti -falign-functions\=4 -std\=c++11 -ffunction-sections -fdata-sections -DF_CPU\=80000000L -DLWIP_OPEN_SRC  -DARDUINO\=10802 -DARDUINO_ESP8266_ESP01 -DARDUINO_ARCH_ESP8266 "-DARDUINO_BOARD\=\\"ESP8266_ESP01\\"" -DESP8266 
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.CPP.O.PATTERN.2/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.CPP.O.PATTERN.2/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.CPP.O.PATTERN.2/value=\ -o 
@@ -280,7 +280,7 @@ environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.OUTPUT
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.OUTPUT.TMP_FILE/value=${A.BUILD.PROJECT_NAME}.bin
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.S.O.PATTERN.1/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.S.O.PATTERN.1/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.S.O.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/esp8266/tools/xtensa-lx106-elf-gcc/1.20.0-26-gb404fb9-2/bin/xtensa-lx106-elf-gcc" -D__ets__ -DICACHE_FLASH -U__STRICT_ANSI__ "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/include" "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/lwip/include" "-IC\:\\trains\\BaseStation\\DCCpp_ESP/Release/core" -c -g -x assembler-with-cpp -mlongcalls -DF_CPU\=80000000L -DLWIP_OPEN_SRC  -DARDUINO\=10609 -DARDUINO_ESP8266_ESP01 -DARDUINO_ARCH_ESP8266 "-DARDUINO_BOARD\=\\"ESP8266_ESP01\\"" -DESP8266 
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.S.O.PATTERN.1/value="C\:\\sloeber\\/arduinoPlugin/packages/esp8266/tools/xtensa-lx106-elf-gcc/1.20.0-26-gb404fb9-2/bin/xtensa-lx106-elf-gcc" -D__ets__ -DICACHE_FLASH -U__STRICT_ANSI__ "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/include" "-IC\:\\sloeber\\/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/tools/sdk/lwip/include" "-IC\:\\trains\\BaseStation\\DCCpp_ESP/Release/core" -c -g -x assembler-with-cpp -mlongcalls -DF_CPU\=80000000L -DLWIP_OPEN_SRC  -DARDUINO\=10802 -DARDUINO_ESP8266_ESP01 -DARDUINO_ARCH_ESP8266 "-DARDUINO_BOARD\=\\"ESP8266_ESP01\\"" -DESP8266 
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.S.O.PATTERN.2/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.S.O.PATTERN.2/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RECIPE.S.O.PATTERN.2/value=\ -o 
@@ -307,37 +307,37 @@ environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.HARDW
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.HARDWARE.PATH/value=${eclipse_home}/arduinoPlugin/packages/esp8266/hardware/esp8266
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.IDE.VERSION/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.IDE.VERSION/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.IDE.VERSION/value=10609
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.IDE.VERSION/value=10802
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.PLATFORM.PATH/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.PLATFORM.PATH/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.PLATFORM.PATH/value=${eclipse_home}/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA-1.0.0.PATH/delimiter=;
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA-1.0.0.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA-1.0.0.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/arduinoOTA/1.0.0
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA-1.1.1.PATH/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA-1.1.1.PATH/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA-1.1.1.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/arduinoOTA/1.1.1
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA.PATH/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/arduinoOTA/1.0.0
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA1.0.0.PATH/delimiter=;
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA1.0.0.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA1.0.0.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/arduinoOTA/1.0.0
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC-4.9.2-ATMEL3.5.3-ARDUINO2.PATH/delimiter=;
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC-4.9.2-ATMEL3.5.3-ARDUINO2.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC-4.9.2-ATMEL3.5.3-ARDUINO2.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/arduinoOTA/1.1.1
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA1.1.1.PATH/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA1.1.1.PATH/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ARDUINOOTA1.1.1.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/arduinoOTA/1.1.1
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC-4.9.2-ATMEL3.5.4-ARDUINO2.PATH/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC-4.9.2-ATMEL3.5.4-ARDUINO2.PATH/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC-4.9.2-ATMEL3.5.4-ARDUINO2.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC.PATH/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC4.9.2-ATMEL3.5.3-ARDUINO2.PATH/delimiter=;
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC4.9.2-ATMEL3.5.3-ARDUINO2.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC4.9.2-ATMEL3.5.3-ARDUINO2.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE-6.3.0-ARDUINO8.PATH/delimiter=;
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE-6.3.0-ARDUINO8.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE-6.3.0-ARDUINO8.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avrdude/6.3.0-arduino8
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC4.9.2-ATMEL3.5.4-ARDUINO2.PATH/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC4.9.2-ATMEL3.5.4-ARDUINO2.PATH/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVR-GCC4.9.2-ATMEL3.5.4-ARDUINO2.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE-6.3.0-ARDUINO9.PATH/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE-6.3.0-ARDUINO9.PATH/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE-6.3.0-ARDUINO9.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avrdude/6.3.0-arduino9
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE.PATH/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avrdude/6.3.0-arduino8
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE6.3.0-ARDUINO8.PATH/delimiter=;
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE6.3.0-ARDUINO8.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE6.3.0-ARDUINO8.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avrdude/6.3.0-arduino8
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avrdude/6.3.0-arduino9
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE6.3.0-ARDUINO9.PATH/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE6.3.0-ARDUINO9.PATH/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.AVRDUDE6.3.0-ARDUINO9.PATH/value=${eclipse_home}/arduinoPlugin/packages/arduino/tools/avrdude/6.3.0-arduino9
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ESPTOOL-0.4.9.PATH/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ESPTOOL-0.4.9.PATH/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.RUNTIME.TOOLS.ESPTOOL-0.4.9.PATH/value=${eclipse_home}/arduinoPlugin/packages/esp8266/tools/esptool/0.4.9
@@ -385,10 +385,10 @@ environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.AVRDUDE
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.AVRDUDE_REMOTE.UPLOAD.VERBOSE/value=-v
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESP8266OTA.UPLOAD.PATTERN/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESP8266OTA.UPLOAD.PATTERN/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESP8266OTA.UPLOAD.PATTERN/value=${A.tools.esptool.upload.network_pattern}
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESP8266OTA.UPLOAD.PATTERN/value=${A.TOOLS.ESPTOOL.UPLOAD.NETWORK_PATTERN}
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESP8266OTA/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESP8266OTA/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESP8266OTA/value=${A.tools.esptool.network_cmd}
+environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESP8266OTA/value=${A.TOOLS.ESPTOOL.NETWORK_CMD}
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESPTOOL.CMD/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESPTOOL.CMD/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/A.TOOLS.ESPTOOL.CMD/value=esptool.exe
@@ -458,12 +458,15 @@ environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.BOARD_NA
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.COM_PORT/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.COM_PORT/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.COM_PORT/value=COM3
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.ECLIPSE_LOCATION/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.ECLIPSE_LOCATION/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.ECLIPSE_LOCATION/value=
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.C.COMPILE/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.C.COMPILE/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.C.COMPILE/value=
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.COMPILE/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.COMPILE/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.COMPILE/value=
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.COMPILE/value=-I${ProjDirPath}/ESPAsyncWebServer/src -I${ProjDirPath}/ESPAsyncTCP/src
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.CPP.COMPILE/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.CPP.COMPILE/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.EXTRA.CPP.COMPILE/value=
@@ -497,12 +500,18 @@ environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.MENU.UPL
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.OBJCOPY/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.OBJCOPY/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.OBJCOPY/value=${A.RECIPE.OBJCOPY.HEX.PATTERN}
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.OS_NAME/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.OS_NAME/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.OS_NAME/value=
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.PACKAGE_ID/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.PACKAGE_ID/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.PACKAGE_ID/value=esp8266
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.PLATFORM_FILE/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.PLATFORM_FILE/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.PLATFORM_FILE/value=${eclipse_home}/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0/platform.txt
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.PROJECT_NAME/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.PROJECT_NAME/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.PROJECT_NAME/value=
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.SELECTED.PLATFORM/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.SELECTED.PLATFORM/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.SELECTED.PLATFORM/value=${eclipse_home}/arduinoPlugin/packages/esp8266/hardware/esp8266/2.3.0
@@ -518,8 +527,11 @@ environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.UPLOAD.P
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.WARNING_LEVEL/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.WARNING_LEVEL/operation=replace
 environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.WARNING_LEVEL/value=true
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.WORKSPACE_LOCATION/delimiter=;
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.WORKSPACE_LOCATION/operation=replace
+environment/project/io.sloeber.core.toolChain.release.1788853009/JANTJE.WORKSPACE_LOCATION/value=
 environment/project/io.sloeber.core.toolChain.release.1788853009/PATH/delimiter=;
 environment/project/io.sloeber.core.toolChain.release.1788853009/PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.1788853009/PATH/value=${A.COMPILER.PATH}${PathDelimiter}${A.BUILD.GENERIC.PATH}${PathDelimiter}${PATH}
+environment/project/io.sloeber.core.toolChain.release.1788853009/PATH/value=${A.COMPILER.PATH}${PathDelimiter}${A.BUILD.GENERIC.PATH}${PathDelimiter}${SystemRoot}\\system32${PathDelimiter}${SystemRoot}${PathDelimiter}${SystemRoot}\\system32\\Wbem${PathDelimiter}${sloeber_path_extension}
 environment/project/io.sloeber.core.toolChain.release.1788853009/append=true
 environment/project/io.sloeber.core.toolChain.release.1788853009/appendContributed=true
