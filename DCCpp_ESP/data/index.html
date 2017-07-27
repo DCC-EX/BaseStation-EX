@@ -1,1279 +1,627 @@
-
-<!DOCTYPE html>
-
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/throttle/bootstrap-toggle.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/throttle/Range23.css"/><!-- Special Thanks to Ana Tudor http://codepen.io/collection/DgYaMj/14/ 
-  for her excellent CSS creation, overlaying the Range slider inputs on this page. User note. Please see the licence included in Range23.css-->  
-
-  <title>DCC++ Web Controller</title>
-  
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --><!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-  <style>
-
-            .bg-1 {
-            background-color: #000000;
-            color: #ffffff;
-            }         
-            .bg-2 {
-            background-color: #4c4e4f;
-            color: #ffffff;
-            }
-            .bg-3 {
-            background-color: #4c4e4f;
-            color: #ffffff;
-            font-size:160%;
-            }        
-           .bg-4 {
-            background-color: #787a7a;
-            color: #ffffff;
-            font-size:150%;
-            }
-            .bg-5 {
-            background-color: #b3b3b3;
-            color: #000000;
-            }
-            .row {
-                padding-top: 10px;
-                padding-bottom: 10px;
-            }        
-            textarea{
-               resize: none;
-               background-color: #4c4e4f;
-               color: #FF8000;
-               border: none;
-               font-family: consolas;
-               overflow: hidden;
-               -ms-overflow-style: none;
-            }
-            //.btn-sm{
-            //padding: 5px 7px;
-            //} 
-            .container2 {
-            width: 240px;
-            margin-left: auto;
-            margin-right: auto;
-            }
-            .clock {
-            float: left; 
-            width: 150px;
-            padding: 0px;
-            //border: 1px solid #333;
-            color: #FF8000;
-            }
-            #Date {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 13px;
-            text-align: center;
-            text-shadow: 0 0 5px #DF7401;
-            color: #FF8000;
-            }
-            ul {
-            width: 150px;
-            margin: 0 auto;
-            padding: 0px;
-            list-style: none;
-            text-align: center;
-            }
-            ul li {
-            display: inline;
-            font-size: 28px;
-            text-align: center;
-            font-family:  Arial, Helvetica, sans-serif;
-            text-shadow: 0 0 5px #DF7401;
-            color: #FF8000;
-            }
-            #point {
-            position: relative;
-            -moz-animation: mymove 1s ease infinite;
-            -webkit-animation: mymove 1s ease infinite;
-            padding-left: 3px;
-            padding-right: 3px;
-            }
-            @-webkit-keyframes mymove {
-
-            0% {opacity: 1.0;
-            text-shadow: 0 0 20px #DF7401;
-            }
-            50% {
-            opacity: 0;
-            text-shadow: none;
-            }
-            100% {
-            opacity: 1.0;
-            text-shadow: 0 0 20px #DF7401;
-            }   
-            @-moz-keyframes mymove {
-            0% {
-            opacity: 1.0;
-            text-shadow: 0 0 20px #DF7401;
-            }
-            50% {
-            opacity: 0;
-            text-shadow: none;
-            }
-            100% {
-            opacity: 1.0;
-            text-shadow: 0 0 20px #DF7401;
-            
-}
-           
-       
-  </style>
-  
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>DCC++ ESP</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="https://cdn.rawgit.com/jbloemendal/jquery-simple-websocket/v1.0.0/jquery.simple.websocket.js"></script>
+	<script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/master/gauge.min.js"></script>
+	<script src="https://cdn.rawgit.com/Lwangaman/jQuery-Clock-Plugin/master/jqClock.min.js"></script>
+	<script src="https://cdn.rawgit.com/simontabor/jquery-toggles/master/toggles.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.13/js/dataTables.jqueryui.min.js"></script>
+	<script src="https://cdn.rawgit.com/flesler/hashmap/master/hashmap.js"></script>
+	<script src="https://cdn.rawgit.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/vader/jquery-ui.css">
+	<link rel="stylesheet" href="https://cdn.rawgit.com/simontabor/jquery-toggles/master/css/toggles.css">
+	<link rel="stylesheet" href="https://cdn.rawgit.com/simontabor/jquery-toggles/master/css/themes/toggles-dark.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4.0.0-alpha.6/dist/css/bootstrap-grid.css">
+	<style>
+		.clockdate {font-family:Arial,Helvetica,sans-serif;font-size:13px;text-align:center;text-shadow:0 0 5px #008B8B;color:#00CCFF;display:block;}
+		.clocktime {display:inline;font-size:28px;text-align:center;font-family:Arial,Helvetica,sans-serif;text-shadow:0 0 5px #008B8B;color:#00CCFF;display:block;}
+		#throttleSpeedRange { height:350; }
+		#throttleSpeedGauge { height:350; width:350; readonly:true; background-color:#121212; color:#00CCFF; border:0px; resize:none; }
+		#serialMonitorContent { height:10em; width:40em; readonly:true; background-color:#121212; color:#00CCFF; border:0px; resize:none; overflow:hidden; }
+		#throttleConsole { height:5em; width:40em; readonly:true; background-color:#121212; color:#00CCFF; border:0px; resize:none; overflow:hidden; }
+		@media (max-width: 500px) {
+			#throttleSpeedRange { height:200; }
+			#throttleSpeedGauge { height:200; width:200; }
+			#serialMonitorContent { width:20em; }
+			#throttleConsole { width:20em; }
+		}
+		@media (max-height: 780px) {
+			.hideForHeight { display:none }
+		}
+	</style>
 </head>
-
 <body>
-  <div class="container2"></div>
+<div id="top-tabs">
+	<ul>
+		<li><a href="#tab-top-0">Throttle</a></li>
+		<li><a href="#tab-top-1">Base Station</a></li>
+	</ul>
+	<div id="tab-top-0">
+		<div class="fluid-container">
+			<div class="row">
+				<div class="col-auto">
+					<div id="clock"></div>
+				</div>
+				<div class="col-auto">
+					<textarea id="throttleConsole">Connect to continue.</textarea>
+				</div>
+			</div>
+			<div class="row center">
+				<div class="col-auto">
+					<div id="throttleConnect" class="toggle toggle-dark"></div>
+				</div>
+				<div class="col-auto">
+					<button id="btnThrottleStatus">Status</button>
+				</div>
+			</div>
+			<div class="row center">
+				<div class="col-1"></div>
+				<div class="col-auto"><div id="throttleDirection" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="throttlePower" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><button id="btnThrottleEStop"><img alt="STOP" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAHCUlEQVRYR6WXaUxUVxiG31lEBBQVkGFEAVeiRtMaralbQZEI7lStSZs0sRBRgkvVuNRo3bc01aqp+qNJ0dr6o9YQrf0hzbS2GheKRqtGERiRTWBgBGaf6ffduXfm3ssgJL3Jmbude97nfNs5o0EPjuPA9P7AUS8wsAfd4QZ8PmBdLnC1u/6a7jqQ+MzxM2ZcHJGSMsjn8QS7swQ3PsRrn5cQqenDw1FbX9/6V0lJYaHH8/3bNN4KcAxImzRz5o/Jo0cPevP8uVJcLizByM4RCQmos1habplMqwniQlcQXQKQ+KxJ6ekXUkaMiLOWl3f+XiXq6wKivrHRctNk+qwQ+DkUREiAr4GM99LTzycNHx7XVlHh/04jdhXNHkpQ8YxcwfdsiZcNDc2lN258ShDFaohOAN8Ame9mZJxLSUqKbaus9AtL4tLXks/VVuAYkD1jAI6LCIMB5vr6pn9u3vx4LXBNDqEAOAXMfSczs2hoYmIMi2tYWKsNQIS1tcEZGakUUYvSffibN7BRPwmAz1EE8bK29nXp7dsrCOK6BBEAOKnTzZ+ckfGdMSEhpq2qShCVA8S2tsI7bBistbVw9+qljHzZrGNtNnjGjoX10SM49HrBAgIItb4EUfXqVUPpvXvLNgAmwbP88wOQOnT69D+Thw2LbWdxcdYCALVYmpH10CF4EhMRs349mgmGIdRxwOLt+/bBmZyMAVu3opnGstNYEoAAER+Pyurq+rKysiWfA38LAJTrvy8rLPyg9f79oM9F8Ri7He0HDgjiDMRtwNq1aLRY4KYZSj6Pc7vRsXcv3CTuFWc9YNs21JIruXp4xXgQ3GE04rfi4l8KgCUCwEngypKCgqzWBw/8Zpe1KPpAt2AB7IsXk2EoHoSE0KDfxo1oZHfQszhqjt274U5KCsxWY7WiL1mrmqznEV0gWaL/0KG4culSMWXFgiDAmjUCQMD3UuSzGA2gX7oUjoULA1ZgkCgys5OEvFu2wD1kiEI8ctMmmJuaFOZnALZOf+p79fJlJcBiArDKXSDOVErBfmTusOXL4Zw3TwGhf/YM7pEjBcuwAM+8NwGZa2o6i4uWYIBfOwGsXh0EkAqPLP8Fs0dEIHzFCrjnzg24IlgaaF0g8bDt21FFfudVQsgA9r8sExiyP8XTteJilQXy8/0AanFVEYqOjkZvMi/GjAF0ukBN4YF7bdiAyqdP/aIuF9zt7fBwWjqd8FKQ8mLG72JSUlBy754KYNWqrNaysmAMSCCKsqWBgT7W5efDQwBCwIoHA2i/+goVFy6gjczP4oIVQrRBVE9ML16oAPLysgJpKBOXixhSU6Hl2Q8erIgDeZ7jyBE8OXYMNor+rgDiKVVNlZVKgEW5uUoXqCxgmDABWjKxhhYXTkehJpBJNSYTfLNmBfzM/sbx4/j36FHYqGCFgpAAqCQH03DRypWCBQIzlpnXMGkStIWUtVRKdeR3BtCSb+07d6L+7l0MoRqAadMECKnhzBk82r8ftpaWThAGqhemqqriAMAJWqGW5OZmtpSWBoNQ9K1x6lT4CgqgiYsThBlA53DATlXvIfmcZ2hIS8PgHTuAKVPgIaswBJ81RUUo3bwZHuovt4SBCtEfZnMQ4Azw5fT587/QWyxaV0eHAiKK/B6dlwcfuUAQp4h2Hj6Mh7Q2yAc1zpkDI6Wgb+JEPwRlge/0aZTu2gUPX8uCMYHSsKS6+jqtBbMDYXw2MvJienZ2jqemRssRzIeXBvJQMA2gQaPXrYOOYFwUYI/27AnpW2NWFoxU/720GnrPnsUdmr06BgaRG580NZmbXa6p5NRqxX7g2/Dwn9ImTsxxlpfrHFRG5eTGnByEU8V7dvBgl9HNYgwxcPJk3KeZq8XjKYCfWq1Vde3tH9JyfFeIc3ma8zXFw/m08eOXOysrdQ6qbPJBtH36wE3B11V6Sc/1tBlxyuoA5QUMlLqPLZaKuo6OrI3AE0k35J6QVsdzaePGLbeZzXo1RHfi8vcsLFiFfH6/sfF5nd0+awtgVtQ2tQWke9obFqWNGfORvbpab1dZojsISZj7JdLCc6eh4VmLw/E+zbxRrdfVtjyKOkYdBE5lp6bOt9XU9AhCLiyIU77fqKmpOOFyZT4GXtMjK8d2dxYIpw59qfVjiF3AgUWjRs2xvXqlE1Y1Nisvq+IowsIj3kuW4X7x5POSly+fb/Z4Vrj8wm+otYnnAEMoC9COUwDgxpboSyVmZ1ZS0mz6y6WT6j5vxUJei0XoVl3dk81eb55KmCFs3VmA3zMYA9AeXGgRnwDZNBM9/fEMoz2enuyooxkLezTq7KULbm5aoF00A/d5/x9TrmpcVPjM4jSE8uj2zyl1p50n+lBj1/SmxhbixpsB/ybR71duxAenKGQXhfm+y6MnAG/7/n+/+w+hb1Fdi+KV+wAAAABJRU5ErkJggg==" /></button></div>
+			</div>
+			<div class="row">
+				<div class="col-auto">
+					<div id="throttleSpeedRange"></div>
+				</div>
+				<div class="col-auto">
+					<canvas id="throttleSpeedGauge"
+						data-type="radial-gauge"
+						data-title="DCC++"
+						data-color-title="#FFFFFF"
+						data-min-value="0"
+						data-max-value="130"
+						data-major-ticks='["0","10","20","30","40","50","60","70","80","90","100","110","120","130"]'
+						data-minor-ticks="10"
+						data-stroke-ticks="true"
+						data-units="Speed"
+						data-value="0"
+						data-value-dec="0"
+						data-glow="true"
+						data-animation-delay="10"
+						data-animation-duration="400"
+						data-animation-fn="linear"
+						data-color-plate="#4C4E4F"
+						data-color-needle="#FF0000"
+						data-color-needle-end="#00CCFF"
+						data-color-major-ticks="#00CCFF"
+						data-color-minor-ticks="#00CCFF"
+						data-color-numbers="#00CCFF"
+						data-highlights='[{"from":100, "to": 126, "color": "#FF0000"}]'>
+					</canvas>
+				</div>
+				<div class="col">
+					<div id="locoGroup">
+						<div class="row">
+							<label for="loco1">123</label>
+							<input type="radio" name="loco" id="loco1" value="">
+							<span id="loco1Info" class="clockdate">Idle</span>
+						</div>
+						<div class="row">
+							<label for="loco2">456</label>
+							<input type="radio" name="loco" id="loco2" value="">
+							<span id="loco2Info" class="clockdate">Idle</span>
+						</div>
+						<div class="row">
+							<label for="loco3">789</label>
+							<input type="radio" name="loco" id="loco3" value="">
+							<span id="loco3Info" class="clockdate">Idle</span>
+						</div>
+						<div class="row">
+							<label for="loco4">012</label>
+							<input type="radio" name="loco" id="loco4" value="">
+							<span id="loco4Info" class="clockdate">Idle</span>
+						</div>
+						<div class="row">
+							<label for="loco5">345</label>
+							<input type="radio" name="loco" id="loco5" value="">
+							<span id="loco5Info" class="clockdate">Idle</span>
+						</div>
+						<div class="row hideForHeight">
+							<label for="loco6">678</label>
+							<input type="radio" name="loco" id="loco6" value="">
+							<span id="loco6Info" class="clockdate">Idle</span>
+						</div>
+						<div class="row hideForHeight">
+							<label for="loco7">901</label>
+							<input type="radio" name="loco" id="loco7" value="">
+							<span id="loco7Info" class="clockdate">Idle</span>
+						</div>
+						<div class="row hideForHeight">
+							<label for="loco8">234</label>
+							<input type="radio" name="loco" id="loco8" value="">
+							<span id="loco8Info" class="clockdate">Idle</span>
+						</div>
+						<div class="row hideForHeight">
+							<label for="loco9">567</label>
+							<input type="radio" name="loco" id="loco9" value="">
+							<span id="loco9Info" class="clockdate">Idle</span>
+						</div>
+						<div class="row hideForHeight">
+							<label for="loco10">890</label>
+							<input type="radio" name="loco" id="loco10" value="">
+							<span id="loco10Info" class="clockdate">Idle</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-auto"><div id="funct_0" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_1" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_2" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_3" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_4" class="toggle toggle-dark"></div></div>
+			</div>
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-auto"><div id="funct_5" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_6" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_7" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_8" class="toggle toggle-dark"></div></div>
+			</div>
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-auto"><div id="funct_9" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_10" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_11" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_12" class="toggle toggle-dark"></div></div>
+			</div>
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-auto"><div id="funct_13" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_14" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_15" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_16" class="toggle toggle-dark"></div></div>
+			</div>
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-auto"><div id="funct_17" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_18" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_19" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_20" class="toggle toggle-dark"></div></div>
+			</div>
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-auto"><div id="funct_21" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_22" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_23" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_24" class="toggle toggle-dark"></div></div>
+			</div>
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-auto"><div id="funct_25" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_26" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_27" class="toggle toggle-dark"></div></div>
+				<div class="col-auto"><div id="funct_28" class="toggle toggle-dark"></div></div>
+			</div>
+		</div>
+	</div>
+	<div id="tab-top-1">
+		<div id="dcc-tabs">
+			<ul>
+				<li><a href="#dcc-tab-0">Status</a></li>
+				<li><a href="#dcc-tab-1">ESP Status</a></li>
+				<li><a href="#dcc-tab-2">Serial Monitor</a></li>
+				<li><a href="#dcc-tab-3">Turnouts</a></li>
+				<li><a href="#dcc-tab-4">Sensors</a></li>
+				<li><a href="#dcc-tab-5">Outputs</a></li>
+			</ul>
+			<div id="dcc-tab-0">
+			</div>
+			<div id="dcc-tab-1">
+				<table id="espinfo" class="display" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+						<th>Component</th>
+						<th>Value</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div id="dcc-tab-2">
+				<label for="consoleConnect">DCC++ Connection:</label>
+				<div id="consoleConnect" class="toggle toggle-dark"></div>
+				<textarea id="serialMonitorContent">Connect to continue.</textarea>
+				<p><button id="btnConsoleClear">Clear</button></p>
+			</div>
+			<div id="dcc-tab-3">
+				<table id="turnouts" class="display" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>State</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div id="dcc-tab-4">
+				<table id="sensors" class="display" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Pin</th>
+							<th>Pullup</th>
+							<th>State</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div id="dcc-tab-5">
+				<table id="outputs" class="display" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Pin</th>
+							<th>Inverted</th>
+							<th>State</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="dialog-locoNumber">
+	<form>
+		<label for="locoNumber">Locomotive Number</label>
+		<input type="text" name="locoNumber" id="dialogLocoNumber" class="text ui-widget-content ui-corner-all" />
+	</form>
+</div>
+<script type="text/javascript">
+	var dialogLocoTargetObject;
+	var locoData = new HashMap();
+	var socket;
+	var socketUrl = window.location + "";
+	socketUrl = socketUrl.replace("http", "ws").replace("/index.html", "");
+	if(socketUrl.endsWith("/")) {
+		socketUrl += "ws";
+	} else {
+		socketUrl += "/ws";
+	}
+	console.log('server url:', socketUrl);
+	
+	function sendCommand(command) {
+		console.log('Sending:', command);
+		socket.send(command);
+	}
+	function setLocoSpeedSlider(newSpeed) {
+		document.gauges.get('throttleSpeedGauge').value = newSpeed;
+		if($('#locoGroup :radio:checked').attr('id')) {
+			var locoID = $('#locoGroup :radio:checked').attr('id').trim();
+			var locoIDKey = locoID.replace('loco', '');
+			sendLocoSpeed(locoIDKey, newSpeed);
+		}
+	}
+	function sendLocoSpeed(locoIDKey, newSpeed) {
+		var locoNumber = $('label[for=loco' + locoIDKey + ']', '#locoGroup').text().trim();
+		var locoDirection = locoData.get(locoIDKey).get('direction');
+		locoData.get(locoIDKey).set('speed', newSpeed);
+		sendCommand('<t' + locoIDKey + ' ' + locoNumber + ' ' + newSpeed + ' ' + locoDirection + '>');
+		if(newSpeed == 0) {
+			$('#loco' + locoIDKey + 'Info').text('Idle');
+		} else if(locoDirection == 1) {
+			$('#loco' + locoIDKey + 'Info').text('FWD ' + newSpeed);
+		} else {
+			$('#loco' + locoIDKey + 'Info').text('REV ' + newSpeed);
+		} 
+	}
+	function sendLocoFunction(locoIDKey, functionID, active) {
+		var locoNumber = $('label[for=loco' + locoIDKey + ']', '#locoGroup').text().trim();
+		var functionGroups = [
+			{
+				firstByte: true,
+				members : ['1', '2', '3', '4', '0'],
+				base : 128
+			},
+			{
+				firstByte: true,
+				members : ['5', '6', '7', '8'],
+				base : 176
+			},
+			{
+				firstByte: true,
+				members : ['9', '10', '11', '12'],
+				base : 160
+			},
+			{
+				firstByte: false,
+				firstByteValue: 222,
+				members : ['13', '14', '15', '16', '17', '18', '19', '20'],
+				base : 0
+			},
+			{
+				firstByte: false,
+				firstByteValue: 223,
+				members : ['21', '22', '23', '24', '25', '26', '27', '28'],
+				base : 0
+			}
+		];
+		locoData.get(locoIDKey).get('functions').set('F' + functionID, active);
+		var firstByteValue = 0;
+		var secondByteValue = 0;
+		for(index = 0; index < functionGroups.length; index++) {
+			if(functionGroups[index].members.indexOf(functionID) >= 0) {
+				var functionValue = functionGroups[index].base;
+				for(memberIndex = 0; memberIndex < functionGroups[index].members.length; memberIndex++) {
+					if(locoData.get(locoIDKey).get('functions').get('F' + functionGroups[index].members[memberIndex])) {
+						functionValue += (1 << memberIndex);
+					}
+				}
+				if(functionGroups[index].firstByte) {
+					firstByteValue = functionValue;
+				} else {
+					firstByteValue = functionGroups[index].firstByteValue;
+					secondByteValue = functionValue;
+				}
+			}
+		}
+		if(secondByteValue != 0) {
+			sendCommand('<f' + locoIDKey + ' ' + locoNumber + ' ' + firstByteValue + ' ' + secondByteValue + '>');
+		} else {
+			sendCommand('<f' + locoIDKey + ' ' + locoNumber + ' ' + firstByteValue + '>');
+		}
+	}
+	function selectLoco(locoIDKey) {
+		var locoMap = locoData.get(locoIDKey);
+		var locoFunctionMap = locoMap.get('functions');
+		$('#throttleSpeedRange').slider('value', locoMap.get('speed'));
+		document.gauges.get('throttleSpeedGauge').value = locoMap.get('speed');
+		for(functionIndex = 0; functionIndex <= 28; functionIndex++) {
+			$('#funct_' + functionIndex).data('toggles').toggle(locoFunctionMap.get('F' + functionIndex), false, true);
+		}
+	}
+	function receiveWebSocketData(data) {
+		$('#serialMonitorContent').prepend(data.replace('<', '&lt;') + "\n");
+		$('#serialMonitorContent').scrollTop();
+		$('#throttleConsole').prepend(data.replace('<', '&lt;') + "\n");
+		$('#throttleConsole').scrollTop();
+		
+	}
+	function connectWebSocket(active) {
+		if (active) {
+			if(!socket || !socket.isConnected()) {
+				socket = $.simpleWebSocket({url: socketUrl, dataType: 'text'});
+				socket.listen(receiveWebSocketData);
+				socket.connect();
+			}
+		} else {
+			if(socket && socket.isConnected()) {
+				socket.close();
+			}
+		}
+	}
+	$(function(){
+		$('#dialog-locoNumber').dialog({
+			autoOpen:false,
+			modal:true,
+			buttons: {
+				'Ok':function() {
+					var newValue = $('#dialogLocoNumber').val();
+					$('label[for=' + dialogLocoTargetObject + ']', '#locoGroup').html(newValue);
+					$(this).dialog('close');
+				},
+				'Cancel':function() {
+					$(this).dialog('close');
+				}}
+		});
+		$('#top-tabs').tabs();
+		$('#dcc-tabs').tabs({
+			beforeActivate: function(event, ui) {
+				if(ui.newPanel.attr('id') == 'dcc-tab-1') {
+					$('#espinfo').DataTable().draw();
+				}
+			}
+		});
+		$('#consoleConnect').toggles({
+			text:{
+				on:'Connected',
+				off:'Disconnected'
+			},
+			width:100}
+		);
+		$('#throttleConnect').toggles({
+			text:{
+				on:'Connected',
+				off:'Disconnected'
+			},
+			width:100}
+		);
+		$('#throttleDirection').toggles({
+			text:{
+				on:'Forward',
+				off:'Reverse'
+			},
+			on:true,
+			width:100}
+		);
+		$('#throttlePower').toggles({
+			text:{
+				on:'Power ON',
+				off:'Power OFF'
+			},
+			width:100}
+		);
+		$('#espinfo').DataTable( {
+			"ajax": {
+				url:'/espinfo',
+				dataSrc: ''
+			},
+			"columns": [ { data: 'label' }, { data: 'value' } ],
+			'paging':false,
+			'info':false,
+			'searching':false,
+			'serverSide':true,
+			'jQueryUI':true,
+			'deferRender':true,
+			'serverSide':true,
+			'deferLoading':9,
+		} );
+		$('#turnouts').DataTable( {
+			"ajax": {
+				url:'/dccpp/turnouts',
+				dataSrc: ''
+			},
+			"columns": [ { data: 'id' }, { data: 'state' } ],
+			'paging':false,
+			'info':false,
+			'searching':false,
+			'serverSide':true,
+			'jQueryUI':true,
+			'deferRender':true,
+			'serverSide':true,
+			'deferLoading':9,
+		} );
+		$('#sensors').DataTable( {
+			"ajax": {
+				url:'/dccpp/sensors',
+				dataSrc: ''
+			},
+			"columns": [ { data: 'id' }, { data: 'pin' }, { data: 'pullup' }, { data: 'state' } ],
+			'paging':false,
+			'info':false,
+			'searching':false,
+			'serverSide':true,
+			'jQueryUI':true,
+			'deferRender':true,
+			'serverSide':true,
+			'deferLoading':9,
+		} );
+		$('#outputs').DataTable( {
+			"ajax": {
+				url:'/dccpp/outputs',
+				dataSrc: ''
+			},
+			"columns": [ { data: 'id' }, { data: 'pin' }, { data: 'inverted' }, { data: 'state' } ],
+			'paging':false,
+			'info':false,
+			'searching':false,
+			'serverSide':true,
+			'jQueryUI':true,
+			'deferRender':true,
+			'serverSide':true,
+			'deferLoading':9,
+		} );
+		$('#throttleSpeedRange').slider({
+			min:0,
+			max:126,
+			orientation:'vertical',
+			animate:true
+		});
+		$('#throttleSpeedRange').on('slide', function(event, ui) {
+			setLocoSpeedSlider(ui.value);
+		});
+		$('#btnConsoleClear').button();
+		$('#btnThrottleClose').button();
+		$('#btnThrottleReset').button();
+		$('#btnThrottleEStop').button();
+		$('#btnThrottleStatus').button();
+		$('#locoGroup').controlgroup({direction:'vertical'});
+		$('#locoGroup').on('change', function() {
+			var locoID = $("#locoGroup :radio:checked").attr('id').trim();
+			var locoIDKey = locoID.replace('loco', '');
+			selectLoco(locoIDKey);
+		});
+		$('label', '#locoGroup').dblclick(function() {
+			$('#dialogLocoNumber').val($(this).text())
+			dialogLocoTargetObject=$(this).attr('for');
+			$('#dialog-locoNumber').dialog('open')
+		})
+		$('label:first', $('#locoGroup')).removeClass('ui-corner-left').addClass('ui-corner-top');
+		$('label:last', $('#locoGroup')).removeClass('ui-corner-right').addClass('ui-corner-bottom');
+		$.fn.hideTab = function (tabIndex) {
+			$(this).find('li:eq(' + tabIndex + ')').hide();
+			return this;
+		};
+		$.fn.showTab = function (tabIndex) {
+			$(this).find('li:eq(' + tabIndex + ')').show();
+			return this;
+		};
+		$('#btnConsoleClear').click(function() {
+			$('#serialMonitorContent').val('');
+		});
+		$('#btnThrottleStatus').click(function() {
+			sendCommand('<s>');
+		});
+		$('#throttlePower').on('toggle', function(e, active) {
+			if(active) {
+				sendCommand('<1>');
+			} else {
+				sendCommand('<0>');
+			}
+		});
+		$('#consoleConnect').on('toggle', function(e, active) {
+			if ($('#dcc-tabs').tabs('option', 'active') == 2) {
+				connectWebSocket(active);
+				$('#throttleConnect').toggle();
+			}
+		});
+		$('#throttleConnect').on('toggle', function(e, active) {
+			if ($('#top-tabs').tabs('option', 'active') == 0) {
+				connectWebSocket(active);
+				$('#consoleConnect').toggle();
+			}
+		});
+		$('#throttleDirection').on('toggle', function(e, active) {
+			if($('#locoGroup :radio:checked').attr('id')) {
+				var locoID = $('#locoGroup :radio:checked').attr('id').trim();
+				var locoIDKey = locoID.replace('loco', '');
+				var locoDataEntry = locoData.get(locoIDKey);
+				if (active) {
+					locoDataEntry.set('direction', '1');
+				} else {
+					locoDataEntry.set('direction', '0');
+				}
+				$('#throttleSpeedRange').slider('value', 0);
+				setLocoSpeedSlider(0);
+			}
+		});
+		$('#clock').clock({'format':'24'});
+		for(i = 1; i <= 10; i++) {
+			locoData.set('' + i, new HashMap());
+			locoData.get('' + i).set('speed', 0).set('direction', 1).set('functions', new HashMap());
+			for(functionIndex = 0; functionIndex <= 28; functionIndex++) {
+				locoData.get('' + i).get('functions').set('F' + functionIndex, false);
+			}
+		}
+		$('#locoGroup :radio:eq(0)').attr('checked', true);
+		for(i = 0; i <= 28; i++) {
+			$('#funct_' + i).toggles({
+				text:{
+					on:'F' + i,
+					off:'F' + i
+				}
+			});
+			$('#funct_' + i).on('toggle', function(e, active) {
+				var functionID = $(this).attr('id').replace('funct_', '').trim();
+				var locoID = $("#locoGroup :radio:checked").attr('id').trim();
+				var locoIDKey = locoID.replace('loco', '');
+				sendLocoFunction(locoIDKey, functionID, active);
+			});
+		}
+		$('#btnThrottleEStop').click(function() {
+			for(locoID = 1; locoID <= 10; locoID++) {
+				var locoIDKey = '' + locoID;
+				locoData.get(locoIDKey).set('speed', 0);
+				if($(':radio:eq(' + (locoID - 1) + ')', '#locoGroup').css("display") != 'none') {
+					sendLocoSpeed(locoIDKey, 0);
+					var locoRadioID = 'loco' + locoIDKey;
+					if($('#locoGroup :radio:checked').attr('id') == locoRadioID) {
+						// not using setLocoSpeedSlider as we don't want to send the value twice
+						$('#throttleSpeedRange').slider('value', 0);
+						document.gauges.get('throttleSpeedGauge').value = 0;
+					}
+				}
+			}
+		});
+	});
+</script>
 
-  <div class="row bg-1">
-    <div class="container-fluid text-center">
-      <h3>DCC++ Web Controller</h3>
-    </div>
-    <div class="container-fluid text-left">
-<a href="/">Home</a><a href="/espinfo">ESP System Information</a><a href="/status">DCC++ Status</a> 
-    </div>
-  </div>
-
-  <div class="row bg-2">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6">
-      <div class="col-xs-3 text-center">
-        <div class="clock">
-          <div id="Date"></div>
-
-          <ul>
-            <li id="hours"></li>
-
-            <li id="point">:</li>
-
-            <li id="min"></li>
-
-            <li id="point">:</li>
-
-            <li id="sec"></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="col-xs-3"></div>
-
-      <div class="col-xs-3"></div>
-
-      <div class="col-xs-3 text-center">
-        <button type="button" class="btn btn-danger btn-lg" onclick="PowerOffRst()">Exit<br>Reset</button>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-3 text-center">
-    <div class="col-md-3 visible-md visible-lg"></div>
-    <div class="main col-md-6">
-      <div class="col-xs-3 text-center">
-        <input type="text" class="form-control" id="server" placeholder="Server 'IP Address'" style="width:150px;height:35px;">
-      </div>
-
-      <div class="col-xs-2">
-      
-      </div>
-
-      <div class="col-xs-7 text-right">
-        <textarea rows="5" cols="23" id="display" value="" spellcheck="false"  readonly="true" style="font-size:16px;line-height: 1em;">Status: Please Connect to Server...
-  </textarea>
-      </div>
-    </div>  
-
-    <div class="col-md-3 visible-md visible-lg"></div>
-  </div>
-
-  <div class="row bg-3 text-center">
-    <div class="col-md-3 visible-md visible-lg"></div>
-
-    <div class="main col-md-6">
-      <div class="col-xs-3 text-center">
-        <button type="button" class="btn btn-primary btn-md" value="Connect" onclick="connect(server.value)">Connect</button>
-      </div>
-
-      <div class="col-xs-6">
-        <input type="checkbox" data-toggle="toggle" id="Power" name="power" onchange="switch0()" data-size="medium" data-on=
-        "Power On" data-off="Power Off" data-onstyle="success" data-offstyle="warning">
-      </div>
-
-      <div class="col-xs-3">
-        <button type="button" class="btn btn-info btn-md" value="S" onclick="Sget()">&lt;s&gt;</button>
-      </div>
-    </div>
-
-    <div class="col-md-3 visible-md visible-lg"></div>
-  </div>
-
-  <div class="row bg-4">
-    <div class="col-md-3 visible-md visible-lg"></div>
-
-    <div class="main col-md-6">
-      <div class="col-xs-2" style="min-height: 14em;">
-        <div class="container-fluid">
-          <input type="range" id="inputSliderT1" min="0" max="126" value="0" step="1" onchange="showValueT1(this.value)">
-        </div> 
-      </div>
-
-      <div class="col-xs-4 text-left">
-        &nbsp; &nbsp;
-
-        <div class="container-fluid">
-          <input type="text" name="Cab1#" placeholder="Cab#" id="Cab1" onchange="Cabmod1()" style=
-          "background-color:#000000;width:65px;height:35px;font-size: 24px;">
-        </div>&nbsp; &nbsp;
-
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="DirT1" onchange="switch1()" data-size="medium" checked data-on=
-          "F&gt;&gt;" data-off="R&lt;&lt;" data-offstyle="danger" data-onstyle="success">
-        </div>&nbsp; &nbsp;
-
-        <div class="container-fluid">
-          <button class="btn btn-danger btn-md" type="button" id="stop1" onclick="Stop1()">STOP</button>
-        </div>&nbsp; &nbsp;
-        <div class="container-fluid">
-          <input type="text" id="outputTextT1" value="0" style="background-color:#787a7a;width:55px;height:40px;border: 4px inset #FF8000; font-size: 26px; color: #FF8000;">
-        </div>
-      </div>       
-      <div class="col-xs-4 text-right">
-        &nbsp; &nbsp;
-
-        <div class="container-fluid">
-          <input type="text" name="Cab2#" placeholder="Cab#" id="Cab2" onchange="Cabmod2()" style=
-          "background-color:#000000;width:65px;height:35px;font-size: 24px;">
-        </div>&nbsp; &nbsp;
-
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="DirT2" onchange="switch2()" data-size="medium" checked data-on=
-          "F&gt;&gt;" data-off="R&lt;&lt;" data-offstyle="danger" data-onstyle="success">
-        </div>&nbsp; &nbsp;
-
-        <div class="container-fluid">
-          <button class="btn btn-danger btn-md" type="button" id="stop2" onclick="Stop2()">STOP</button>
-        </div>&nbsp; &nbsp;
-        <div class="container-fluid">
-          <input type="text" id="outputTextT2" value="0" style="background-color:#787a7a;width:55px;height:40px;border: 4px inset #FF8000; font-size: 26px; color: #FF8000;">
-        </div>
-      </div>
-      <div class="col-xs-2" style="min-height: 14em;">
-        <div class="container-fluid">
-          <input type="range" id="inputSliderT2" min="0" max="126" value="0" step="1" onchange="showValueT2(this.value)">
-        </div>        
-      </div>
-    </div>    
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-  
-  
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F0-1" onchange="Fgrp1a()" data-size="small" data-width="50px" data-on="F0" data-off="F0" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F1-1" onchange="Fgrp1a()" data-size="small" data-width="50px" data-on="F1" data-off="F1" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot1a" onclick="Fgrp1a()" type="button" style="width:50px;">F0-4</button>
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F0-2" onchange="Fgrp2a()" data-size="small" data-width="50px" data-on="F0" data-off="F0" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F1-2" onchange="Fgrp2a()" data-size="small" data-width="50px" data-on="F1" data-off="F1" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot2a" onclick="Fgrp2a()" type="button" style="width:50px;">F0-4</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F2-1" onchange="Fgrp1a()" data-size="small" data-width="50px" data-on="F2" data-off="F2" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F3-1" onchange="Fgrp1a()" data-size="small" data-width="50px" data-on="F3" data-off="F3" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F4-1" onchange="Fgrp1a()" data-size="small" data-width="50px" data-on="F4" data-off="F4" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F2-2" onchange="Fgrp2a()" data-size="small" data-width="50px" data-on="F2" data-off="F2" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F3-2" onchange="Fgrp2a()" data-size="small" data-width="50px" data-on="F3" data-off="F3" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F4-2" onchange="Fgrp2a()" data-size="small" data-width="50px" data-on="F4" data-off="F4" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F5-1" onchange="Fgrp1b()" data-size="small" data-width="50px" data-on="F5" data-off="F5" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F6-1" onchange="Fgrp1b()" data-size="small" data-width="50px" data-on="F6" data-off="F6" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot1b" onclick="Fgrp1b()" type="button" style="width:50px;">F5-8</button>
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F5-2" onchange="Fgrp2b()" data-size="small" data-width="50px" data-on="F5" data-off="F5" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F6-2" onchange="Fgrp2b()" data-size="small" data-width="50px" data-on="F6" data-off="F6" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot2b" onclick="Fgrp2b()" type="button" style="width:50px;">F5-8</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F7-1" onchange="Fgrp1b()" data-size="small" data-width="50px" data-on="F7" data-off="F7" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F8-1" onchange="Fgrp1b()" data-size="small" data-width="50px" data-on="F8" data-off="F8" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F7-2" onchange="Fgrp2b()" data-size="small" data-width="50px" data-on="F7" data-off="F7" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F8-2" onchange="Fgrp2b()" data-size="small" data-width="50px" data-on="F8" data-off="F8" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F9-1" onchange="Fgrp1c()" data-size="small" data-width="50px" data-on="F9" data-off="F9" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F10-1" onchange="Fgrp1c()" data-size="small" data-width="50px" data-on="F10" data-off="F10" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot1c" onclick="Fgrp1c()" type="button" style="width:50px;padding-left: 8px;">F9-12</button>
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F9-2" onchange="Fgrp2c()" data-size="small" data-width="50px" data-on="F9" data-off="F9" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F10-2" onchange="Fgrp2c()" data-size="small" data-width="50px" data-on="F10" data-off="F10" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot2c" onclick="Fgrp2c()" type="button" style="width:50px;padding-left: 8px;">F9-12</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F11-1" onchange="Fgrp1c()" data-size="small" data-width="50px" data-on="F11" data-off="F11" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F12-1" onchange="Fgrp1c()" data-size="small" data-width="50px" data-on="F12" data-off="F12" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F11-2" onchange="Fgrp2c()" data-size="small" data-width="50px" data-on="F11" data-off="F11" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F12-2" onchange="Fgrp2c()" data-size="small" data-width="50px" data-on="F12" data-off="F12" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F13-1" onchange="Fgrp1d()" data-size="small" data-width="50px" data-on="F13" data-off="F13" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F14-1" onchange="Fgrp1d()" data-size="small" data-width="50px" data-on="F14" data-off="F14" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot1d" onclick="Fgrp1d()" type="button" style="width:50px;padding-left: 5px;">F13-20</button>
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F13-2" onchange="Fgrp2d()" data-size="small" data-width="50px" data-on="F13" data-off="F13" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F14-2" onchange="Fgrp2d()" data-size="small" data-width="50px" data-on="F14" data-off="F14" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot2d" onclick="Fgrp2d()" type="button" style="width:50px;padding-left: 5px;">F13-20</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F15-1" onchange="Fgrp1d()" data-size="small" data-width="50px" data-on="F15" data-off="F15" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F16-1" onchange="Fgrp1d()" data-size="small" data-width="50px" data-on="F16" data-off="F16" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F17-1" onchange="Fgrp1d()" data-size="small" data-width="50px" data-on="F17" data-off="F17" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F15-2" onchange="Fgrp2d()" data-size="small" data-width="50px" data-on="F15" data-off="F15" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F16-2" onchange="Fgrp2d()" data-size="small" data-width="50px" data-on="F16" data-off="F16" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F17-2" onchange="Fgrp2d()" data-size="small" data-width="50px" data-on="F17" data-off="F17" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F18-1" onchange="Fgrp1d()" data-size="small" data-width="50px" data-on="F18" data-off="F18" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F19-1" onchange="Fgrp1d()" data-size="small" data-width="50px" data-on="F19" data-off="F19" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F20-1" onchange="Fgrp1d()" data-size="small" data-width="50px" data-on="F20" data-off="F20" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F18-2" onchange="Fgrp2d()" data-size="small" data-width="50px" data-on="F18" data-off="F18" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F19-2" onchange="Fgrp2d()" data-size="small" data-width="50px" data-on="F19" data-off="F19" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F20-2" onchange="Fgrp2d()" data-size="small" data-width="50px" data-on="F20" data-off="F20" data-offstyle="default" data-onstyle="info">
-        </div>&nbsp;
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F21-1" onchange="Fgrp1e()" data-size="small" data-width="50px" data-on="F21" data-off="F21" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F22-1" onchange="Fgrp1e()" data-size="small" data-width="50px" data-on="F22" data-off="F22" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot1e" onclick="Fgrp1e()" type="button" style="width:50px;padding-left: 5px;">F21-28</button>
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F21-2" onchange="Fgrp2e()" data-size="small" data-width="50px" data-on="F21" data-off="F21" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F22-2" onchange="Fgrp2e()" data-size="small" data-width="50px" data-on="F22" data-off="F22" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <button class="btn btn-primary btn-sm" id="shoot2e" onclick="Fgrp2e()" type="button" style="width:50px;padding-left: 5px;">F21-28</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F23-1" onchange="Fgrp1e()" data-size="small" data-width="50px" data-on="F23" data-off="F23" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F24-1" onchange="Fgrp1e()" data-size="small" data-width="50px" data-on="F24" data-off="F24" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F25-1" onchange="Fgrp1e()" data-size="small" data-width="50px" data-on="F25" data-off="F25" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F23-2" onchange="Fgrp2e()" data-size="small" data-width="50px" data-on="F23" data-off="F23" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F24-2" onchange="Fgrp2e()" data-size="small" data-width="50px" data-on="F24" data-off="F24" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F25-2" onchange="Fgrp2e()" data-size="small" data-width="50px" data-on="F25" data-off="F25" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-
-  <div class="row bg-5">
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-    <div class="main col-md-6 myBtnCol">
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F26-1" onchange="Fgrp1e()" data-size="small" data-width="50px" data-on="F26" data-off="F26" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F27-1" onchange="Fgrp1e()" data-size="small" data-width="50px" data-on="F27" data-off="F27" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F28-1" onchange="Fgrp1e()" data-size="small" data-width="50px" data-on="F28" data-off="F28" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F26-2" onchange="Fgrp2e()" data-size="small" data-width="50px" data-on="F26" data-off="F26" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F27-2" onchange="Fgrp2e()" data-size="small" data-width="50px" data-on="F27" data-off="F27" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-      <div class="col-xs-2 text-center">
-        <div class="container-fluid">
-          <input type="checkbox" data-toggle="toggle" id="F28-2" onchange="Fgrp2e()" data-size="small" data-width="50px" data-on="F28" data-off="F28" data-offstyle="default" data-onstyle="info">
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 visible-md visible-lg">
-    </div>
-  </div>
-  <datalist id="locoaddress">
-      <option value="101">
-      <option value="1234">
-      <option value="2020">
-      <option value="9876">
-      <option value="1411">
-      <option value="165">
-      <option value="1188">
-  </datalist> 
-  
-
-  <footer class="pg-empty-placeholder text-center bg-1">
-    HTML by S. Lowry (indev2) 2016
-  </footer><!-- Bootstrap core JavaScript
-    ================================================== --><!-- Placed at the end of the document so the pages load faster -->
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>   
-  <script type="text/javascript" src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="/throttle/bootstrap-toggle.min.js"></script>
-  <script>
-
-        var display = document.getElementById('display');
-        var wsocket;
-
-        function connect(server) {
-            console.log('connecting', server);
-            if (window.WebSocket) {
-                display.value = "Connecting to..\n"+server+"\n";
-                if(wsocket) {
-                    wsocket.close();
-                    alert("WebSocket Closed.\nPlease try again.");
-        }
-			
-        wsocket = new WebSocket(server);	
-
-        wsocket.onopen = function(event) {
-            isRunning = true;
-            display.value += "Connected\n";
-            //alert ("Successfully connected to Server");
-        };
-        wsocket.onmessage = function(event) {
-            display.value += event.data + "\n";
-            var textarea = document.getElementById('display');
-            textarea.scrollTop = textarea.scrollHeight;
-        };
-        wsocket.onclose = function(event) {
-            isRunning = false;
-            display.value = "Disconnected\n";
-        };
-        wsocket.onerror = function(event) {
-            display.value = "Error\n";
-            console.log('WebSocket Error ', error);
-        };
-        } else {
-             alert("Your browser does not support Web Socket.");
-             }
-        }
-        function switch0() {
-            if (document.getElementById('Power').checked) {
-                var toSend = "ON";
-                wsocket.send(toSend);
-                console.log("Power On sent:" + toSend); <!--Debug - Comment out if not required.-->	
-
-            } else {
-                var toSend = "OFF";
-                wsocket.send(toSend);
-                console.log("Power Off sent:" + toSend); <!--Debug - Comment out if not required.-->
-            }
-        }
-        function Sget() {
-            var toSend = "S";
-            wsocket.send(toSend);
-        }
-
-        function switch1() {
-            if (document.getElementById('DirT1').checked) {
-                var toSend = "FOR";
-                wsocket.send(toSend);
-                console.log("Forward T1 sent:"+ toSend); <!--Debug - Comment out if not required.-->
-
-            } else {
-                var toSend = "REV";
-                wsocket.send(toSend);
-                console.log("Reverse T1 sent:"+ toSend); <!--Debug - Comment out if not required.-->
-            }
-        }
-
-        function switch2() {
-            if (document.getElementById('DirT2').checked) {
-                var toSend = "FOR2";
-                wsocket.send(toSend);
-                console.log("Forward T2 sent:"+ toSend); <!--Debug - Comment out if not required.-->
-
-            } else {
-                var toSend = "REV2";
-                wsocket.send(toSend);
-                console.log("Reverse T2 sent:"+ toSend); <!--Debug - Comment out if not required.-->
-            }
-        }
-
-        function PowerOffRst() {            
-            var toSend = "EXIT";
-            wsocket.send(toSend);            
-            console.log("Shut Down sent:" + toSend); <!--Debug - Comment out if not required.-->
-            setTimeout(wsocket.close(1000),3000);            
-            setTimeout (function(){location.reload()},3000);
-            
-        }
-
-        function Stop1() {
-            var toSend = "STOP1";
-            wsocket.send(toSend);
-            document.getElementById("inputSliderT1").value = 0;
-            document.getElementById("outputTextT1").value = 0;            
-            console.log("Stop sent:"+ toSend);
-            
-        }
-
-         function Stop2() {
-            var toSend = "STOP2";
-            wsocket.send(toSend);
-            document.getElementById("inputSliderT2").value = 0;
-            document.getElementById("outputTextT2").value = 0;              
-            console.log("Stop sent:"+ toSend);
-            
-        }
-
-        function Cabmod1() {
-            var text = document.getElementById('Cab1').value;
-            var toSend = "CAB1-" + text;
-            wsocket.send(toSend);
-            console.log("Cab# T1 sent:" + toSend); <!--Debug - Comment out if not required.-->
-
-        }
-
-        function Cabmod2() {
-            var text = document.getElementById('Cab2').value;
-            var toSend = "CAB2-" + text;
-            wsocket.send(toSend);
-            console.log("Cab# T2 sent:" + toSend); <!--Debug - Comment out if not required.-->
-        }
-
-        function showValueT1(newValue) {
-            document.getElementById("outputTextT1").value = newValue;
-            wsocket.send("T1-" + newValue);
-        }
-
-        function showValueT2(newValue) {
-            document.getElementById("outputTextT2").value = newValue;
-            wsocket.send("T2-" + newValue);
-        }
-        function Fgrp1a() {
-            if (document.getElementById('F0-1').checked) {
-                var  FnA = 16;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F1-1').checked) {
-                var  FnB = 1;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F2-1').checked) {
-                var  FnC = 2;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F3-1').checked) {
-                var  FnD = 4;                
-            } else {
-                 FnD = 0;
-        }
-             if (document.getElementById('F4-1').checked) {
-                var  FnE = 8;                
-            } else {
-                 FnE = 0;
-        }
-            var FnValue1 = +FnA + +FnB + +FnC + +FnD + +FnE +128;
-                wsocket.send("FnT1" +FnValue1);                
-                console.log("Function T1 sent:" +FnValue1);
-        }
-
-         function Fgrp2a() {
-            if (document.getElementById('F0-2').checked) {
-                var  FnA = 16;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F1-2').checked) {
-                var  FnB = 1;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F2-2').checked) {
-                var  FnC = 2;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F3-2').checked) {
-                var  FnD = 4;                
-            } else {
-                 FnD = 0;
-        }
-             if (document.getElementById('F4-2').checked) {
-                var  FnE = 8;                
-            } else {
-                 FnE = 0;
-        }
-            var FnValue2 = +FnA + +FnB + +FnC + +FnD + +FnE +128;
-                wsocket.send("FnT2" +FnValue2);                
-                console.log("Function T2 sent:" +FnValue2);
-        }
-        function Fgrp1b() {
-            if (document.getElementById('F5-1').checked) {
-                var  FnA = 1;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F6-1').checked) {
-                var  FnB = 2;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F7-1').checked) {
-                var  FnC = 4;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F8-1').checked) {
-                var  FnD = 8;                
-            } else {
-                 FnD = 0;
-        }
-            var FnValue1 = +FnA + +FnB + +FnC + +FnD +176;
-                wsocket.send("FnT1" +FnValue1);                
-                console.log("Function T1 sent:" +FnValue1);
-        }
-        function Fgrp2b() {
-            if (document.getElementById('F5-2').checked) {
-                var  FnA = 1;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F6-2').checked) {
-                var  FnB = 2;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F7-2').checked) {
-                var  FnC = 4;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F8-2').checked) {
-                var  FnD = 8;                
-            } else {
-                 FnD = 0;
-        }
-            var FnValue2 = +FnA + +FnB + +FnC + +FnD +176;
-                wsocket.send("FnT2" +FnValue2);                
-                console.log("Function T2 sent:" +FnValue2);
-        }
-        function Fgrp1c() {
-            if (document.getElementById('F9-1').checked) {
-                var  FnA = 1;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F10-1').checked) {
-                var  FnB = 2;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F11-1').checked) {
-                var  FnC = 4;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F12-1').checked) {
-                var  FnD = 8;                
-            } else {
-                 FnD = 0;
-        }
-            var FnValue1 = +FnA + +FnB + +FnC + +FnD +160;
-                wsocket.send("FnT1" +FnValue1);                
-                console.log("Function T1 sent:" +FnValue1);
-        }
-        function Fgrp2c() {
-            if (document.getElementById('F9-2').checked) {
-                var  FnA = 1;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F10-2').checked) {
-                var  FnB = 2;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F11-2').checked) {
-                var  FnC = 4;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F12-2').checked) {
-                var  FnD = 8;                
-            } else {
-                 FnD = 0;
-        }
-            var FnValue2 = +FnA + +FnB + +FnC + +FnD +160;
-                wsocket.send("FnT2" +FnValue2);                
-                console.log("Function T2 sent:" +FnValue2);
-        }
-        function Fgrp1d() {
-            if (document.getElementById('F13-1').checked) {
-                var  FnA = 1;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F14-1').checked) {
-                var  FnB = 2;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F15-1').checked) {
-                var  FnC = 4;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F16-1').checked) {
-                var  FnD = 8;                
-            } else {
-                 FnD = 0;
-        }
-             if (document.getElementById('F17-1').checked) {
-                var  FnE = 16;                
-            } else {
-                 FnE = 0;
-        }
-             if (document.getElementById('F18-1').checked) {
-                var  FnF = 32;                
-            } else {
-                 FnF = 0;
-        }
-             if (document.getElementById('F19-1').checked) {
-                var  FnG = 64;                
-            } else {
-                 FnG = 0;
-        }
-             if (document.getElementById('F20-1').checked) {
-                var  FnH = 128;                
-            } else {
-                 FnH = 0;
-        }
-            var FnValue1 = +FnA + +FnB + +FnC + +FnD + +FnE + +FnF+ +FnG+ +FnH;
-                wsocket.send("FnT1222 " +FnValue1);                
-                console.log("Function T1 sent:222 " +FnValue1);
-        }
-        function Fgrp2d() {
-            if (document.getElementById('F13-2').checked) {
-                var  FnA = 1;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F14-2').checked) {
-                var  FnB = 2;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F15-2').checked) {
-                var  FnC = 4;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F16-2').checked) {
-                var  FnD = 8;                
-            } else {
-                 FnD = 0;
-        }
-             if (document.getElementById('F17-2').checked) {
-                var  FnE = 16;                
-            } else {
-                 FnE = 0;
-        }
-             if (document.getElementById('F18-2').checked) {
-                var  FnF = 32;                
-            } else {
-                 FnF = 0;
-        }
-             if (document.getElementById('F19-2').checked) {
-                var  FnG = 64;                
-            } else {
-                 FnG = 0;
-        }
-             if (document.getElementById('F20-2').checked) {
-                var  FnH = 128;                
-            } else {
-                 FnH = 0;
-        }
-            var FnValue2 = +FnA + +FnB + +FnC + +FnD + +FnE + +FnF+ +FnG+ +FnH;
-                wsocket.send("FnT2222 " +FnValue2);                
-                console.log("Function T2 sent:222 " +FnValue2);
-        }
-        function Fgrp1e() {
-            if (document.getElementById('F21-1').checked) {
-                var  FnA = 1;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F22-1').checked) {
-                var  FnB = 2;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F23-1').checked) {
-                var  FnC = 4;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F24-1').checked) {
-                var  FnD = 8;                
-            } else {
-                 FnD = 0;
-        }
-             if (document.getElementById('F25-1').checked) {
-                var  FnE = 16;                
-            } else {
-                 FnE = 0;
-        }
-             if (document.getElementById('F26-1').checked) {
-                var  FnF = 32;                
-            } else {
-                 FnF = 0;
-        }
-             if (document.getElementById('F27-1').checked) {
-                var  FnG = 64;                
-            } else {
-                 FnG = 0;
-        }
-             if (document.getElementById('F28-1').checked) {
-                var  FnH = 128;                
-            } else {
-                 FnH = 0;
-        }
-            var FnValue1 = +FnA + +FnB + +FnC + +FnD + +FnE + +FnF+ +FnG+ +FnH;
-                wsocket.send("FnT1223 " +FnValue1);                
-                console.log("Function T1 sent:223 " +FnValue1);
-        }
-        function Fgrp2e() {
-            if (document.getElementById('F21-2').checked) {
-                var  FnA = 1;                
-            } else {
-                 FnA = 0;
-        }
-             if (document.getElementById('F22-2').checked) {
-                var  FnB = 2;                
-            } else {
-                 FnB = 0;
-        }
-             if (document.getElementById('F23-2').checked) {
-                var  FnC = 4;                
-            } else {
-                 FnC = 0;
-        }
-             if (document.getElementById('F24-2').checked) {
-                var  FnD = 8;                
-            } else {
-                 FnD = 0;
-        }
-             if (document.getElementById('F25-2').checked) {
-                var  FnE = 16;                
-            } else {
-                 FnE = 0;
-        }
-             if (document.getElementById('F26-2').checked) {
-                var  FnF = 32;                
-            } else {
-                 FnF = 0;
-        }
-             if (document.getElementById('F27-2').checked) {
-                var  FnG = 64;                
-            } else {
-                 FnG = 0;
-        }
-             if (document.getElementById('F28-2').checked) {
-                var  FnH = 128;                
-            } else {
-                 FnH = 0;
-        }
-            var FnValue2 = +FnA + +FnB + +FnC + +FnD + +FnE + +FnF+ +FnG+ +FnH;
-                wsocket.send("FnT2223 " +FnValue2);                
-                console.log("Function T2 sent:223 " +FnValue2);
-        }
-
-       $(document).ready(function() {
-           var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]; 
-           var dayNames= ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
-           var newDate = new Date();
-           newDate.setDate(newDate.getDate());
-           $('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear());
-
-        setInterval( function() {
-            var seconds = new Date().getSeconds();
-            $("#sec").html(( seconds < 10 ? "0":"" ) + seconds);
-        },1000);
-        
-        setInterval( function() {
-            var minutes = new Date().getMinutes();
-            $("#min").html(( minutes < 10 ? "0":"" ) + minutes);
-        },1000);
-        
-        setInterval( function() {
-            var hours = new Date().getHours();
-            $("#hours").html(( hours < 10 ? "0":"" ) + hours);
-        }, 1000);   
-        });
-        
-        $(document).ready(function(){
-        var socketUrl = window.location + "/ws";
-        socketUrl = socketUrl.replace("http", "ws");
-        socketUrl = socketUrl.replace("/throttle", "");
-        document.getElementById("server").value = socketUrl;
-});
-  </script>
-  
-  
- 
 </body>
 </html>
