@@ -91,7 +91,7 @@ Part of DCC++ BASE STATION for the Arduino
 //
 // Note: This feature requires an I2C enabled LCD screen using a PCF8574 based chipset.
 //
-#define ENABLE_LCD
+// #define ENABLE_LCD
 
 #ifdef ENABLE_LCD
 	// This defines the I2C address for the LCD device
