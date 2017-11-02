@@ -16,6 +16,9 @@ what is provided in DCC++.
 Building DCC++ ESP
 ------------------
 
+The easiest way to build DCC++ ESP is to use Platform IO IDE, this will ensure the
+necessary libraries are installed and everything is automated.
+
 Building DCC++ ESP requires the following libraries:
 * ArduinoOTA (https://github.com/esp8266/Arduino)
 * ESP8266mDNS (https://github.com/esp8266/Arduino)
@@ -31,5 +34,13 @@ for details in setting up the additional packages for this.
 Uploading DCC++ ESP to your device
 ----------------------------------
 
-The Arduino IDE or Arduino Eclipse IDE provide the necessary support for uploading to the ESP8266
-device, there is no longer a SPIFFS binary to upload so no manual steps are required for that.
+The Arduino IDE provides the basic support for compiling and uploading the binary, but does not
+provide the support for SPIFFS upload without adding additional plugins.
+
+The easiest way to upload this to your ESP device is to use Platform IO IDE and execute the
+following commands from a terminal window in the project directory:
+platformio init
+platformio run --target upload
+platformio run --target uploadfs
+
+This should compile and upload both the binary and SPIFFS data to the ESP device.
