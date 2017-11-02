@@ -15,7 +15,7 @@ Part of DCC++ BASE STATION for the Arduino
 // See SerialCommand::parse() below for defined text commands.
 
 #include "SerialCommand.h"
-#include "DCCpp_Uno.h"
+#include "DCCpp.h"
 #include "Accessories.h"
 #include "Sensor.h"
 #include "Outputs.h"
@@ -40,7 +40,7 @@ void SerialCommand::init(volatile RegisterList *_mRegs, volatile RegisterList *_
 ///////////////////////////////////////////////////////////////////////////////
 
 void SerialCommand::parse(const char *com){
-  
+
   switch(com[0]){
 
 /***** SET ENGINE THROTTLES USING 128-STEP SPEED CONTROL ****/
@@ -86,7 +86,7 @@ void SerialCommand::parse(const char *com){
  *
  *    To set functions F13-F20 on (=1) or off (=0):
  *
- *    BYTE1: 222 
+ *    BYTE1: 222
  *    BYTE2: F13*1 + F14*2 + F15*4 + F16*8 + F17*16 + F18*32 + F19*64 + F20*128
  *
  *    To set functions F21-F28 on (=1) of off (=0):
@@ -161,7 +161,7 @@ void SerialCommand::parse(const char *com){
 
 /***** CREATE/EDIT/REMOVE/SHOW A SENSOR  ****/
 
-    case 'S': 
+    case 'S':
 /*
  *   *** SEE SENSOR.CPP FOR COMPLETE INFO ON THE DIFFERENT VARIATIONS OF THE "S" COMMAND
  *   USED TO CREATE/EDIT/REMOVE/SHOW SENSOR DEFINITIONS
@@ -184,12 +184,12 @@ void SerialCommand::parse(const char *com){
 /*
  *    writes, without any verification, a Configuration Variable to the decoder of an engine on the main operations track
  *
- *    CAB:  the short (1-127) or long (128-10293) address of the engine decoder 
+ *    CAB:  the short (1-127) or long (128-10293) address of the engine decoder
  *    CV: the number of the Configuration Variable memory location in the decoder to write to (1-1024)
  *    VALUE: the value to be written to the Configuration Variable memory location (0-255)
- *    
+ *
  *    returns: NONE
-*/    
+*/
       mRegs->writeCVByteMain(com+1);
       break;
 
@@ -199,7 +199,7 @@ void SerialCommand::parse(const char *com){
 /*
  *    writes, without any verification, a single bit within a Configuration Variable to the decoder of an engine on the main operations track
  *
- *    CAB:  the short (1-127) or long (128-10293) address of the engine decoder 
+ *    CAB:  the short (1-127) or long (128-10293) address of the engine decoder
  *    CV: the number of the Configuration Variable memory location in the decoder to write to (1-1024)
  *    BIT: the bit number of the Configurarion Variable regsiter to write (0-7)
  *    VALUE: the value of the bit to be written (0-1)
@@ -216,13 +216,13 @@ void SerialCommand::parse(const char *com){
  *    writes, and then verifies, a Configuration Variable to the decoder of an engine on the programming track
  *
  *    CV: the number of the Configuration Variable memory location in the decoder to write to (1-1024)
- *    VALUE: the value to be written to the Configuration Variable memory location (0-255) 
+ *    VALUE: the value to be written to the Configuration Variable memory location (0-255)
  *    CALLBACKNUM: an arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs that call this function
  *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ Interface) that call this function
  *
  *    returns: <r CALLBACKNUM|CALLBACKSUB|CV Value)
  *    where VALUE is a number from 0-255 as read from the requested CV, or -1 if verificaiton read fails
-*/    
+*/
       pRegs->writeCVByte(com+1);
       break;
 
@@ -240,7 +240,7 @@ void SerialCommand::parse(const char *com){
  *
  *    returns: <r CALLBACKNUM|CALLBACKSUB|CV BIT VALUE)
  *    where VALUE is a number from 0-1 as read from the requested CV bit, or -1 if verificaiton read fails
-*/    
+*/
       pRegs->writeCVBit(com+1);
       break;
 
@@ -288,7 +288,7 @@ void SerialCommand::parse(const char *com){
 /*
  *    reads current being drawn on main operations track
  *
- *    returns: <a CURRENT> 
+ *    returns: <a CURRENT>
  *    where CURRENT = 0-1024, based on exponentially-smoothed weighting scheme
  */
       MotorBoardManager::parse(com);
@@ -324,7 +324,7 @@ void SerialCommand::parse(const char *com){
  *
  *    returns: <e nTurnouts nSensors>
 */
-     
+
     EEStore::store();
     CommManager::printf("<e %d %d %d>", EEStore::eeStore->data.nTurnouts, EEStore::eeStore->data.nSensors, EEStore::eeStore->data.nOutputs);
     break;
@@ -360,7 +360,7 @@ void SerialCommand::parse(const char *com){
 
 /***** ENTER DIAGNOSTIC MODE  ****/
 
-    case 'D':       // <D>  
+    case 'D':       // <D>
 /*
  *    changes the clock speed of the chip and the pre-scaler for the timers so that you can visually see the DCC signals flickering with an LED
  *    SERIAL COMMUNICAITON WILL BE INTERUPTED ONCE THIS COMMAND IS ISSUED - MUST RESET BOARD OR RE-OPEN SERIAL WINDOW TO RE-ESTABLISH COMMS
@@ -378,7 +378,7 @@ void SerialCommand::parse(const char *com){
       bitSet(TCCR0B,CS02);    // set Timer 0 prescale=256 - SLOWS NORMAL SPEED BY A FACTOR OF 4
       bitClear(TCCR0B,CS01);
       bitClear(TCCR0B,CS00);
-      
+
     #else                     // Configuration for MEGA
 
       bitClear(TCCR3B,CS32);    // set Timer 3 prescale=8 - SLOWS NORMAL SPEED BY A FACTOR OF 8
@@ -399,14 +399,14 @@ void SerialCommand::parse(const char *com){
  *   writes a DCC packet of two, three, four, or five hexidecimal bytes to a register driving the main operations track
  *   FOR DEBUGGING AND TESTING PURPOSES ONLY.  DO NOT USE UNLESS YOU KNOW HOW TO CONSTRUCT NMRA DCC PACKETS - YOU CAN INADVERTENTLY RE-PROGRAM YOUR ENGINE DECODER
  *
- *    REGISTER: an internal register number, from 0 through MAX_MAIN_REGISTERS (inclusive), to write (if REGISTER=0) or write and store (if REGISTER>0) the packet 
+ *    REGISTER: an internal register number, from 0 through MAX_MAIN_REGISTERS (inclusive), to write (if REGISTER=0) or write and store (if REGISTER>0) the packet
  *    BYTE1:  first hexidecimal byte in the packet
  *    BYTE2:  second hexidecimal byte in the packet
  *    BYTE3:  optional third hexidecimal byte in the packet
  *    BYTE4:  optional fourth hexidecimal byte in the packet
  *    BYTE5:  optional fifth hexidecimal byte in the packet
  *
- *    returns: NONE   
+ *    returns: NONE
  */
       mRegs->writeTextPacket(com+1);
       break;
@@ -441,7 +441,7 @@ void SerialCommand::parse(const char *com){
  *     returns: <f MEM>
  *     where MEM is the number of free bytes remaining in the Arduino's SRAM
  */
-      int v; 
+      int v;
       CommManager::printf("<f%d>", (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval));
       break;
 
@@ -480,5 +480,3 @@ void SerialCommand::parse(const char *com){
 }; // SerialCommand::parse
 
 ///////////////////////////////////////////////////////////////////////////////
-
-

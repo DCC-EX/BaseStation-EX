@@ -8,7 +8,7 @@
 #include <Arduino.h>
 #include "CommInterfaceESP.h"
 #include "SerialCommand.h"
-#include "DCCpp_Uno.h"
+#include "DCCpp.h"
 
 #if COMM_INTERFACE == 4
 

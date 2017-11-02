@@ -8,7 +8,7 @@ Part of DCC++ BASE STATION for the Arduino
 **********************************************************************/
 /**********************************************************************
 
-DCC++ BASE STATION supports Sensor inputs that can be connected to any Aruidno Pin 
+DCC++ BASE STATION supports Sensor inputs that can be connected to any Aruidno Pin
 not in use by this program.  Sensors can be of any type (infrared, magentic, mechanical...).
 The only requirement is that when "activated" the Sensor must force the specified Arduino
 Pin LOW (i.e. to ground), and when not activated, this Pin should remain HIGH (e.g. 5V),
@@ -33,7 +33,7 @@ sensor definitions using the following variation of the "S" command:
 
   <S>:                         lists all defined sensors
                                returns: <Q ID PIN PULLUP> for each defined sensor or <X> if no sensors defined
-  
+
 where
 
   ID: the numeric ID (0-32767) of the sensor
@@ -55,20 +55,20 @@ decide to ignore the <q ID> return and only react to <Q ID> triggers.
 
 **********************************************************************/
 
-#include "DCCpp_Uno.h"
+#include "DCCpp.h"
 #include "Sensor.h"
 #include "EEStore.h"
 #include <EEPROM.h>
 #include "CommInterface.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-  
-void Sensor::check(){    
+
+void Sensor::check(){
   Sensor *tt;
 
   for(tt=firstSensor;tt!=NULL;tt=tt->nextSensor){
     tt->signal=tt->signal*(1.0-SENSOR_DECAY)+digitalRead(tt->data.pin)*SENSOR_DECAY;
-    
+
     if(!tt->active && tt->signal<0.5){
       tt->active=true;
       CommManager::printf("<Q %d>", tt->data.snum);
@@ -77,14 +77,14 @@ void Sensor::check(){
       CommManager::printf("<q %d>", tt->data.snum);
     }
   } // loop over all sensors
-    
+
 } // Sensor::check
 
 ///////////////////////////////////////////////////////////////////////////////
 
 Sensor *Sensor::create(int snum, int pin, int pullUp, int v){
   Sensor *tt;
-  
+
   if(firstSensor==NULL){
     firstSensor=(Sensor *)calloc(1,sizeof(Sensor));
     tt=firstSensor;
@@ -101,7 +101,7 @@ Sensor *Sensor::create(int snum, int pin, int pullUp, int v){
       CommManager::printf("<X>");
     return(tt);
   }
-  
+
   tt->data.snum=snum;
   tt->data.pin=pin;
   tt->data.pullUp=(pullUp==0?LOW:HIGH);
@@ -113,7 +113,7 @@ Sensor *Sensor::create(int snum, int pin, int pullUp, int v){
   if(v==1)
     CommManager::printf("<O>");
   return(tt);
-  
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,20 +121,20 @@ Sensor *Sensor::create(int snum, int pin, int pullUp, int v){
 Sensor* Sensor::get(int n){
   Sensor *tt;
   for(tt=firstSensor;tt!=NULL && tt->data.snum!=n;tt=tt->nextSensor);
-  return(tt); 
+  return(tt);
 }
 ///////////////////////////////////////////////////////////////////////////////
 
 void Sensor::remove(int n){
   Sensor *tt,*pp;
-  
+
   for(tt=firstSensor;tt!=NULL && tt->data.snum!=n;pp=tt,tt=tt->nextSensor);
 
   if(tt==NULL){
     CommManager::printf("<X>");
     return;
   }
-  
+
   if(tt==firstSensor)
     firstSensor=tt->nextSensor;
   else
@@ -154,7 +154,7 @@ void Sensor::show(){
     CommManager::printf("<X>");
     return;
   }
-    
+
   for(tt=firstSensor;tt!=NULL;tt=tt->nextSensor){
     CommManager::printf("<Q %d %d %d>", tt->data.snum, tt->data.pin, tt->data.pullUp);
   }
@@ -169,7 +169,7 @@ void Sensor::status(){
     CommManager::printf("<X>");
     return;
   }
-    
+
   for(tt=firstSensor;tt!=NULL;tt=tt->nextSensor){
     CommManager::printf("<%c %d>", tt->active?'Q':'q', tt->data.snum);
   }
@@ -177,12 +177,12 @@ void Sensor::status(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void Sensor::parse(const char *c){
+void Sensor::parse(const char *c) {
   int n,s,m;
   Sensor *t;
-  
+
   switch(sscanf(c,"%d %d %d",&n,&s,&m)){
-    
+
     case 3:                     // argument is string with id number of sensor followed by a pin number and pullUp indicator (0=LOW/1=HIGH)
       create(n,s,m,1);
     break;
@@ -190,7 +190,7 @@ void Sensor::parse(const char *c){
     case 1:                     // argument is a string with id number only
       remove(n);
     break;
-    
+
     case -1:                    // no arguments
       show();
     break;
@@ -208,29 +208,28 @@ void Sensor::load(){
   Sensor *tt;
 
   for(int i=0;i<EEStore::eeStore->data.nSensors;i++){
-    EEPROM.get(EEStore::pointer(),data);  
+    EEPROM.get(EEStore::pointer(),data);
     tt=create(data.snum,data.pin,data.pullUp);
     EEStore::advance(sizeof(tt->data));
-  }  
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void Sensor::store(){
   Sensor *tt;
-  
+
   tt=firstSensor;
   EEStore::eeStore->data.nSensors=0;
-  
+
   while(tt!=NULL){
     EEPROM.put(EEStore::pointer(),tt->data);
     EEStore::advance(sizeof(tt->data));
     tt=tt->nextSensor;
     EEStore::eeStore->data.nSensors++;
-  }  
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 Sensor *Sensor::firstSensor=NULL;
-

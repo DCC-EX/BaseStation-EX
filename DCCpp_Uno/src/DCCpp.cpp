@@ -18,7 +18,7 @@ COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
 **********************************************************************/
 /**********************************************************************
-      
+
 DCC++ BASE STATION is a C++ program written for the Arduino Uno and Arduino Mega
 using the Arduino IDE 1.6.6.
 
@@ -139,7 +139,7 @@ DCC++ BASE STATION in split into multiple modules, each with its own header file
 
   DCCpp_Uno:        declares required global objects and contains initial Arduino setup()
                     and Arduino loop() functions, as well as interrupt code for OC0B and OC1B.
-                    Also includes declarations of optional array of Turn-Outs and optional array of Sensors 
+                    Also includes declarations of optional array of Turn-Outs and optional array of Sensors
 
   SerialCommand:    contains methods to read and interpret text commands from the serial line,
                     process those instructions, and, if necessary call appropriate Packet RegisterList methods
@@ -162,13 +162,13 @@ DCC++ BASE STATION in split into multiple modules, each with its own header file
   EEStore:          contains methods to store, update, and load various DCC settings and status
                     (e.g. the states of all defined turnouts) in the EEPROM for recall after power-up
 
-DCC++ BASE STATION is configured through the Config.h file that contains all user-definable parameters                    
+DCC++ BASE STATION is configured through the Config.h file that contains all user-definable parameters
 
 **********************************************************************/
 
 // BEGIN BY INCLUDING THE HEADER FILES FOR EACH MODULE
- 
-#include "DCCpp_Uno.h"
+
+#include "DCCpp.h"
 #include "PacketRegister.h"
 #include "CurrentMonitor.h"
 #include "Sensor.h"
@@ -312,12 +312,12 @@ void setup(){
 
   mainRegs.loadPacket(1,RegisterList::idlePacket,2,0);    // load idle packet into register 1
 
-  bitSet(TIMSK1,OCIE1B);    // enable interrupt vector for Timer 1 Output Compare B Match (OCR1B)    
+  bitSet(TIMSK1,OCIE1B);    // enable interrupt vector for Timer 1 Output Compare B Match (OCR1B)
 
   // CONFIGURE EITHER TIMER_0 (UNO) OR TIMER_3 (MEGA) TO OUTPUT 50% DUTY CYCLE DCC SIGNALS ON OC0B (UNO) OR OC3B (MEGA) INTERRUPT PINS
 
 #ifdef ARDUINO_AVR_UNO      // Configuration for UNO
-  
+
   // Directon Pin for Motor Shield Channel B - PROGRAMMING TRACK
   // Controlled by Arduino 8-bit TIMER 0 / OC0B Interrupt Pin
   // Values for 8-bit OCR0A and OCR0B registers calibrated for 1:64 prescale at 16 MHz clock frequency
@@ -350,7 +350,7 @@ void setup(){
 
   pinMode(SIGNAL_ENABLE_PIN_PROG,OUTPUT);   // master enable for motor channel B
 
-  progRegs.loadPacket(1,RegisterList::idlePacket,2,0);    // load idle packet into register 1    
+  progRegs.loadPacket(1,RegisterList::idlePacket,2,0);    // load idle packet into register 1
 
   bitSet(TIMSK0,OCIE0B);    // enable interrupt vector for Timer 0 Output Compare B Match (OCR0B)
 
@@ -391,7 +391,7 @@ void setup(){
 
   progRegs.loadPacket(1,RegisterList::idlePacket,2,0);    // load idle packet into register 1
 
-  bitSet(TIMSK3,OCIE3B);    // enable interrupt vector for Timer 3 Output Compare B Match (OCR3B)    
+  bitSet(TIMSK3,OCIE3B);    // enable interrupt vector for Timer 3 Output Compare B Match (OCR3B)
 
 #endif
 
@@ -401,7 +401,7 @@ void setup(){
 // DEFINE THE INTERRUPT LOGIC THAT GENERATES THE DCC SIGNAL
 ///////////////////////////////////////////////////////////////////////////////
 
-// The code below will be called every time an interrupt is triggered on OCNB, where N can be 0 or 1. 
+// The code below will be called every time an interrupt is triggered on OCNB, where N can be 0 or 1.
 // It is designed to read the current bit of the current register packet and
 // updates the OCNA and OCNB counters of Timer-N to values that will either produce
 // a long (200 microsecond) pulse, or a short (116 microsecond) pulse, which respectively represent
@@ -482,7 +482,7 @@ ISR(TIMER3_COMPB_vect){              // set interrupt service for OCR3B of TIMER
 
 ///////////////////////////////////////////////////////////////////////////////
 // PRINT CONFIGURATION INFO TO SERIAL PORT REGARDLESS OF INTERFACE TYPE
-// - ACTIVATED ON STARTUP IF SHOW_CONFIG_PIN IS TIED HIGH 
+// - ACTIVATED ON STARTUP IF SHOW_CONFIG_PIN IS TIED HIGH
 
 void showConfiguration(){
   Serial.print("\n*** DCC++ CONFIGURATION ***\n");
@@ -499,7 +499,7 @@ void showConfiguration(){
 
   Serial.print("\n\nMOTOR SHIELD: ");
   Serial.print(MOTOR_SHIELD_NAME);
-  
+
   Serial.print("\n\nDCC SIG MAIN: ");
   Serial.print(DCC_SIGNAL_PIN_MAIN);
   Serial.print("\n   DIRECTION: ");
@@ -524,7 +524,7 @@ void showConfiguration(){
   Serial.print(EEStore::eeStore->data.nSensors);
   Serial.print("\n     OUTPUTS: ");
   Serial.print(EEStore::eeStore->data.nOutputs);
-  
+
   Serial.print("\n\nINTERFACE(s):\n");
   CommManager::showConfiguration();
   Serial.print("\n\nPROGRAM HALTED - PLEASE RESTART ARDUINO");
@@ -532,9 +532,3 @@ void showConfiguration(){
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-

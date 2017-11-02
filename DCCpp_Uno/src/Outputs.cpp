@@ -48,8 +48,8 @@ where
                               depending on IFLAG, bit 2
 
           IFLAG, bit 2:   0 = state of pin set to INACTIVE uponm power-up or when first created
-                          1 = state of pin set to ACTIVE uponm power-up or when first created 
-                
+                          1 = state of pin set to ACTIVE uponm power-up or when first created
+
 Once all outputs have been properly defined, use the <E> command to store their definitions to EEPROM.
 If you later make edits/additions/deletions to the output definitions, you must invoke the <E> command if you want those
 new definitions updated in the EEPROM.  You can also clear everything stored in the EEPROM by invoking the <e> command.
@@ -73,7 +73,7 @@ the state of any outputs being monitored or controlled by a separate interface o
 
 #include "Outputs.h"
 #include "SerialCommand.h"
-#include "DCCpp_Uno.h"
+#include "DCCpp.h"
 #include "EEStore.h"
 #include <EEPROM.h>
 #include "CommInterface.h"
@@ -93,20 +93,20 @@ void Output::activate(int s){
 Output* Output::get(int n){
   Output *tt;
   for(tt=firstOutput;tt!=NULL && tt->data.id!=n;tt=tt->nextOutput);
-  return(tt); 
+  return(tt);
 }
 ///////////////////////////////////////////////////////////////////////////////
 
 void Output::remove(int n){
   Output *tt,*pp;
-  
+
   for(tt=firstOutput;tt!=NULL && tt->data.id!=n;pp=tt,tt=tt->nextOutput);
 
   if(tt==NULL){
     CommManager::printf("<X>");
     return;
   }
-  
+
   if(tt==firstOutput)
     firstOutput=tt->nextOutput;
   else
@@ -126,7 +126,7 @@ void Output::show(int n){
     CommManager::printf("<X>");
     return;
   }
-    
+
   for(tt=firstOutput;tt!=NULL;tt=tt->nextOutput){
     if(n==1) {
       CommManager::printf("<Y %d %d %d %d>", tt->data.id, tt->data.pin, tt->data.iFlag, tt->data.oStatus);
@@ -141,9 +141,9 @@ void Output::show(int n){
 void Output::parse(const char *c){
   int n,s,m;
   Output *t;
-  
+
   switch(sscanf(c,"%d %d %d",&n,&s,&m)){
-    
+
     case 2:                     // argument is string with id number of output followed by zero (LOW) or one (HIGH)
       t=get(n);
       if(t!=NULL)
@@ -159,7 +159,7 @@ void Output::parse(const char *c){
     case 1:                     // argument is a string with id number only
       remove(n);
     break;
-    
+
     case -1:                    // no arguments
       show(1);                  // verbose show
     break;
@@ -173,24 +173,24 @@ void Output::load(){
   Output *tt;
 
   for(int i=0;i<EEStore::eeStore->data.nOutputs;i++){
-    EEPROM.get(EEStore::pointer(),data);  
+    EEPROM.get(EEStore::pointer(),data);
     tt=create(data.id,data.pin,data.iFlag);
     tt->data.oStatus=bitRead(tt->data.iFlag,1)?bitRead(tt->data.iFlag,2):data.oStatus;      // restore status to EEPROM value is bit 1 of iFlag=0, otherwise set to value of bit 2 of iFlag
     digitalWrite(tt->data.pin,tt->data.oStatus ^ bitRead(tt->data.iFlag,0));
     pinMode(tt->data.pin,OUTPUT);
     tt->num=EEStore::pointer();
     EEStore::advance(sizeof(tt->data));
-  }  
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void Output::store(){
   Output *tt;
-  
+
   tt=firstOutput;
   EEStore::eeStore->data.nOutputs=0;
-  
+
   while(tt!=NULL){
     tt->num=EEStore::pointer();
     EEPROM.put(EEStore::pointer(),tt->data);
@@ -198,13 +198,13 @@ void Output::store(){
     tt=tt->nextOutput;
     EEStore::eeStore->data.nOutputs++;
   }
-  
+
 }
 ///////////////////////////////////////////////////////////////////////////////
 
 Output *Output::create(int id, int pin, int iFlag, int v){
   Output *tt;
-  
+
   if(firstOutput==NULL){
     firstOutput=(Output *)calloc(1,sizeof(Output));
     tt=firstOutput;
@@ -221,24 +221,23 @@ Output *Output::create(int id, int pin, int iFlag, int v){
       CommManager::printf("<X>");
     return(tt);
   }
-  
+
   tt->data.id=id;
   tt->data.pin=pin;
   tt->data.iFlag=iFlag;
   tt->data.oStatus=0;
-  
+
   if(v==1){
-    tt->data.oStatus=bitRead(tt->data.iFlag,1)?bitRead(tt->data.iFlag,2):0;      // sets status to 0 (INACTIVE) is bit 1 of iFlag=0, otherwise set to value of bit 2 of iFlag  
+    tt->data.oStatus=bitRead(tt->data.iFlag,1)?bitRead(tt->data.iFlag,2):0;      // sets status to 0 (INACTIVE) is bit 1 of iFlag=0, otherwise set to value of bit 2 of iFlag
     digitalWrite(tt->data.pin,tt->data.oStatus ^ bitRead(tt->data.iFlag,0));
     pinMode(tt->data.pin,OUTPUT);
     CommManager::printf("<O>");
   }
-  
+
   return(tt);
-  
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 Output *Output::firstOutput=NULL;
-

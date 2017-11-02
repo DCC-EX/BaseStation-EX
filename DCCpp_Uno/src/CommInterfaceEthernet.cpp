@@ -6,7 +6,7 @@
  */
 
 #include <Arduino.h>
-#include "DCCpp_Uno.h"
+#include "DCCpp.h"
 #include "CommInterface.h"
 #include "CommInterfaceEthernet.h"
 #include "SerialCommand.h"
