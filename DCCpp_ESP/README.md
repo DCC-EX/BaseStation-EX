@@ -39,8 +39,10 @@ provide the support for SPIFFS upload without adding additional plugins.
 
 The easiest way to upload this to your ESP device is to use Platform IO IDE and execute the
 following commands from a terminal window in the project directory:
+```
 platformio init
 platformio run --target upload
 platformio run --target uploadfs
+```
 
 This should compile and upload both the binary and SPIFFS data to the ESP device.
