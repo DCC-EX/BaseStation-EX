@@ -9,22 +9,29 @@
 	<script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/master/gauge.min.js"></script>
 	<script src="https://cdn.rawgit.com/Lwangaman/jQuery-Clock-Plugin/master/jqClock.min.js"></script>
 	<script src="https://cdn.rawgit.com/simontabor/jquery-toggles/master/toggles.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.13/js/dataTables.jqueryui.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.16/js/dataTables.jqueryui.min.js"></script>
 	<script src="https://cdn.rawgit.com/flesler/hashmap/master/hashmap.js"></script>
 	<script src="https://cdn.rawgit.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.min.js"></script>
+	<script src="https://cdn.datatables.net/select/1.2.3/js/dataTables.select.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/vader/jquery-ui.css">
 	<link rel="stylesheet" href="https://cdn.rawgit.com/simontabor/jquery-toggles/master/css/toggles.css">
 	<link rel="stylesheet" href="https://cdn.rawgit.com/simontabor/jquery-toggles/master/css/themes/toggles-dark.css">
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4.0.0-alpha.6/dist/css/bootstrap-grid.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.3/css/select.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.4.2/css/buttons.jqueryui.min.css">
 	<style>
 		.clockdate {font-family:Arial,Helvetica,sans-serif;font-size:13px;text-align:center;text-shadow:0 0 5px #008B8B;color:#00CCFF;display:block;}
 		.clocktime {display:inline;font-size:28px;text-align:center;font-family:Arial,Helvetica,sans-serif;text-shadow:0 0 5px #008B8B;color:#00CCFF;display:block;}
 		#throttleSpeedRange { height:350; }
 		#throttleSpeedGauge { height:350; width:350; readonly:true; background-color:#121212; color:#00CCFF; border:0px; resize:none; }
-		#serialMonitorContent { height:10em; width:40em; readonly:true; background-color:#121212; color:#00CCFF; border:0px; resize:none; overflow:hidden; }
+		#serialMonitorContent { height:10em; width:35em; readonly:true; background-color:#121212; color:#00CCFF; border:0px; resize:none; overflow:hidden; }
 		#throttleConsole { height:5em; width:40em; readonly:true; background-color:#121212; color:#00CCFF; border:0px; resize:none; overflow:hidden; }
+		#progResult { height:10em; width:35em; readonly:true; background-color:#121212; color:#00CCFF; border:0px; resize:none; overflow:hidden; }
+		.smaller-button { font-size: 9px !important }
+		.ui-button-text { font-size: inherit !important; }
 		@media (max-width: 500px) {
 			#throttleSpeedRange { height:200; }
 			#throttleSpeedGauge { height:200; width:200; }
@@ -53,18 +60,10 @@
 				</div>
 			</div>
 			<div class="row center">
-				<div class="col-auto">
-					<div id="throttleConnect" class="toggle toggle-dark"></div>
-				</div>
-				<div class="col-auto">
-					<button id="btnThrottleStatus">Status</button>
-				</div>
-			</div>
-			<div class="row center">
-				<div class="col-1"></div>
+				<div class="col-auto"><div id="throttleConnect" class="toggle toggle-dark"></div><div id="throttlePower" class="toggle toggle-dark"></div></div>
 				<div class="col-auto"><div id="throttleDirection" class="toggle toggle-dark"></div></div>
-				<div class="col-auto"><div id="throttlePower" class="toggle toggle-dark"></div></div>
-				<div class="col-auto"><button id="btnThrottleEStop"><img alt="STOP" src="data:image/png;base64,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" /></button></div>
+				<div class="col-1"></div>
+				<div class="col-auto"><button id="btnThrottleEStop"><font color="RED">EMERGENCY<br>STOP</font></button></div>
 			</div>
 			<div class="row">
 				<div class="col-auto">
@@ -207,41 +206,56 @@
 		<div id="dcc-tabs">
 			<ul>
 				<li><a href="#dcc-tab-0">Status</a></li>
-				<li><a href="#dcc-tab-1">ESP Status</a></li>
-				<li><a href="#dcc-tab-2">Serial Monitor</a></li>
-				<li><a href="#dcc-tab-3">Turnouts</a></li>
-				<li><a href="#dcc-tab-4">Sensors</a></li>
-				<li><a href="#dcc-tab-5">Outputs</a></li>
+				<li><a href="#dcc-tab-1">Turnouts</a></li>
+				<li><a href="#dcc-tab-2">Sensors</a></li>
+				<li><a href="#dcc-tab-3">Outputs</a></li>
+				<li><a href="#dcc-tab-4">Programmer</a></li>
+				<li><a href="#dcc-tab-5">ESP Status</a></li>
 			</ul>
 			<div id="dcc-tab-0">
+				<div class="row">
+					<div class="col-auto"><label for="statusTrackPower">Track Power:</label></div>
+					<div class="col-auto"><div id="statusTrackPower" class="toggle toggle-dark"></div></div>
+				</div>
+				<div class="row">
+					<div class="col center">
+						<table id="powerDistrictStatus" class="display" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th>District</th>
+									<th>Status</th>
+									<th>Utilization</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-auto"><label for="consoleConnect">DCC++ Serial Console:</label></div>
+					<div class="col-auto"><div id="consoleConnect" class="toggle toggle-dark"></div></div>
+				</div>
+				<div class="row">
+					<div class="col-auto"><textarea id="serialMonitorContent">Connect to continue.</textarea></div>
+					<div class="col-auto"><p><button id="btnConsoleClear" class="smaller-button">Clear Console</button></p></div>
+				</div>
+				<div class="row">
+					<div class="col-auto"><button id="btnPersistConfig" class="smaller-button">Persist Config</button></div>
+					<div class="col-auto"><button id="btnClearConfig" class="smaller-button">Clear Config</button></div>
+				</div>
 			</div>
 			<div id="dcc-tab-1">
-				<table id="espinfo" class="display" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-						<th>Component</th>
-						<th>Value</th>
-						</tr>
-					</thead>
-				</table>
-			</div>
-			<div id="dcc-tab-2">
-				<label for="consoleConnect">DCC++ Connection:</label>
-				<div id="consoleConnect" class="toggle toggle-dark"></div>
-				<textarea id="serialMonitorContent">Connect to continue.</textarea>
-				<p><button id="btnConsoleClear">Clear</button></p>
-			</div>
-			<div id="dcc-tab-3">
 				<table id="turnouts" class="display" cellspacing="0" width="100%">
 					<thead>
 						<tr>
 							<th>ID</th>
+							<th>Address</th>
+							<th>Sub Address</th>
 							<th>State</th>
 						</tr>
 					</thead>
 				</table>
 			</div>
-			<div id="dcc-tab-4">
+			<div id="dcc-tab-2">
 				<table id="sensors" class="display" cellspacing="0" width="100%">
 					<thead>
 						<tr>
@@ -253,7 +267,7 @@
 					</thead>
 				</table>
 			</div>
-			<div id="dcc-tab-5">
+			<div id="dcc-tab-3">
 				<table id="outputs" class="display" cellspacing="0" width="100%">
 					<thead>
 						<tr>
@@ -265,6 +279,51 @@
 					</thead>
 				</table>
 			</div>
+			<div id="dcc-tab-4">
+				<div class="row">
+					<div class="col-1"><label for="progTarget">Track:</label></div>
+					<div class="col-auto"><div id="progTarget" class="toggle toggle-dark"></div></div>
+				</div>
+				<div class="row">
+					<div class="col-1"><label for="progReadOrWrite">Action:</label></div>
+					<div class="col-auto"><div id="progReadOrWrite" class="toggle toggle-dark"></div></div>
+				</div>
+				<div class="row">
+					<div class="col-1"><label for="progLocoNumber" id="progLocoNumberLabel">Loco:</label></div>
+					<div class="col-auto"><input type="number" min="1" max="10293" value="1" name="progLocoNumber" id="progLocoNumber" class="text ui-widget-content ui-corner-all" /></div>
+				</div>
+				<div class="row">
+					<div class="col-1"><label for="progCVNumber">CV:</label></div>
+					<div class="col-auto"><input type="number" value="1" min="1" max="1024" name="progCVNumber" id="progCVNumber" class="text ui-widget-content ui-corner-all" /></div>
+				</div>
+				<div class="row">
+					<div class="col-1"><label for="progByteOrBit" id="progByteOrBitLabel">Mode:</label></div>
+					<div class="col-auto"><div id="progByteOrBit" class="toggle toggle-dark"></div></div>
+				</div>
+				<div class="row">
+					<div class="col-1"><label for="progBitNumber" id="progBitNumberLabel">Bit:</label></div>
+					<div class="col-auto"><input type="number" value="0" min="0" max="7" id="progBitNumber" class="text ui-widget-content ui-corner-all"/></div>
+				</div>
+				<div class="row">
+					<div class="col-1"><label for="progCVValue" id="progCVValueLabel">Value:</label></div>
+					<div class="col-auto"><input type="number" value="1" min="1" max="1024" name="progCVValue" id="progCVValue" class="text ui-widget-content ui-corner-all" /></div>
+					<div class="col-auto"><div id="progBitValue" class="toggle toggle-dark"></div></div>
+				</div>
+				<div class="col-auto"><button id="btnProgExecute" class="smaller-button">Execute</button></div>
+				<div class="row">
+					<textarea id="progResult"></textarea>
+				</div>
+			</div>
+			<div id="dcc-tab-5">
+				<table id="espinfo" class="display" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>Component</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>
@@ -272,6 +331,36 @@
 	<form>
 		<label for="locoNumber">Locomotive Number</label>
 		<input type="text" name="locoNumber" id="dialogLocoNumber" class="text ui-widget-content ui-corner-all" />
+	</form>
+</div>
+<div id="dialog-turnoutEditor">
+	<form>
+		<label for="turnoutID">Turnout ID:</label>
+		<input type="text" name="turnoutID" id="dialogTurnoutID" class="text ui-widget-content ui-corner-all" />
+		<label for="turnoutAddress">Address:</label>
+		<input type="text" name="turnoutAddress" id="dialogTurnoutAddress" class="text ui-widget-content ui-corner-all" />
+		<label for="turnoutSubAddress">Sub Address:</label>
+		<input type="text" name="turnoutSubAddress" id="dialogTurnoutSubAddress" class="text ui-widget-content ui-corner-all" />
+	</form>
+</div>
+<div id="dialog-outputEditor">
+	<form>
+		<label for="dialogOutputID">Output ID:</label>
+		<input type="text" name="dialogOutputID" id="dialogOutputID" class="text ui-widget-content ui-corner-all" />
+		<label for="dialogOutputPin">Pin:</label>
+		<input type="text" name="dialogOutputPin" id="dialogOutputPin" class="text ui-widget-content ui-corner-all" />
+		<label for="dialogOutputInverted">Inverted:</label>
+		<div id="dialogOutputInverted" class="toggle toggle-dark"></div>
+	</form>
+</div>
+<div id="dialog-sensorEditor">
+	<form>
+		<label for="dialogSensorID">Sensor ID:</label>
+		<input type="text" name="dialogSensorID" id="dialogSensorID" class="text ui-widget-content ui-corner-all" />
+		<label for="dialogSensorPin">Pin:</label>
+		<input type="text" name="dialogSensorPin" id="dialogSensorPin" class="text ui-widget-content ui-corner-all" />
+		<label for="dialogSensorPullUp">Pull Up:</label>
+		<div id="dialogSensorPullUp" class="toggle toggle-dark"></div>
 	</form>
 </div>
 <script type="text/javascript">
@@ -286,7 +375,8 @@
 		socketUrl += "/ws";
 	}
 	console.log('server url:', socketUrl);
-	
+	var turnoutEditor;
+
 	function sendCommand(command) {
 		console.log('Sending:', command);
 		socket.send(command);
@@ -382,17 +472,18 @@
 		$('#serialMonitorContent').scrollTop();
 		$('#throttleConsole').prepend(data.replace('<', '&lt;') + "\n");
 		$('#throttleConsole').scrollTop();
-		
 	}
 	function connectWebSocket(active) {
 		if (active) {
 			if(!socket || !socket.isConnected()) {
+				console.log('connecting to:' + socketUrl)
 				socket = $.simpleWebSocket({url: socketUrl, dataType: 'text'});
 				socket.listen(receiveWebSocketData);
 				socket.connect();
 			}
 		} else {
 			if(socket && socket.isConnected()) {
+				console.log('disconnecting')
 				socket.close();
 			}
 		}
@@ -402,23 +493,142 @@
 			autoOpen:false,
 			modal:true,
 			buttons: {
-				'Ok':function() {
-					var newValue = $('#dialogLocoNumber').val();
-					$('label[for=' + dialogLocoTargetObject + ']', '#locoGroup').html(newValue);
-					$(this).dialog('close');
+				'Ok': {
+					text: 'Ok',
+					click: function() {
+						var newValue = $('#dialogLocoNumber').val();
+						$('label[for=' + dialogLocoTargetObject + ']', '#locoGroup').html(newValue);
+						$(this).dialog('close');
+					},
+					class: 'smaller-button ui-button ui-corner-all ui-widget'
 				},
-				'Cancel':function() {
-					$(this).dialog('close');
+				'Cancel': {
+					text: 'Cancel',
+					click: function() {
+						$(this).dialog('close');
+					},
+					class: 'smaller-button ui-button ui-corner-all ui-widget'
 				}}
 		});
-		$('#top-tabs').tabs();
+		$('#dialog-turnoutEditor').dialog({
+			autoOpen:false,
+			modal:true,
+			buttons: {
+				'Save': {
+					text: 'Save',
+					click: function() {
+						var turnoutID = $('#dialogTurnoutID').val();
+						var turnoutAddress = $('#dialogTurnoutAddress').val();
+						var turnoutSubAddress = $('#dialogTurnoutSubAddress').val();
+						$.post('/dccpp/turnouts', { 'id': turnoutID, 'address': turnoutAddress, 'subAddress': turnoutSubAddress});
+						$('#turnouts').DataTable().draw();
+						$(this).dialog('close');
+					},
+					class: 'smaller-button ui-button ui-corner-all ui-widget'
+				},
+				'Cancel': {
+					text: 'Cancel',
+					click: function() {
+						$(this).dialog('close');
+					},
+					class: 'smaller-button ui-button ui-corner-all ui-widget'
+				}
+			}
+		});
+		$('#dialogOutputInverted').toggles({
+			text:{
+				on:'Inverted',
+				off:'Normal'
+			},
+			width:100}
+		);
+		$('#dialog-outputEditor').dialog({
+			autoOpen:false,
+			modal:true,
+			buttons: {
+				'Save': {
+					text: 'Save',
+					click: function() {
+						var outputID = $('#dialogOutputID').val();
+						var outputPin = $('#dialogOutputPin').val();
+						var outputInverted = $('#dialogOutputInverted').data('toggles').active;
+						console.log('creating/updating output: ' + outputID + ', pin: ' + outputPin + ', inverted: ' + outputInverted)
+						$.post('/dccpp/outputs', { 'id': outputID, 'pin': outputPin, 'inverted': outputInverted});
+						$('#outputs').DataTable().draw();
+						$(this).dialog('close');
+					},
+					class: 'smaller-button ui-button ui-corner-all ui-widget'
+				},
+				'Cancel': {
+					text: 'Cancel',
+					click: function() {
+						$(this).dialog('close');
+					},
+					class: 'smaller-button ui-button ui-corner-all ui-widget'
+				}
+			}
+		});
+		$('#dialogSensorPullUp').toggles({
+			text:{
+				on:'On',
+				off:'Off'
+			},
+			width:100}
+		);
+		$('#dialog-sensorEditor').dialog({
+			autoOpen:false,
+			modal:true,
+			buttons: {
+				'Save': {
+					text: 'Save',
+					click: function() {
+						var sensorID = $('#dialogSensorID').val();
+						var sensorPin = $('#dialogSensorPin').val();
+						var sensorPullUp = $('#dialogSensorPullUp').data('toggles').active;
+						console.log('creating/updating sensor: ' + sensorID + ', pin: ' + sensorPin + ', pullUp: ' + sensorPullUp)
+						$.post('/dccpp/sensor', { 'id': sensorID, 'pin': sensorPin, 'pullUp': sensorPullUp});
+						$('#sensors').DataTable().draw();
+						$(this).dialog('close');
+					},
+					class: 'smaller-button ui-button ui-corner-all ui-widget'
+				},
+				'Cancel': {
+					text: 'Cancel',
+					click: function() {
+						$(this).dialog('close');
+					},
+					class: 'smaller-button ui-button ui-corner-all ui-widget'
+				}
+			}
+		});
+		
+		$('#top-tabs').tabs({
+			beforeActivate: function(event, ui) {
+				if(ui.newPanel.attr('id') == 'tab-top-1') {
+					$('#powerDistrictStatus').DataTable().draw();
+				}
+			}
+		});
 		$('#dcc-tabs').tabs({
 			beforeActivate: function(event, ui) {
+				if(ui.newPanel.attr('id') == 'dcc-tab-0') {
+					$('#powerDistrictStatus').DataTable().draw();
+				}
 				if(ui.newPanel.attr('id') == 'dcc-tab-1') {
+					$('#turnouts').DataTable().draw();
+				}
+				if(ui.newPanel.attr('id') == 'dcc-tab-2') {
+					$('#sensors').DataTable().draw();
+				}
+				if(ui.newPanel.attr('id') == 'dcc-tab-3') {
+					$('#outputs').DataTable().draw();
+				}
+				if(ui.newPanel.attr('id') == 'dcc-tab-5') {
 					$('#espinfo').DataTable().draw();
 				}
 			}
 		});
+		$('#dcc-programmer-tabs').tabs();
 		$('#consoleConnect').toggles({
 			text:{
 				on:'Connected',
@@ -448,12 +658,19 @@
 			},
 			width:100}
 		);
+		$('#statusTrackPower').toggles({
+			text:{
+				on:'Power ON',
+				off:'Power OFF'
+			},
+			width:100}
+		);
 		$('#espinfo').DataTable( {
 			"ajax": {
 				url:'/espinfo',
 				dataSrc: ''
 			},
-			"columns": [ { data: 'label' }, { data: 'value' } ],
+			'columns': [ { data: 'id',}, { data: 'value' } ],
 			'paging':false,
 			'info':false,
 			'searching':false,
@@ -462,13 +679,16 @@
 			'deferRender':true,
 			'serverSide':true,
 			'deferLoading':9,
+			'ordering': false
 		} );
 		$('#turnouts').DataTable( {
-			"ajax": {
+			'dom': 'tiB',
+			'ajax': {
 				url:'/dccpp/turnouts',
 				dataSrc: ''
 			},
-			"columns": [ { data: 'id' }, { data: 'state' } ],
+			'columns': [ { data: 'id',}, { data: 'address' }, { data: 'subAddress' }, { data: 'state' }],
+			'select': { style: 'single' },
 			'paging':false,
 			'info':false,
 			'searching':false,
@@ -477,13 +697,76 @@
 			'deferRender':true,
 			'serverSide':true,
 			'deferLoading':9,
+			'ordering': false,
+			'buttons': [
+				{
+					text: 'Add',
+					action: function ( e, dt, node, config ) {
+						$('#dialogTurnoutID').val("");
+						$('#dialogTurnoutAddress').val("");
+						$('#dialogTurnoutSubAddress').val("");
+						$('#dialog-turnoutEditor').dialog('open')
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				},
+				{
+					text: 'Edit',
+					action: function ( e, dt, node, config ) {
+						var selectedRows = dt.rows( { selected: true } ).data();
+						if(selectedRows.length > 0) {
+							$('#dialogTurnoutID').val(selectedRows[0]['id']);
+							$('#dialogTurnoutAddress').val(selectedRows[0]['address']);
+							$('#dialogTurnoutSubAddress').val(selectedRows[0]['subAddress']);
+							$('#dialog-turnoutEditor').dialog('open')
+						} else {
+							alert("No turnout selected");
+						}
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				},
+				{
+					text: 'Delete',
+					action: function ( e, dt, node, config ) {
+						var selectedRows = dt.rows( { selected: true } ).data();
+						if(selectedRows.length > 0) {
+							$.ajax({
+								url: '/dccpp/turnouts?id=' + selectedRows[0]['id'],
+								method: 'DELETE'
+							});
+						} else {
+							alert("No turnout selected");
+						}
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				},
+				{
+					text: 'Throw',
+					action: function ( e, dt, node, config ) {
+						var selectedRows = dt.rows( { selected: true } ).data();
+						if(selectedRows.length > 0) {
+							$.ajax({
+								url: '/dccpp/turnouts',
+								data: {
+									'id': selectedRows[0]['id'],
+									'state': selectedRows[0]['state'] == 'Normal'
+								},
+								method: 'PUT'
+							});
+						} else {
+							alert("No turnout selected");
+						}
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				}
+			]
 		} );
 		$('#sensors').DataTable( {
-			"ajax": {
+			'dom': 'tiB',
+			'ajax': {
 				url:'/dccpp/sensors',
 				dataSrc: ''
 			},
-			"columns": [ { data: 'id' }, { data: 'pin' }, { data: 'pullup' }, { data: 'state' } ],
+			'columns': [ { data: 'id' }, { data: 'pin' }, { data: 'pullup' }, { data: 'state' } ],
 			'paging':false,
 			'info':false,
 			'searching':false,
@@ -492,13 +775,57 @@
 			'deferRender':true,
 			'serverSide':true,
 			'deferLoading':9,
+			'ordering': false,
+			buttons: [
+				{
+					text: 'Add',
+					action: function ( e, dt, node, config ) {
+						$('#dialogSensorID').val("");
+						$('#dialogSensorPin').val("");
+						$('#dialogSensorPullUp').toggles(false);
+						$('#dialog-sensorEditor').dialog('open')
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				},
+				{
+					text: 'Edit',
+					action: function ( e, dt, node, config ) {
+						var selectedRows = dt.rows( { selected: true } ).data();
+						if(selectedRows.length > 0) {
+							$('#dialogSensorID').val(selectedRows[0]['id']);
+							$('#dialogSensorPin').val(selectedRows[0]['pin']);
+							$('#dialogSensorPullUp').toggles(selectedRows[0]['pullUp'] == 'true');
+							$('#dialog-sensorEditor').dialog('open')
+						} else {
+							alert("No Sensor selected");
+						}
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				},
+				{
+					text: 'Delete',
+					action: function ( e, dt, node, config ) {
+						var selectedRows = dt.rows( { selected: true } ).data();
+						if(selectedRows.length > 0) {
+							$.ajax({
+								url: '/dccpp/sensors?id=' + selectedRows[0]['id'],
+								method: 'DELETE'
+							});
+						} else {
+							alert("No Sensor selected");
+						}
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				}
+			]
 		} );
 		$('#outputs').DataTable( {
-			"ajax": {
+			'dom': 'tiB',
+			'ajax': {
 				url:'/dccpp/outputs',
 				dataSrc: ''
 			},
-			"columns": [ { data: 'id' }, { data: 'pin' }, { data: 'inverted' }, { data: 'state' } ],
+			'columns': [ { data: 'id' }, { data: 'pin' }, { data: 'inverted' }, { data: 'state' } ],
 			'paging':false,
 			'info':false,
 			'searching':false,
@@ -507,7 +834,101 @@
 			'deferRender':true,
 			'serverSide':true,
 			'deferLoading':9,
+			'ordering': false,
+			buttons: [
+				{
+					text: 'Add',
+					action: function ( e, dt, node, config ) {
+						$('#dialogOutputID').val("");
+						$('#dialogOutputPin').val("");
+						$('#dialogOutputInverted').toggles(false);
+						$('#dialog-outputEditor').dialog('open')
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				},
+				{
+					text: 'Edit',
+					action: function ( e, dt, node, config ) {
+						var selectedRows = dt.rows( { selected: true } ).data();
+						if(selectedRows.length > 0) {
+							$('#dialogOutputID').val(selectedRows[0]['id']);
+							$('#dialogOutputPin').val(selectedRows[0]['pin']);
+							$('#dialogOutputInverted').toggles(selectedRows[0]['inverted'] == 'true');
+							$('#dialog-outputEditor').dialog('open')
+						} else {
+							alert("No Output selected");
+						}
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				},
+				{
+					text: 'Delete',
+					action: function ( e, dt, node, config ) {
+						var selectedRows = dt.rows( { selected: true } ).data();
+						if(selectedRows.length > 0) {
+							$.ajax({
+								url: '/dccpp/outputs?id=' + selectedRows[0]['id'],
+								method: 'DELETE'
+							});
+						} else {
+							alert("No Output selected");
+						}
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				},
+				{
+					text: 'Toggle',
+					action: function ( e, dt, node, config ) {
+						var selectedRows = dt.rows( { selected: true } ).data();
+						if(selectedRows.length > 0) {
+							$.ajax({
+								url: '/dccpp/outputs',
+								data: {
+									'id': selectedRows[0]['id'],
+									'state': selectedRows[0]['state'] == 'Off'
+								},
+								method: 'PUT'
+							});
+						} else {
+							alert("No Output selected");
+						}
+					},
+					className: 'smaller-button ui-button ui-corner-all ui-widget',
+				}
+			]
 		} );
+		$('#powerDistrictStatus').DataTable( {
+			'ajax': {
+				url:'/dccpp/powerStatus',
+				dataSrc: ''
+			},
+			'columns': [ { data: 'name' }, { data: 'state' }, { data: 'usage' } ],
+			'paging':false,
+			'info':false,
+			'searching':false,
+			'serverSide':true,
+			'jQueryUI':true,
+			'deferRender':true,
+			'serverSide':true,
+			'deferLoading':9,
+			'ordering': false
+		} );
+		setInterval( function () {
+			if ($('#top-tabs').tabs('option', 'active') == 1) {
+				if ($('#dcc-tabs').tabs('option', 'active') == 0) {
+					$('#powerDistrictStatus').DataTable().draw();
+				}
+				if ($('#dcc-tabs').tabs('option', 'active') == 1) {
+					$('#turnouts').DataTable().draw();
+				}
+				if ($('#dcc-tabs').tabs('option', 'active') == 2) {
+					$('#sensors').DataTable().draw();
+				}
+				if ($('#dcc-tabs').tabs('option', 'active') == 3) {
+					$('#outputs').DataTable().draw();
+				}
+			}
+		}, 20000 );
 		$('#throttleSpeedRange').slider({
 			min:0,
 			max:126,
@@ -517,9 +938,8 @@
 		$('#throttleSpeedRange').on('slide', function(event, ui) {
 			setLocoSpeedSlider(ui.value);
 		});
+		$('#btnPersistConfig').button();
 		$('#btnConsoleClear').button();
-		$('#btnThrottleClose').button();
-		$('#btnThrottleReset').button();
 		$('#btnThrottleEStop').button();
 		$('#btnThrottleStatus').button();
 		$('#locoGroup').controlgroup({direction:'vertical'});
@@ -550,14 +970,27 @@
 			sendCommand('<s>');
 		});
 		$('#throttlePower').on('toggle', function(e, active) {
-			if(active) {
-				sendCommand('<1>');
-			} else {
-				sendCommand('<0>');
+			if ($('#top-tabs').tabs('option', 'active') == 0) {
+				$('#statusTrackPower').toggle();
+				if(active) {
+					sendCommand('<1>');
+				} else {
+					sendCommand('<0>');
+				}
+			}
+		});
+		$('#statusTrackPower').on('toggle', function(e, active) {
+			if ($('#top-tabs').tabs('option', 'active') == 1 && $('#dcc-tabs').tabs('option', 'active') == 0) {
+				$('#throttlePower').toggle();
+				if(active) {
+					sendCommand('<1>');
+				} else {
+					sendCommand('<0>');
+				}
 			}
 		});
 		$('#consoleConnect').on('toggle', function(e, active) {
-			if ($('#dcc-tabs').tabs('option', 'active') == 2) {
+			if ($('#top-tabs').tabs('option', 'active') == 1 && $('#dcc-tabs').tabs('option', 'active') == 0) {
 				connectWebSocket(active);
 				$('#throttleConnect').toggle();
 			}
@@ -620,8 +1053,191 @@
 				}
 			}
 		});
+		$('#btnPersistConfig').click(function() {
+			$.post({url: '/dccpp/config'}); 
+		});
+		$('#btnClearConfig').button();
+		$('#btnClearConfig').click(function() {
+			$.ajax({
+				url: '/dccpp/config',
+				method: 'DELETE'
+			}); 
+		});
+		var progChecker;
+		var progCheckerAttempts = 0;
+		function checkProgrammerResult(callback, subNumber) {
+			progCheckerAttempts = progCheckerAttempts + 1;
+			$.get({
+				url: '/dccpp/programmer',
+				dataType: 'json',
+				data: {
+					'callback': callback,
+					'subNumber' : subNumber
+				},
+				success : function (data, status, xhr) {
+					var requestComplete = false;
+					$('#progResult').append('result: ' + data['value'] + '\n');
+					if (data['value'] != -1) {
+						requestComplete = true;
+						$('#progResult').append('programming request complete.\n');
+					} else {
+						if(progCheckerAttempts > 30) {
+							// abort
+							requestComplete = true;
+							$('#progResult').append('programming request timed out.\n');
+						}
+					}
+					$('#progResult').scrollBottom();
+					if(requestComplete) {
+						window.clearInterval(progChecker);
+						$.ajax({
+							url: '/dccpp/programmer?callback=' + callback + '&callbackSub=' + callbackSub,
+							method: 'DELETE'
+						});
+					}
+				},
+				error : function (xhr, status, error) {
+					$('#progResult').append("Programmer request failed.\n");
+					window.clearInterval(progChecker);
+				}
+			});
+		}
+		$('#btnProgExecute').button();
+		$('#btnProgExecute').click(function() {
+			var action='queryCV';
+			if($('#progReadOrWrite').data('toggles').active) {
+				if($('#progByteOrBit').data('toggles').active) {
+					action='setCVBit';
+				} else {
+					action='setCV';
+				}
+			}
+			$.post({
+				url: '/dccpp/programmer',
+				dataType: 'json',
+				data: {
+					'action' : action,
+					'cv' : $('#progCVNumber').val(),
+					'loco' : $('#progLocoNumber').val(),
+					'bit' : $('#progBitNumber').val(),
+					'value' : $('#progCVValue').val(),
+					'bitValue' : $('#progBitValue').data('toggles').active,
+					'target': $('#progTarget').data('toggles').active
+				},
+				success : function (data, status, xhr) {
+					if(xhr.status == 202) {
+						$('#progResult').append('programming request sent, callback: ' + data['callback'] + ', sub: ' + data['subNumber'] + '\n');
+						progCheckerAttempts = 0;
+						progChecker = setInterval(function() {
+							checkProgrammerResult(data['callback'], data['subNumber']);
+						}, 2000);
+					} else {
+						$('#progResult').append('programming request completed.\n');
+					}
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 202) {
+						var data = jQuery.parseJSON(xhr.responseText);
+						$('#progResult').append('programming request sent, callback: ' + data['callback'] + ', sub: ' + data['subNumber'] + '\n');
+						progCheckerAttempts = 0;
+						progChecker = setInterval(function() {
+							checkProgrammerResult(data['callback'], data['subNumber']);
+						}, 5000);
+					} else {
+						$('#progResult').append('programming request failed.\n');
+					}
+				}
+			}); 
+		});
+		$('#progTarget').toggles({
+			text:{
+				on:'MAIN',
+				off:'PROG'
+			},
+			width:100}
+		);
+		$('#progByteOrBit').toggles({
+			text:{
+				on:'Bit',
+				off:'Byte'
+			},
+			width:100}
+		);
+		$('#progReadOrWrite').toggles({
+			text:{
+				on:'Write',
+				off:'Read'
+			},
+			width:100}
+		);
+		$('#progBitValue').toggles({
+			text:{
+				on:'ON',
+				off:'OFF'
+			},
+			width:100}
+		);
+		$('#progTarget').on('toggle', function(e, active) {
+			$('#progLocoNumber').toggle();
+			$('#progLocoNumberLabel').toggle();
+			$('#progLocoNumber').val('1');
+		});
+		$('#progReadOrWrite').on('toggle', function(e, active) {
+			if(active) {
+				$('#progByteOrBit').toggles(false);
+				$('#progByteOrBit').show();
+				$('#progByteOrBitLabel').show();
+				$('#progCVValue').show();
+				$('#progCVValueLabel').show();
+			} else {
+				$('#progByteOrBit').hide();
+				$('#progByteOrBitLabel').hide();
+				$('#progCVValue').hide();
+				$('#progCVValueLabel').hide();
+				$('#progBitValue').hide();
+			}
+		});
+		$('#progByteOrBit').on('toggle', function(e, active) {
+			if($('#progReadOrWrite').data('toggles').active) {
+				if(active) {
+					$('#progBitValue').show();
+					$('#progBitNumberLabel').show();
+					$('#progBitNumber').show();
+					$('#progCVValueLabel').show();
+					$('#progCVValue').hide();
+				} else {
+					$('#progBitNumber').hide();
+					$('#progBitNumberLabel').hide();
+					$('#progBitValue').hide();
+					$('#progCVValueLabel').show();
+					$('#progCVValue').show();
+				}
+			} else {
+				if(active) {
+					$('#progBitNumber').show();
+					$('#progBitNumberLabel').show();
+					$('#progCVValue').hide();
+				} else {
+					$('#progCVValue').hide();
+					$('#progCVValueLabel').hide();
+					$('#progBitNumber').hide();
+					$('#progBitNumberLabel').hide();
+				}
+			}
+		});
+		$('#progByteOrBit').hide();
+		$('#progByteOrBitLabel').hide();
+		$('#progLocoNumber').hide();
+		$('#progLocoNumberLabel').hide();
+		$('#progCVValue').hide();
+		$('#progCVValueLabel').hide();
+		$('#progBitNumber').hide();
+		$('#progBitNumberLabel').hide();
+		$('#progBitValue').hide();
 	});
 </script>
 
 </body>
 </html>
+
+

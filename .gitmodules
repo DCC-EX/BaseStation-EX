@@ -1,9 +1,3 @@
-[submodule "DCCpp_ESP/ESPAsyncWebServer"]
-	path = DCCpp_ESP/ESPAsyncWebServer
-	url = https://github.com/me-no-dev/ESPAsyncWebServer
-[submodule "DCCpp_ESP/ESPAsyncTCP"]
-	path = DCCpp_ESP/ESPAsyncTCP
-	url = https://github.com/me-no-dev/ESPAsyncTCP
 [submodule "DCCpp_Uno/LiquidCrystal_PCF8574"]
 	path = DCCpp_Uno/LiquidCrystal_PCF8574
 	url = https://github.com/mathertel/LiquidCrystal_PCF8574

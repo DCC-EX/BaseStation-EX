@@ -22,24 +22,14 @@ Building DCC++ ESP requires the following libraries:
 * ESP8266WiFi (https://github.com/esp8266/Arduino)
 * ESPAsyncTCP (https://github.com/me-no-dev/ESPAsyncTCP)
 * ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
+* ArduinoJson (https://github.com/bblanchon/ArduinoJson)
+* TaskScheduler (https://github.com/arkhipenko/TaskScheduler)
 
 Additionally the Arduino IDE will require ESP8266 support, see https://github.com/esp8266/Arduino
-for details in setting up the additional packages for this. Arduino Eclipse can be used as well and
-provides a board definition for the ESP8266.  For Arduino IDE the SPIFFS upload plugin is also
-required: https://github.com/esp8266/arduino-esp8266fs-plugin. Arduino Eclipse does not yet support
-automated SPIFFS upload.
-
-When setting up the project in the IDE be sure to select the appropriate ESP device and that you
-select the 128kb SPIFFS setting.
+for details in setting up the additional packages for this.
 
 Uploading DCC++ ESP to your device
 ----------------------------------
 
-The IDE should provide upload support by default. If you are using Arduino IDE you must also upload
-the SPIFFS piece via Tools -> ESP8266 Sketch Data Upload.  For Arduino Eclipse it must be done
-manually:
-* mkspiffs.exe -c data -p 256 -b 4096 -s 131072 spiffs.bin
-* esptool.exe -cd none -cb 115200 -cp COM3 -ca 0xDB000 -cf spiffs.bin
-
-These values are based on a 512Mbit+512MBit ESP module.  Other modules may require a different base
-address for upload.
+The Arduino IDE or Arduino Eclipse IDE provide the necessary support for uploading to the ESP8266
+device, there is no longer a SPIFFS binary to upload so no manual steps are required for that.
