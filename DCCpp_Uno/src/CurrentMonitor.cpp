@@ -87,7 +87,11 @@ void MotorBoard::showStatus() {
 	}
 }
 
+#if MAX_MOTOR_BOARDS > 6
 MotorBoard *MotorBoardManager::boards[MAX_MOTOR_BOARDS] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+#else
+MotorBoard *MotorBoardManager::boards[MAX_MOTOR_BOARDS] = { NULL, NULL, NULL, NULL, NULL, NULL };
+#endif
 
 void MotorBoardManager::registerBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name) {
 	for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
