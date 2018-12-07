@@ -117,9 +117,9 @@ void MotorBoardManager::powerOnAll() {
 		}
 	}
 	CommManager::printf("<p1>");
-#if defined(LCD_ENABLED) && LCD_LINES > 2
+#if defined(ENABLE_LCD) && LCD_LINES > 2
 	if(lcdEnabled) {
-		lcdDisplay.setCursor(12, 3);
+		lcdDisplay.setCursor(13, 3);
 		lcdDisplay.print("ON ");
 	}
 #endif
@@ -132,9 +132,9 @@ void MotorBoardManager::powerOffAll() {
 		}
 	}
 	CommManager::printf("<p0>");
-#if defined(LCD_ENABLED) && LCD_LINES > 2
+#if defined(ENABLE_LCD) && LCD_LINES > 2
 	if(lcdEnabled) {
-		lcdDisplay.setCursor(12, 3);
+		lcdDisplay.setCursor(13, 3);
 		lcdDisplay.print("OFF");
 	}
 #endif
