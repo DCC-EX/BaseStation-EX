@@ -174,7 +174,7 @@ void MotorBoardManager::parse(const char *com) {
 			} else {
 				for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
 					if(boards[i] != NULL && strcasecmp(boards[i]->getName(), com+2) == 0) {
-						CommManager::printf("<a %d %s>", boards[i]->getLastRead(), boards[i]->getName());
+						CommManager::printf("<a %s %d>", boards[i]->getName(), boards[i]->getLastRead());
 						return;
 					}
 				}
