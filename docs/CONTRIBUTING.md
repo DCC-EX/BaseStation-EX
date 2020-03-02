@@ -1,0 +1,1 @@
+Thanks for considering contributing to our project. Here is a guide for how to get started and and a list of our conventions. We will also walk you through the Github command line and Desktop commands necessary to download the code, make changes, and get it included in a next version of the sofware.
