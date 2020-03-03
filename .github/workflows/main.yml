@@ -15,11 +15,11 @@ jobs:
       run: pip install -U https://github.com/platformio/platformio/archive/develop.zip
     - name: Install PlatformIO AVR platform
       run: python -m platformio platform install https://github.com/platformio/platform-atmelavr.git
-    - name: Install PlatformIO esp8266 platform
-      run: python -m platformio platform install https://github.com/platformio/platform-espressif8266.git
+#    - name: Install PlatformIO esp8266 platform
+#      run: python -m platformio platform install https://github.com/platformio/platform-espressif8266.git
     - name: Compile BaseStation (AVR)
       run: python -m platformio run
       working-directory: DCCpp_Uno
-    - name: Compile BaseStation (ESP8266)
-      run: python -m platformio run
-      working-directory: DCCpp_ESP
+#    - name: Compile BaseStation (ESP8266)
+#      run: python -m platformio run
+#      working-directory: DCCpp_ESP
