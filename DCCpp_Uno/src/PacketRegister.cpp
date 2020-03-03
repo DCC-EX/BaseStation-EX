@@ -235,8 +235,7 @@ void RegisterList::readCV(const char *s) volatile{
         d=1;
       }
     }
- loadPacket(0,resetPacket,2,1);           // Final reset packet completed (and decoder begins to respond)
-    bitWrite(bValue,i,d);
+     bitWrite(bValue,i,d);
   }
 
   c=0;
@@ -298,8 +297,6 @@ void RegisterList::writeCVByte(const char *s) volatile{
     base+=analogRead(CURRENT_MONITOR_PIN_PROG);
   base/=ACK_BASE_COUNT;
   
-  loadPacket(0,resetPacket,2,1); // Final reset packet completed (and decoder begins to respond)
-
   bWrite[0]=0x74+(highByte(cv)&0x03);    // set-up to re-verify entire byte
 
   loadPacket(0,resetPacket,2,3);        // NMRA recommends starting with 3 reset packets
@@ -349,8 +346,6 @@ void RegisterList::writeCVBit(const char *s) volatile{
     base+=analogRead(CURRENT_MONITOR_PIN_PROG);
   base/=ACK_BASE_COUNT;
   
-  loadPacket(0,resetPacket,2,1);      // Final reset packet completed (and decoder begins to respond)
-
   bitClear(bWrite[2],4);              // change instruction code from Write Bit to Verify Bit
   loadPacket(0,resetPacket,2,3);      // NMRA recommends starting with 3 reset packets
   loadPacket(0,bWrite,3,5);           // NMRA recommends 5 verify packets
