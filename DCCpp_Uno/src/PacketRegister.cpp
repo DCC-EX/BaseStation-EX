@@ -234,9 +234,8 @@ void RegisterList::readCV(const char *s) volatile{
       if(c>ACK_SAMPLE_THRESHOLD) {
         d=1;
       }
-  loadPacket(0,resetPacket,2,1);           // Final reset packet completed (and decoder begins to respond)
     }
-
+ loadPacket(0,resetPacket,2,1);           // Final reset packet completed (and decoder begins to respond)
     bitWrite(bValue,i,d);
   }
 
