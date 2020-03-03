@@ -221,20 +221,20 @@ void RegisterList::readCV(const char *s) volatile{
     for(int j=0;j<ACK_BASE_COUNT;j++) {
       base+=analogRead(CURRENT_MONITOR_PIN_PROG);
     }
-    base/=ACK_BASE_COUNT;
+  base/=ACK_BASE_COUNT;
 
-    bRead[2]=0xE8+i;
+  bRead[2]=0xE8+i;
 
-loadPacket(0,resetPacket,2,3);            // NMRA recommends starting with 3 reset packets
-loadPacket(0,bRead,3,5);                  // NMRA recommends 5 verify packets
-loadPacket(0, idlePacket, 2, 6);          // NMRA recommends 6 idle or reset packets for decoder recovery time
+  loadPacket(0,resetPacket,2,3);            // NMRA recommends starting with 3 reset packets
+  loadPacket(0,bRead,3,5);                  // NMRA recommends 5 verify packets
+  loadPacket(0, idlePacket, 2, 6);          // NMRA recommends 6 idle or reset packets for decoder recovery time
 
     for(int j=0;j<ACK_SAMPLE_COUNT;j++){
       c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
       if(c>ACK_SAMPLE_THRESHOLD) {
         d=1;
       }
- loadPacket(0,resetPacket,2,1);           // Final reset packet completed (and decoder begins to respond)
+  loadPacket(0,resetPacket,2,1);           // Final reset packet completed (and decoder begins to respond)
     }
 
     bitWrite(bValue,i,d);
