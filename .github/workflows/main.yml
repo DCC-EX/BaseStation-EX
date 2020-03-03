@@ -12,7 +12,7 @@ jobs:
     - name: Install Python Wheel
       run: pip install wheel
     - name: Install PlatformIO Core
-      run: pip install -U https://github.com/platformio/platformio/archive/develop.zip
+      run: pip install -U https://github.com/platformio/platformio/archive/v4.2.1.zip
     - name: Install PlatformIO AVR platform
       run: python -m platformio platform install https://github.com/platformio/platform-atmelavr.git
     - name: Install PlatformIO esp8266 platform
