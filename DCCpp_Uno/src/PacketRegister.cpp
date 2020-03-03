@@ -225,9 +225,10 @@ void RegisterList::readCV(const char *s) volatile{
 
     bRead[2]=0xE8+i;
 
-    loadPacket(0,resetPacket,2,3);          // NMRA recommends starting with 3 reset packets
-    loadPacket(0,bRead,3,5);                // NMRA recommends 5 verfy packets
-    loadPacket(0,bRead,3,1);          // forces code to wait until all repeats of bRead are completed (and decoder begins to respond)
+loadPacket(0,resetPacket,2,3); // NMRA recommends starting with 3 reset packets
+loadPacket(0,bRead,3,5); // NMRA recommends 5 verify packets
+loadPacket(0,bRead,3,6); // NMRA recommends 6 write or reset packets for decoder recovery time
+loadPacket(0,resetPacket,2,1); // Final reset packet completed (and decoder begins to respond)
 
     for(int j=0;j<ACK_SAMPLE_COUNT;j++){
       c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
@@ -251,9 +252,10 @@ void RegisterList::readCV(const char *s) volatile{
   bRead[0]=0x74+(highByte(cv)&0x03);   // set-up to re-verify entire byte
   bRead[2]=bValue;
 
-  loadPacket(0,resetPacket,2,3);          // NMRA recommends starting with 3 reset packets
-  loadPacket(0,bRead,3,5);                // NMRA recommends 5 verfy packets
-  loadPacket(0,bRead,3,1);          // forces code to wait until all repeats of bRead are completed (and decoder begins to respond)
+  loadPacket(0,resetPacket,2,3); // NMRA recommends starting with 3 reset packets
+  loadPacket(0,bRead,3,5); // NMRA recommends 5 verify packets
+  loadPacket(0,bRead,3,6); // NMRA recommends 6 write or reset packets for decoder recovery time
+  loadPacket(0,resetPacket,2,1); // Final reset packet completed (and decoder begins to respond)
 
   for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
@@ -283,9 +285,11 @@ void RegisterList::writeCVByte(const char *s) volatile{
   bWrite[1]=lowByte(cv);
   bWrite[2]=bValue;
 
-  loadPacket(0,resetPacket,2,1);
-  loadPacket(0,bWrite,3,4);
-  loadPacket(0,resetPacket,2,1);
+ 
+  loadPacket(0,resetPacket,2,3); // NMRA recommends starting with 3 reset packets
+  loadPacket(0,bWrite,3,5); // NMRA recommends 5 verify packets
+  loadPacket(0,bWtite,3,6); // NMRA recommends 6 write or reset packets for decoder recovery time
+  loadPacket(0,resetPacket,2,1); // Final reset packet completed (and decoder begins to respond)
   loadPacket(0,idlePacket,2,10);
 
   c=0;
@@ -298,9 +302,10 @@ void RegisterList::writeCVByte(const char *s) volatile{
 
   bWrite[0]=0x74+(highByte(cv)&0x03);   // set-up to re-verify entire byte
 
-  loadPacket(0,resetPacket,2,3);          // NMRA recommends starting with 3 reset packets
-  loadPacket(0,bWrite,3,5);               // NMRA recommends 5 verfy packets
-  loadPacket(0,bWrite,3,1);          // forces code to wait until all repeats of bRead are completed (and decoder begins to respond)
+  loadPacket(0,resetPacket,2,3); // NMRA recommends starting with 3 reset packets
+  loadPacket(0,bWrite,3,5); // NMRA recommends 5 verify packets
+  loadPacket(0,bWtite,3,6); // NMRA recommends 6 write or reset packets for decoder recovery time
+  loadPacket(0,resetPacket,2,1); // Final reset packet (and decoder begins to respond)
 
   for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
@@ -332,11 +337,12 @@ void RegisterList::writeCVBit(const char *s) volatile{
   bWrite[1]=lowByte(cv);
   bWrite[2]=0xF0+bValue*8+bNum;
 
-  loadPacket(0,resetPacket,2,1);
-  loadPacket(0,bWrite,3,4);
-  loadPacket(0,resetPacket,2,1);
+  loadPacket(0,resetPacket,2,3); // NMRA recommends starting with 3 reset packets
+  loadPacket(0,bWrite,3,5); // NMRA recommends 5 verify packets
+  loadPacket(0,bWtite,3,6); // NMRA recommends 6 write or reset packets for decoder recovery time
+  loadPacket(0,resetPacket,2,1); // Final reset packet completed (and decoder begins to respond)
   loadPacket(0,idlePacket,2,10);
-
+  
   c=0;
   d=0;
   base=0;
@@ -347,10 +353,12 @@ void RegisterList::writeCVBit(const char *s) volatile{
 
   bitClear(bWrite[2],4);              // change instruction code from Write Bit to Verify Bit
 
-  loadPacket(0,resetPacket,2,3);          // NMRA recommends starting with 3 reset packets
-  loadPacket(0,bWrite,3,5);               // NMRA recommends 5 verfy packets
-  loadPacket(0,bWrite,3,1);          // forces code to wait until all repeats of bRead are completed (and decoder begins to respond)
-
+  loadPacket(0,resetPacket,2,3); // NMRA recommends starting with 3 reset packets
+  loadPacket(0,bWrite,3,5); // NMRA recommends 5 verify packets
+  loadPacket(0,bWtite,3,6); // NMRA recommends 6 write or reset packets for decoder recovery time
+  loadPacket(0,resetPacket,2,1); // Final reset packetcompleted (and decoder begins to respond)
+  loadPacket(0,idlePacket,2,10);
+  
   for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
     if(c>ACK_SAMPLE_THRESHOLD)
