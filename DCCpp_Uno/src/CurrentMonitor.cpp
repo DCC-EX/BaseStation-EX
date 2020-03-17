@@ -15,29 +15,38 @@ Part of DCC++ BASE STATION for the Arduino
 
 #define  CURRENT_SAMPLE_SMOOTHING          0.01
 
-#ifdef ARDUINO_AVR_UNO                        // Configuration for UNO
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)   // Configuration for UNO
   #define  CURRENT_SAMPLE_TIME        10
-#else                                         // Configuration for MEGA
+#else                                                       // Configuration for MEGA
   #define  CURRENT_SAMPLE_TIME        1
 #endif
 
-MotorBoard::MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name) : sensePin(sensePin), enablePin(enablePin), name(name), current(0), triggered(false), lastCheckTime(0) {
+MotorBoard::MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name) : sensePin(sensePin), enablePin(enablePin), name(name), current(0), reading(0), triggered(false), lastCheckTime(0) {
 	switch(type) {
 		case ARDUINO_SHIELD:
-			// Arduino motor board: 890mA == 300*0.0049/1.65
-			triggerValue = 300;
+			// Arduino motor board: 890mA == 300 sensor reading
+			triggerMilliamps = 890;
+			maxMilliAmps = 2000;
 			break;
 		case POLOLU:
-			// Pololu motor board: 1.493A == 160*0.0049/0.525
-			triggerValue = 160;
+			// Pololu motor board: 1.493A == 160 sensor reading
+			triggerMilliamps = 1490;
+			maxMilliAmps = 3000;
 			break;
 		case BTS7960B_5A:
-			// BTS7960B motor board: 5.133A == 11*0.0049/0.0105
-			triggerValue = 11;
+			// BTS7960B motor board: 5.133A == 11 sensor reading
+			triggerMilliamps = 5133;
+			maxMilliAmps = 5000;
 			break;
 		case BTS7960B_10A:
-			// BTS7960B motor board: 10.266A == 22*0.0049/0.0105
-			triggerValue = 22;
+			// BTS7960B motor board: 10.266A == 22 sensor reading
+			triggerMilliamps = 10000;
+			maxMilliAmps = 10000;
+			break;
+		case LMD18200_MAX471:
+			// LMD18200 motor board: 3.0A == 22*0.0049/
+			triggerMilliamps = 3000;
+			maxMilliAmps = 3000;
 			break;
 	}
 }
@@ -46,11 +55,12 @@ void MotorBoard::check() {
 	// if we have exceeded the CURRENT_SAMPLE_TIME we need to check if we are over/under current.
 	if(millis() - lastCheckTime > CURRENT_SAMPLE_TIME) {
 		lastCheckTime = millis();
-		current = analogRead(sensePin) * CURRENT_SAMPLE_SMOOTHING + current * (1.0 - CURRENT_SAMPLE_SMOOTHING);
-		if(current > triggerValue && digitalRead(enablePin)) {
+		reading = analogRead(sensePin) * CURRENT_SAMPLE_SMOOTHING + current * (1.0 - CURRENT_SAMPLE_SMOOTHING);
+		current = reading * CURRENT_CONVERSION_FACTOR; // get current in milliamps
+		if(current > triggerMilliamps && digitalRead(enablePin)) {
 			powerOff(false, true);
 			triggered=true;
-		} else if(current < triggerValue && triggered) {
+		} else if(current < triggerMilliamps && triggered) {
 			powerOn();
 			triggered=false;
 		}
@@ -76,7 +86,7 @@ void MotorBoard::powerOff(bool announce, bool overCurrent) {
 }
 
 int MotorBoard::getLastRead() {
-	return current;
+	return current;  //fnd returns milliamps with var "current" with my changes. may need it to return "reading" for JMRI
 }
 
 void MotorBoard::showStatus() {
