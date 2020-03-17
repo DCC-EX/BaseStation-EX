@@ -16,22 +16,35 @@ Part of DCC++ BASE STATION for the Arduino
 // RELEASE VERSION
 /////////////////////////////////////////////////////////////////////////////////////
 
-#define VERSION "2.0.0"
+#define VERSION "2.1.0"
 
 /////////////////////////////////////////////////////////////////////////////////////
 // AUTO-SELECT ARDUINO BOARD
 /////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef ARDUINO_AVR_MEGA                   // is using Mega 1280, define as Mega 2560 (pinouts and functionality are identical)
-  #define ARDUINO_AVR_MEGA2560
+  #define ARDUINO_AVR_MEGA2560  
 #endif
 
-#if defined  ARDUINO_AVR_UNO
+#if defined ARDUINO_AVR_UNO
 
   #define ARDUINO_TYPE    "UNO"
 
   #define DCC_SIGNAL_PIN_MAIN 10          // Ardunio Uno  - uses OC1B
   #define DCC_SIGNAL_PIN_PROG 5           // Arduino Uno  - uses OC0B
+
+  #if COMM_INTERFACE != 0                 // Serial was not selected
+
+    #error CANNOT COMPILE - DCC++ FOR THE UNO CAN ONLY USE SERIAL COMMUNICATION - PLEASE SELECT THIS IN THE CONFIG FILE
+
+  #endif
+
+#elif defined ARDUINO_AVR_NANO
+
+  #define ARDUINO_TYPE    "NANO"
+
+  #define DCC_SIGNAL_PIN_MAIN 10          // Ardunio Nano  - uses OC1B
+  #define DCC_SIGNAL_PIN_PROG 5           // Arduino Nano  - uses OC0B
 
   #if COMM_INTERFACE != 0                 // Serial was not selected
 
@@ -48,12 +61,16 @@ Part of DCC++ BASE STATION for the Arduino
 
 #else
 
-  #error CANNOT COMPILE - DCC++ ONLY WORKS WITH AN ARDUINO UNO OR AN ARDUINO MEGA 1280/2560
+  #error CANNOT COMPILE - DCC++ ONLY WORKS WITH AN ARDUINO UNO, NANO 328, OR ARDUINO MEGA 1280/2560
 
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////
-// SELECT MOTOR SHIELD
+// SELECT MOTOR SHIELD       current in milliamps computed from ((Vcc/1024)/volts_per_amp) * 1000
+//                           VCC is the voltage range of the Arduino sensor pin (5v) while 1024
+//                           is the resolution or the range of the sensor (10bits). volts_per_amp
+//                           is the number of volts out of the current sensor board that corresponds
+//                           to one amp of current.
 /////////////////////////////////////////////////////////////////////////////////////
 
 #if MOTOR_SHIELD_TYPE == 0
@@ -69,6 +86,8 @@ Part of DCC++ BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
+  #define CURRENT_CONVERSION_FACTOR 2.96  // ((5/1024)/1.65) * 1000 
+
 #elif MOTOR_SHIELD_TYPE == 1
 
   #define MOTOR_SHIELD_NAME "POLOLU MC33926 MOTOR SHIELD"
@@ -82,9 +101,11 @@ Part of DCC++ BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 7
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 8
 
+  #define CURRENT_CONVERSION_FACTOR 9.30  // (5/1024) /.525 * 1000 
+
 #elif MOTOR_SHIELD_TYPE == 2
 
-  #define MOTOR_SHIELD_NAME "BTS7960B BASED MOTOR SHIELD"
+  #define MOTOR_SHIELD_NAME "BTS7960B BASED MOTOR SHIELD 5A"
 
   #define SIGNAL_ENABLE_PIN_MAIN 3
   #define SIGNAL_ENABLE_PIN_PROG 11
@@ -94,6 +115,38 @@ Part of DCC++ BASE STATION for the Arduino
 
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
+
+  #define CURRENT_CONVERSION_FACTOR 465  // (5/1024) /.0105 * 1000  fnd-not .125?
+
+  #elif MOTOR_SHIELD_TYPE == 3
+
+  #define MOTOR_SHIELD_NAME "BTS7960B BASED MOTOR SHIELD 10A"
+
+  #define SIGNAL_ENABLE_PIN_MAIN 3
+  #define SIGNAL_ENABLE_PIN_PROG 11
+
+  #define CURRENT_MONITOR_PIN_MAIN A0
+  #define CURRENT_MONITOR_PIN_PROG A1
+
+  #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
+  #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
+
+  #define CURRENT_CONVERSION_FACTOR 465  // (5/1024) /.0105 * 1000 
+
+  #elif MOTOR_SHIELD_TYPE == 4
+
+  #define MOTOR_SHIELD_NAME "LMD18200 with MAX 471 for current sense"
+
+  #define SIGNAL_ENABLE_PIN_MAIN 3
+  #define SIGNAL_ENABLE_PIN_PROG 11
+
+  #define CURRENT_MONITOR_PIN_MAIN A0
+  #define CURRENT_MONITOR_PIN_PROG A1
+
+  #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
+  #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
+
+  #define CURRENT_CONVERSION_FACTOR 4.88  // (5/1024) /1 * 1000 
 
 #else
 

@@ -12,7 +12,7 @@ Part of DCC++ BASE STATION for the Arduino
 
 #include "Arduino.h"
 
-enum MOTOR_BOARD_TYPE { ARDUINO_SHIELD, POLOLU, BTS7960B_5A, BTS7960B_10A };
+enum MOTOR_BOARD_TYPE { ARDUINO_SHIELD, POLOLU, BTS7960B_5A, BTS7960B_10A, LMD18200_MAX471 };
 
 // cap the number of motor boards at the maximum number of analog inputs
 #define MAX_MOTOR_BOARDS NUM_ANALOG_INPUTS
@@ -33,9 +33,11 @@ private:
 	int enablePin;
 	const char *name;
 	float current;
+	float reading;  // fnd added
 	bool triggered;
 	long int lastCheckTime;
-	int triggerValue;
+	int triggerMilliamps; // fnd renamed from triggerValue
+	int maxMilliAmps;  // fnd added
 };
 
 class MotorBoardManager {

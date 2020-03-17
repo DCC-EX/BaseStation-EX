@@ -373,7 +373,7 @@ void SerialCommand::parse(const char *com){
     bitSet(TCCR1B,CS11);
     bitClear(TCCR1B,CS10);
 
-    #ifdef ARDUINO_AVR_UNO      // Configuration for UNO
+    #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)     // Configuration for UNO or Nano
 
       bitSet(TCCR0B,CS02);    // set Timer 0 prescale=256 - SLOWS NORMAL SPEED BY A FACTOR OF 4
       bitClear(TCCR0B,CS01);
