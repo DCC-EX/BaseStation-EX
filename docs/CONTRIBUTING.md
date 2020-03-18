@@ -2,8 +2,14 @@ Thanks for considering contributing to our project. Here is a guide for how to g
 
 ## Development Platform
 
-We are using Visual Studio Code with PlatformIO. You need to install Microsoft's FREE Visual Studio Code and the FREE PlatformIO for Visual Studio Code. From PlatformIO install the C++ extension. You may also want to install the Clang extension. Under "Platforms", make sure you have "Atmel AVR" installed so you can connect to Arduino boards.
+We are using Visual Studio Code with PlatformIO. To get everything you need, follow these steps:
+
+* Download and install the latest version of the Arduino IDE
+* Download and install the latest version of Visual Studio Code from Microsoft
+* Run VSCode and click on the "extensions" icon on the left. Install "PlatformIO IDE for VSCode" and the "Arduino Framework" support
+
+If you don't see C/C++ Installed in the list, install that too. We also recomment installing the Gitlens extension to make working with Git and GitHub even easier.
 
 ## Code Formatting
 
-We are using the "Visual Studio" C++ code formatting standard. Make sure in your Settings file that the C_Cpp:Clang_format_fallback Style is set to "Visual Studio". Then when you right click and select "Format Document" (or use the Alt-Shift-F shortcut) your code will be standardized to the DCC++ EX style.
+We are using the "Visual Studio" C++ code formatting standard. Make sure in your VSCode Settings that the C_Cpp:Clang_format_fallback Style is set to "Visual Studio". Then when you right click and select "Format Document" (or use the Alt-Shift-F shortcut) your code will be standardized to the DCC++ EX style.
