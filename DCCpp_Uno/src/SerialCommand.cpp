@@ -286,12 +286,11 @@ void SerialCommand::parse(const char *com){
 
     case 'c':     // <c>
 /*
- *    reads current being drawn on main operations track
- * ...returns <a READING CURRENT TRIGGERMILLIAMPS MAXMILLIAMPS>
+ *    reads current being drawn on main operations track. returns <a READING CURRENT TRIGGERMILLIAMPS MAXMILLIAMPS>
  *        READING = 0-1023 - exponentially smoothed weighted value from the raw reading on the current sense pin of the Arduino
- *      - CURRENT = 0-1024 - current calculated from the READING and the CURRENT_CONVERSION_FACTOR for the current sense device
- *        TRIGGERMILLIAMPS - the value in milliamps that will trigger the overcurrent shutdown of the track
- *        MAXMILLIAMPS - the maxiumum supported current of the motor board
+ *      - CURRENT = - current calculated from the READING and the CURRENT_CONVERSION_FACTOR for the current sense device
+ *        TRIGGERMILLIAMPS = the value in milliamps that will trigger the overcurrent shutdown of the track
+ *        MAXMILLIAMPS = the maxiumum supported current of the motor board
  */
       MotorBoardManager::parse(com);
       break;
