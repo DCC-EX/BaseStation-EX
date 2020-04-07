@@ -7,7 +7,7 @@ Part of DCC++ BASE STATION for the Arduino
 
 **********************************************************************/
 
-#include "DCCpp.h"
+#include "DCCppEX.h"
 #include "PacketRegister.h"
 #include "CommInterface.h"
 
