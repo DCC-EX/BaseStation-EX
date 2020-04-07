@@ -86,7 +86,8 @@ Part of DCC++ BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
-  #define CURRENT_CONVERSION_FACTOR 2.96  // ((5/1024)/1.65) * 1000 
+  // ((5/1024)/1.65) * 1000
+  #define CURRENT_CONVERSION_FACTOR 2.96
 
 #elif MOTOR_SHIELD_TYPE == 1
 
@@ -101,7 +102,8 @@ Part of DCC++ BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 7
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 8
 
-  #define CURRENT_CONVERSION_FACTOR 9.30  // (5/1024) /.525 * 1000 
+  // (5/1024) /.525 * 1000
+  #define CURRENT_CONVERSION_FACTOR 9.30
 
 #elif MOTOR_SHIELD_TYPE == 2
 
@@ -116,7 +118,8 @@ Part of DCC++ BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
-  #define CURRENT_CONVERSION_FACTOR 465  // (5/1024) /.0105 * 1000  fnd-not .125?
+  // (5/1024) /.0105 * 1000  fnd-not .125?
+  #define CURRENT_CONVERSION_FACTOR 465
 
   #elif MOTOR_SHIELD_TYPE == 3
 
@@ -131,9 +134,33 @@ Part of DCC++ BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
-  #define CURRENT_CONVERSION_FACTOR 465  // (5/1024) /.0105 * 1000 
+  // (5/1024) /.0105 * 1000
+  #define CURRENT_CONVERSION_FACTOR 465
 
-  #elif MOTOR_SHIELD_TYPE == 4
+   #elif MOTOR_SHIELD_TYPE == 4
+   // uses current sense resister of 2.2 kOhms between pin 8 and ground.
+   // The LMD18200 delivers 377uA per Amp of output current and will report
+   // current over its rating of 3A up to 6A! We have to take this into consideration
+   // so as not to damage the Arduino
+   // R = Vout/Imax = 5/(.000377/6) = 2200 Ohms
+   // So 1A would send .83V to the Arduino sense pin.
+   // That means with a 2200 Ohm resistor to a 5V arduinio pin, that is .83V / Amp
+
+  #define MOTOR_SHIELD_NAME "LMD18200 Using onboard current sense"
+  
+  #define SIGNAL_ENABLE_PIN_MAIN 3
+  #define SIGNAL_ENABLE_PIN_PROG 11
+
+  #define CURRENT_MONITOR_PIN_MAIN A0
+  #define CURRENT_MONITOR_PIN_PROG A1
+
+  #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
+  #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
+
+  // (5/1024) /.83* 1000
+  #define CURRENT_CONVERSION_FACTOR 5.88
+
+  #elif MOTOR_SHIELD_TYPE == 5
 
   #define MOTOR_SHIELD_NAME "LMD18200 with MAX 471 for current sense"
 
@@ -146,7 +173,8 @@ Part of DCC++ BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
-  #define CURRENT_CONVERSION_FACTOR 4.88  // (5/1024) /1 * 1000 
+  // (5/1024) /1 * 1000
+  #define CURRENT_CONVERSION_FACTOR 4.88
 
 #else
 

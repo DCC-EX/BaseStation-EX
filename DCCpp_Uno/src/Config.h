@@ -8,15 +8,20 @@ Part of DCC++ BASE STATION for the Arduino
 **********************************************************************/
 
 /////////////////////////////////////////////////////////////////////////////////////
+//  NOTE: Before connecting these boards and selecting one in this software
+//        check the quick install guides!!! Some of these boards require a voltage
+//        generating resitor on the current sense pin of the device. Failure to select
+//        the correct resistor could damage the sense pin on your Arduino or destroy
+//        the device.
 //
 // DEFINE MOTOR_SHIELD_TYPE ACCORDING TO THE FOLLOWING TABLE:
 //
 //  0 = ARDUINO MOTOR SHIELD            (MAX 18V/2A  PER CHANNEL)  Arduino Motor shield Rev3 based on the L298
 //  1 = POLOLU MC33926 MOTOR SHIELD     (MAX 28V/2.5 PER CHANNEL)  Pololu MC33926 Motor Driver (shield or carrier)
 //  2 = BTS7960B_5A                     (MAX 27V/5A  PER CHANNEL)  Infineon Technologies BTS 7960 Motor Driver Module. Max Output 5A (43A actual max)
-//  3 = BTS7906B_10A                    (MAX 27V/10A PER CHANNEL)  Infineon Technologies BTS 7960 Motor Driver Module. Max Output 10A (43A actual max
-//  4 = LMD18200 MOTOR DRIVER MODULE
-//      & MAX 471 CURRENT SENSE MODULE  (MAX 28V/3A  PER CHANNEL)
+//  3 = BTS7906B_10A                    (MAX 27V/10A PER CHANNEL)  Infineon Technologies BTS 7960 Motor Driver Module. Max Output 10A (43A actual max)
+//  4 = LMD18200 MOTOR DRIVER MODULE    (MAX 55V/3A  PER CHANNEL)  LMD18200 Motor Driver Board (6A Max actual instantaneous peak)
+//  5 = MAX 471 CURRENT SENSE MODULE    (MAX 28V/3A  PER CHANNEL)  MAX 471 connected to an LMD18200 Motor Driver
 
 #define MOTOR_SHIELD_TYPE   0
 

@@ -21,30 +21,51 @@ Part of DCC++ BASE STATION for the Arduino
   #define  CURRENT_SAMPLE_TIME        1
 #endif
 
-MotorBoard::MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name) : sensePin(sensePin), enablePin(enablePin), name(name), current(0), reading(0), triggered(false), lastCheckTime(0) {
+MotorBoard::MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name) : sensePin(sensePin), 
+																							   enablePin(enablePin), 
+																							   name(name), 
+																							   current(0), 
+																							   reading(0),
+																							   triggerMilliamps(0),
+																							   maxMilliAmps(0), 
+																							   triggered(false), 
+																							   lastCheckTime(0) {
 	switch(type) {
 		case ARDUINO_SHIELD:
-			// Arduino motor board: 890mA == 300 sensor reading
+			// Board outputs 1.65V / Amp, Current conversion factor: ((5/1024)/1.65))*1000 = 2.96
+			// Arduino motor board: 300 sensor reading == 890mA (300 * 2.96)
 			triggerMilliamps = 890;
 			maxMilliAmps = 2000;
 			break;
 		case POLOLU:
-			// Pololu motor board: 1.493A == 160 sensor reading
+			// Board outputs .525V / Amp, Current conversion factor: ((5/1024)/.525))*1000 = 9.30
+			// Pololu motor board: 160 sensor reading == 1.493A (160 * 9.30)/1000
 			triggerMilliamps = 1490;
 			maxMilliAmps = 3000;
 			break;
 		case BTS7960B_5A:
-			// BTS7960B motor board: 5.133A == 11 sensor reading
+			// Board outputs ..0105V / Amp, Current conversion factot: ((5/1024) /.0105)*1000 = 465
+			// BTS7960B motor board: 11 sensor reading == 5.133A (11 * 465)/1000
 			triggerMilliamps = 5133;
-			maxMilliAmps = 5000;
+			maxMilliAmps = 43000;
 			break;
 		case BTS7960B_10A:
-			// BTS7960B motor board: 10.266A == 22 sensor reading
-			triggerMilliamps = 10000;
-			maxMilliAmps = 10000;
+			// Board outputs ..0105V / Amp, Current conversion factot: ((5/1024) /.0105)*1000 = 465
+			// BTS7960B motor board: 22 sensor reading == 10.266A (22 * 465)/1000
+			triggerMilliamps = 10266;
+			maxMilliAmps = 43000;
 			break;
+		case LMD18200:
+			// *** requires 2.2k resistor ***
+			// resistor is calculated for 6A because that is the max the board reports. We don't want to 
+			// send more than 5V to the Arduino GPIO
+			// Board with resistor outputs .83V/A, Current conversion factor: ((5/1024)/.83)*1000 = 5.88
+			// LM18200 motor board: 510 sensor reading == 3A (510 * 5.88)/1000
+			triggerMilliamps = 3000;
+			maxMilliAmps = 3000;
 		case LMD18200_MAX471:
-			// LMD18200 motor board: 3.0A == 22*0.0049/
+			// MAX471 outputs 1V/A, Current conversion factor is ((5/1024)/1)*1000 = 4.88
+			// LMD18200 & MAX471 for curent sense: 615 sensor reading == 3A (615 * 4.88)/1000
 			triggerMilliamps = 3000;
 			maxMilliAmps = 3000;
 			break;
@@ -86,8 +107,25 @@ void MotorBoard::powerOff(bool announce, bool overCurrent) {
 }
 
 int MotorBoard::getLastRead() {
-	return current;  //fnd returns milliamps with var "current" with my changes. may need it to return "reading" for JMRI
+	// return the raw Arduino pin reading
+	return reading;
 }
+
+int MotorBoard::getLastCurrent() {
+	// return true current in MilliAmps
+	return current;
+}
+
+int MotorBoard::getTriggerMilliAmps() {
+	// return the value that will trigger track shutoff for overcurrent
+	return triggerMilliamps;
+}
+
+int MotorBoard::getMaxMilliAmps() {
+	// returnt the maximum current handling capability of the motor board
+	return maxMilliAmps;
+}
+
 
 void MotorBoard::showStatus() {
 	if(digitalRead(enablePin) == LOW) {
@@ -180,11 +218,11 @@ void MotorBoardManager::parse(const char *com) {
 			break;
 		case 'c':
 			if(strlen(com) == 1) {
-				CommManager::printf("<a %d>", boards[0]->getLastRead());
+				CommManager::printf("<a %d %d %d %d>", boards[0]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTriggerMilliAmps(), boards[0]->getMaxMilliAmps());
 			} else {
 				for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
 					if(boards[i] != NULL && strcasecmp(boards[i]->getName(), com+2) == 0) {
-						CommManager::printf("<a %s %d>", boards[i]->getName(), boards[i]->getLastRead());
+						CommManager::printf("<a %s %d %d %d>", boards[i]->getName(), boards[i]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTriggerMilliAmps(), boards[0]->getMaxMilliAmps());
 						return;
 					}
 				}
