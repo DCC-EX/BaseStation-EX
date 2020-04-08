@@ -15,7 +15,7 @@ jobs:
       run: pip install -U https://github.com/platformio/platformio/archive/v4.2.1.zip
     - name: Compile BaseStation (AVR)
       run: python -m platformio run
-      working-directory: DCCpp_Uno
+      working-directory: DCCpp_EX
     - name: Compile BaseStation (ESP8266)
       run: python -m platformio run
       working-directory: DCCpp_ESP
