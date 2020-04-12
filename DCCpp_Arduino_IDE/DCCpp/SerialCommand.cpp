@@ -15,7 +15,7 @@ Part of DCC++ BASE STATION for the Arduino
 // See SerialCommand::parse() below for defined text commands.
 
 #include "SerialCommand.h"
-#include "DCCppEX.h"
+#include "DCCpp.h"
 #include "Accessories.h"
 #include "Sensor.h"
 #include "Outputs.h"
@@ -286,14 +286,10 @@ void SerialCommand::parse(const char *com){
 
     case 'c':     // <c>
 /*
- *    reads current being drawn on main operations track. 
+ *    reads current being drawn on main operations track
  *
- *    returns <a READING CURRENT TRIGGERMILLIAMPS MAXMILLIAMPS>
- *
- *    READING = 0-1023 - exponentially smoothed weighted value from the raw reading on the current sense pin of the Arduino
- *    CURRENT = - current calculated from the READING and the CURRENT_CONVERSION_FACTOR for the current sense device
- *    TRIGGERMILLIAMPS = the value in milliamps that will trigger the overcurrent shutdown of the track
- *    MAXMILLIAMPS = the maxiumum supported current of the motor board
+ *    returns: <a CURRENT>
+ *    where CURRENT = 0-1024, based on exponentially-smoothed weighting scheme
  */
       MotorBoardManager::parse(com);
       break;
@@ -377,7 +373,7 @@ void SerialCommand::parse(const char *com){
     bitSet(TCCR1B,CS11);
     bitClear(TCCR1B,CS10);
 
-    #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)     // Configuration for UNO or Nano
+    #ifdef ARDUINO_AVR_UNO      // Configuration for UNO
 
       bitSet(TCCR0B,CS02);    // set Timer 0 prescale=256 - SLOWS NORMAL SPEED BY A FACTOR OF 4
       bitClear(TCCR0B,CS01);

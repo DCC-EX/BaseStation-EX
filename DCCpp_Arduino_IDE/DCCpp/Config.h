@@ -8,20 +8,12 @@ Part of DCC++ BASE STATION for the Arduino
 **********************************************************************/
 
 /////////////////////////////////////////////////////////////////////////////////////
-//  NOTE: Before connecting these boards and selecting one in this software
-//        check the quick install guides!!! Some of these boards require a voltage
-//        generating resitor on the current sense pin of the device. Failure to select
-//        the correct resistor could damage the sense pin on your Arduino or destroy
-//        the device.
 //
 // DEFINE MOTOR_SHIELD_TYPE ACCORDING TO THE FOLLOWING TABLE:
 //
-//  0 = ARDUINO MOTOR SHIELD            (MAX 18V/2A  PER CHANNEL)  Arduino Motor shield Rev3 based on the L298
-//  1 = POLOLU MC33926 MOTOR SHIELD     (MAX 28V/2.5 PER CHANNEL)  Pololu MC33926 Motor Driver (shield or carrier)
-//  2 = BTS7960B_5A                     (MAX 27V/5A  PER CHANNEL)  Infineon Technologies BTS 7960 Motor Driver Module. Max Output 5A (43A actual max)
-//  3 = BTS7906B_10A                    (MAX 27V/10A PER CHANNEL)  Infineon Technologies BTS 7960 Motor Driver Module. Max Output 10A (43A actual max)
-//  4 = LMD18200 MOTOR DRIVER MODULE    (MAX 55V/3A  PER CHANNEL)  LMD18200 Motor Driver Board (6A Max actual instantaneous peak)
-//  5 = MAX 471 CURRENT SENSE MODULE    (MAX 28V/3A  PER CHANNEL)  MAX 471 connected to an LMD18200 Motor Driver
+//  0 = ARDUINO MOTOR SHIELD          (MAX 18V/2A PER CHANNEL)
+//  1 = POLOLU MC33926 MOTOR SHIELD   (MAX 28V/3A PER CHANNEL)
+//  2 = BTS7960B                      (MAX 27V/43A PER CHANNEL)
 
 #define MOTOR_SHIELD_TYPE   0
 
@@ -33,11 +25,6 @@ Part of DCC++ BASE STATION for the Arduino
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// NOTE: Only the Mega currently supports networking since pin 4 is in use by DCC++
-//       and creates a conflict with the Ethernet Shield's need for pin 4. For the Mega,
-//       DCC++ uses pin 2 instead of pin 4. This could be changed in the future but
-//       could cause issues with people with old UNO jumper settings applying an update
-//
 // DEFINE COMMUNICATIONS INTERFACE
 //
 //  0 = Built-in Serial Port
@@ -46,7 +33,7 @@ Part of DCC++ BASE STATION for the Arduino
 //  3 = Seeed Studio Ethernet/SD-Card Shield W5200
 //  4 = ESP8266 WiFi module
 
-#define COMM_INTERFACE   0
+#define COMM_INTERFACE   1
 
 #if COMM_INTERFACE == 4
 	/////////////////////////////////////////////////////////////////////////////////////

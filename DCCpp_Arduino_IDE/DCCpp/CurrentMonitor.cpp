@@ -7,7 +7,7 @@ Part of DCC++ BASE STATION for the Arduino
 
 **********************************************************************/
 
-#include "DCCppEX.h"
+#include "DCCpp.h"
 #include "CurrentMonitor.h"
 #include "CommInterface.h"
 
@@ -15,59 +15,29 @@ Part of DCC++ BASE STATION for the Arduino
 
 #define  CURRENT_SAMPLE_SMOOTHING          0.01
 
-#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)   // Configuration for UNO
+#ifdef ARDUINO_AVR_UNO                        // Configuration for UNO
   #define  CURRENT_SAMPLE_TIME        10
-#else                                                       // Configuration for MEGA
+#else                                         // Configuration for MEGA
   #define  CURRENT_SAMPLE_TIME        1
 #endif
 
-MotorBoard::MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name) : sensePin(sensePin), 
-																							   enablePin(enablePin), 
-																							   name(name), 
-																							   current(0), 
-																							   reading(0),
-																							   triggerMilliamps(0),
-																							   maxMilliAmps(0), 
-																							   triggered(false), 
-																							   lastCheckTime(0) {
+MotorBoard::MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name) : sensePin(sensePin), enablePin(enablePin), name(name), current(0), triggered(false), lastCheckTime(0) {
 	switch(type) {
 		case ARDUINO_SHIELD:
-			// Board outputs 1.65V / Amp, Current conversion factor: ((5/1024)/1.65))*1000 = 2.96
-			// Arduino motor board: 300 sensor reading == 890mA (300 * 2.96)
-			triggerMilliamps = 890;
-			maxMilliAmps = 2000;
+			// Arduino motor board: 890mA == 300*0.0049/1.65
+			triggerValue = 300;
 			break;
 		case POLOLU:
-			// Board outputs .525V / Amp, Current conversion factor: ((5/1024)/.525))*1000 = 9.30
-			// Pololu motor board: 160 sensor reading == 1.493A (160 * 9.30)/1000
-			triggerMilliamps = 1490;
-			maxMilliAmps = 3000;
+			// Pololu motor board: 1.493A == 160*0.0049/0.525
+			triggerValue = 160;
 			break;
 		case BTS7960B_5A:
-			// Board outputs ..0105V / Amp, Current conversion factot: ((5/1024) /.0105)*1000 = 465
-			// BTS7960B motor board: 11 sensor reading == 5.133A (11 * 465)/1000
-			triggerMilliamps = 5133;
-			maxMilliAmps = 43000;
+			// BTS7960B motor board: 5.133A == 11*0.0049/0.0105
+			triggerValue = 11;
 			break;
 		case BTS7960B_10A:
-			// Board outputs ..0105V / Amp, Current conversion factot: ((5/1024) /.0105)*1000 = 465
-			// BTS7960B motor board: 22 sensor reading == 10.266A (22 * 465)/1000
-			triggerMilliamps = 10266;
-			maxMilliAmps = 43000;
-			break;
-		case LMD18200:
-			// *** requires 2.2k resistor ***
-			// resistor is calculated for 6A because that is the max the board reports. We don't want to 
-			// send more than 5V to the Arduino GPIO
-			// Board with resistor outputs .83V/A, Current conversion factor: ((5/1024)/.83)*1000 = 5.88
-			// LM18200 motor board: 510 sensor reading == 3A (510 * 5.88)/1000
-			triggerMilliamps = 3000;
-			maxMilliAmps = 3000;
-		case LMD18200_MAX471:
-			// MAX471 outputs 1V/A, Current conversion factor is ((5/1024)/1)*1000 = 4.88
-			// LMD18200 & MAX471 for curent sense: 615 sensor reading == 3A (615 * 4.88)/1000
-			triggerMilliamps = 3000;
-			maxMilliAmps = 3000;
+			// BTS7960B motor board: 10.266A == 22*0.0049/0.0105
+			triggerValue = 22;
 			break;
 	}
 }
@@ -76,12 +46,11 @@ void MotorBoard::check() {
 	// if we have exceeded the CURRENT_SAMPLE_TIME we need to check if we are over/under current.
 	if(millis() - lastCheckTime > CURRENT_SAMPLE_TIME) {
 		lastCheckTime = millis();
-		reading = analogRead(sensePin) * CURRENT_SAMPLE_SMOOTHING + current * (1.0 - CURRENT_SAMPLE_SMOOTHING);
-		current = reading * CURRENT_CONVERSION_FACTOR; // get current in milliamps
-		if(current > triggerMilliamps && digitalRead(enablePin)) {
+		current = analogRead(sensePin) * CURRENT_SAMPLE_SMOOTHING + current * (1.0 - CURRENT_SAMPLE_SMOOTHING);
+		if(current > triggerValue && digitalRead(enablePin)) {
 			powerOff(false, true);
 			triggered=true;
-		} else if(current < triggerMilliamps && triggered) {
+		} else if(current < triggerValue && triggered) {
 			powerOn();
 			triggered=false;
 		}
@@ -107,25 +76,8 @@ void MotorBoard::powerOff(bool announce, bool overCurrent) {
 }
 
 int MotorBoard::getLastRead() {
-	// return the raw Arduino pin reading
-	return reading;
-}
-
-int MotorBoard::getLastCurrent() {
-	// return true current in MilliAmps
 	return current;
 }
-
-int MotorBoard::getTriggerMilliAmps() {
-	// return the value that will trigger track shutoff for overcurrent
-	return triggerMilliamps;
-}
-
-int MotorBoard::getMaxMilliAmps() {
-	// returnt the maximum current handling capability of the motor board
-	return maxMilliAmps;
-}
-
 
 void MotorBoard::showStatus() {
 	if(digitalRead(enablePin) == LOW) {
@@ -218,11 +170,11 @@ void MotorBoardManager::parse(const char *com) {
 			break;
 		case 'c':
 			if(strlen(com) == 1) {
-				CommManager::printf("<a %d %d %d %d>", boards[0]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTriggerMilliAmps(), boards[0]->getMaxMilliAmps());
+				CommManager::printf("<a %d>", boards[0]->getLastRead());
 			} else {
 				for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
 					if(boards[i] != NULL && strcasecmp(boards[i]->getName(), com+2) == 0) {
-						CommManager::printf("<a %s %d %d %d>", boards[i]->getName(), boards[i]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTriggerMilliAmps(), boards[0]->getMaxMilliAmps());
+						CommManager::printf("<a %s %d>", boards[i]->getName(), boards[i]->getLastRead());
 						return;
 					}
 				}

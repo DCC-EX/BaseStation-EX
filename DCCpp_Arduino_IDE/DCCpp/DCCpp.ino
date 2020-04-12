@@ -34,7 +34,7 @@ This version of DCC++ BASE STATION supports:
   * 128-step speed throttling
   * Cab functions F0-F28
   * Activate/de-activate accessory functions using 512 addresses, each with 4 sub-addresses
-      - includes optional functionailty to monitor and store the direction of any connected turnouts
+      - includes optional functionailty to monitor and store of the direction of any connected turnouts
   * Programming on the Main Operations Track
       - write configuration variable bytes
       - set/clear specific configuration variable bits
@@ -79,7 +79,7 @@ REFERENCES:
 
 BRIEF NOTES ON THE THEORY AND OPERATION OF DCC++ BASE STATION:
 
-DCC++ BASE STATION for the Uno and Nano configures the OC0B interrupt pin associated with Timer 0,
+DCC++ BASE STATION for the Uno configures the OC0B interrupt pin associated with Timer 0,
 and the OC1B interupt pin associated with Timer 1, to generate separate 0-5V
 unipolar signals that each properly encode zero and one bits conforming with
 DCC timing standards.  When compiled for the Mega, DCC++ BASE STATION uses OC3B instead of OC0B.
@@ -91,7 +91,7 @@ methods for updating and queuing according to text commands sent by the user
 the main operations track and one that controls the programming track.
 
 For the main operations track, packets to store cab throttle settings are stored in
-registers numbered 1 through MAX_MAIN_REGISTERS (as defined in DCCppEX.h).
+registers numbered 1 through MAX_MAIN_REGISTERS (as defined in DCCpp_Uno.h).
 It is generally considered good practice to continuously send throttle control packets
 to every cab so that if an engine should momentarily lose electrical connectivity with the tracks,
 it will very quickly receive another throttle control signal as soon as connectivity is
@@ -129,7 +129,7 @@ For the Mega, the OC1B output is produced directly on pin 12, so no jumper is ne
 Motor Shield's DIRECTION A input.  However, one small jumper wire is needed to connect the Mega's OC3B output (pin 2)
 to the Motor Shield's DIRECTION B input (pin 13).
 
-Other Motor Shields may require different sets of jumper or configurations (see Config.h and DCCppEX.h for details).
+Other Motor Shields may require different sets of jumper or configurations (see Config.h and DCCpp_Uno.h for details).
 
 When configured as such, the CHANNEL A and CHANNEL B outputs of the Motor Shield may be
 connected directly to the tracks.  This software assumes CHANNEL A is connected
@@ -137,7 +137,7 @@ to the Main Operations Track, and CHANNEL B is connected to the Programming Trac
 
 DCC++ BASE STATION in split into multiple modules, each with its own header file:
 
-  DCCppEX  :        declares required global objects and contains initial Arduino setup()
+  DCCpp_Uno:        declares required global objects and contains initial Arduino setup()
                     and Arduino loop() functions, as well as interrupt code for OC0B and OC1B.
                     Also includes declarations of optional array of Turn-Outs and optional array of Sensors
 
@@ -168,7 +168,7 @@ DCC++ BASE STATION is configured through the Config.h file that contains all use
 
 // BEGIN BY INCLUDING THE HEADER FILES FOR EACH MODULE
 
-#include "DCCppEX.h"
+#include "DCCpp.h"
 #include "PacketRegister.h"
 #include "CurrentMonitor.h"
 #include "Sensor.h"
@@ -245,12 +245,6 @@ void setup(){
 #elif MOTOR_SHIELD_TYPE == 2
   MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_5A, "MAIN");
   MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_5A, "PROG");
-#elif MOTOR_SHIELD_TYPE == 3
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_10A, "MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_10A, "PROG");
-  #elif MOTOR_SHIELD_TYPE == 4
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::LMD18200_MAX47, "MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::LMD18200_MAX47, "PROG");
 #endif
 
 #if COMM_INTERFACE != 4 || (COMM_INTERFACE == 4 && !defined(USE_SERIAL_FOR_WIFI))
@@ -322,7 +316,7 @@ void setup(){
 
   // CONFIGURE EITHER TIMER_0 (UNO) OR TIMER_3 (MEGA) TO OUTPUT 50% DUTY CYCLE DCC SIGNALS ON OC0B (UNO) OR OC3B (MEGA) INTERRUPT PINS
 
-#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)   // Configuration for UNO or NANO
+#ifdef ARDUINO_AVR_UNO      // Configuration for UNO
 
   // Directon Pin for Motor Shield Channel B - PROGRAMMING TRACK
   // Controlled by Arduino 8-bit TIMER 0 / OC0B Interrupt Pin
@@ -471,7 +465,7 @@ ISR(TIMER1_COMPB_vect){              // set interrupt service for OCR1B of TIMER
   DCC_SIGNAL(mainRegs,1)
 }
 
-#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)    // Configuration for UNO or NANO
+#ifdef ARDUINO_AVR_UNO      // Configuration for UNO
 
 ISR(TIMER0_COMPB_vect){              // set interrupt service for OCR1B of TIMER-0 which flips direction bit of Motor Shield Channel B controlling Prog Track
   DCC_SIGNAL(progRegs,0)
