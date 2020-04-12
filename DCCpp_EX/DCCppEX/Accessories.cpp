@@ -62,7 +62,7 @@ the directions of any Turnouts being monitored or controlled by a separate inter
 #include "Accessories.h"
 #include "CommInterface.h"
 #include "SerialCommand.h"
-#include "DCCpp.h"
+#include "DCCppEX.h"
 #include "EEStore.h"
 #include <EEPROM.h>
 

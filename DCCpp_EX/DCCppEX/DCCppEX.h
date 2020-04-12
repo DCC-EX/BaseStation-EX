@@ -1,6 +1,6 @@
 /**********************************************************************
 
-DCCpp_Uno.h
+DCCppEX.h
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
 Part of DCC++ BASE STATION for the Arduino
@@ -9,14 +9,16 @@ Part of DCC++ BASE STATION for the Arduino
 
 #include "Config.h"
 
-#ifndef DCCpp_Uno_h
-#define DCCpp_Uno_h
+// use an include guard
+#ifndef DCCppEX_h
+#define DCCppEX_h
 
 /////////////////////////////////////////////////////////////////////////////////////
 // RELEASE VERSION
 /////////////////////////////////////////////////////////////////////////////////////
 
 #define VERSION "2.1.0"
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 // AUTO-SELECT ARDUINO BOARD
