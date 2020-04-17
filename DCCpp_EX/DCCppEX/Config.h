@@ -97,6 +97,41 @@ Part of DCC++ BASE STATION for the Arduino
 #define MAC_ADDRESS {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEF }
 
 /////////////////////////////////////////////////////////////////////////////////////
+//
+// USE_TRIGGERPIN: Enable code that switches the trigger pin on and off at end
+//                 of the preamble. This takes some clock cycles in the
+//                 interrupt routine for the main track.
+// USE_TRIGGERPIN_PER_BIT: As above but for every bit. This only makes sense
+//                 if USE_TRIGGERPIN is set.
+//
+// The value of the TRIGGERPIN is defined in DCCppEX.h because it might
+// be board specific
+//
+//#define USE_TRIGGERPIN
+//#define USE_TRIGGERPIN_PER_BIT
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Define only of you need the store to EEPROM feature. This takes RAM and
+// you may need to use less MAX_MAIN_REGISTERS to compensate (at least on the UNO)
+//#define EESTORE
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// This shows the status and version at startup. This takes RAM. You can comment
+// this line if you need to increase MAX_MAIN_REGISTERS(at least on the UNO)
+#define SHOWCONFIG
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// PREAMBLE_MAIN: Length of the preamble on the main track. Per standard this should
+//                be at least 14 bits but if some equipment wants to insert a RailCom
+//                cutout this should be at least 16 bits.
+// PERAMBLE_PROG: Length of the preamble on the programming track. Per standard this
+//                should be at least 22 bits 
+//
+#define PREAMBLE_MAIN 16
+#define PREAMBLE_PROG 22
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
