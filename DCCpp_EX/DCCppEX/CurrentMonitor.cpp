@@ -21,38 +21,41 @@ Part of DCC++ BASE STATION for the Arduino
   #define  CURRENT_SAMPLE_TIME        1
 #endif
 
-MotorBoard::MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name) : sensePin(sensePin), 
-																							   enablePin(enablePin), 
-																							   name(name), 
-																							   current(0), 
-																							   reading(0),
-																							   triggerMilliamps(0),
-																							   maxMilliAmps(0), 
-																							   triggered(false), 
-																							   lastCheckTime(0) {
-	switch(type) {
+MotorBoard::MotorBoard (int _sensePin, int _enablePin, MOTOR_BOARD_TYPE _type, int _currentConvFactor, bool _isProgTrack, const char *_name) {
+	this->sensePin=_sensePin;
+	this->enablePin=_enablePin;
+	this->name=_name;
+	this->current=0;
+	this->reading=0;
+	//this->triggerMilliamps=0;
+	//this->maxMilliAmps=0;
+	this->currentConvFactor=_currentConvFactor;
+	this->tripped=false;
+	this->lastCheckTime=0; {
+
+	switch(_type) {
 		case ARDUINO_SHIELD:
 			// Board outputs 1.65V / Amp, Current conversion factor: ((5/1024)/1.65))*1000 = 2.96
 			// Arduino motor board: 300 sensor reading == 890mA (300 * 2.96)
-			triggerMilliamps = 890;
+			tripMilliamps = 1500;
 			maxMilliAmps = 2000;
 			break;
 		case POLOLU:
 			// Board outputs .525V / Amp, Current conversion factor: ((5/1024)/.525))*1000 = 9.30
 			// Pololu motor board: 160 sensor reading == 1.493A (160 * 9.30)/1000
-			triggerMilliamps = 1490;
+			tripMilliamps = 1490;
 			maxMilliAmps = 3000;
 			break;
 		case BTS7960B_5A:
 			// Board outputs ..0105V / Amp, Current conversion factot: ((5/1024) /.0105)*1000 = 465
 			// BTS7960B motor board: 11 sensor reading == 5.133A (11 * 465)/1000
-			triggerMilliamps = 5133;
+			tripMilliamps = 5133;
 			maxMilliAmps = 43000;
 			break;
 		case BTS7960B_10A:
 			// Board outputs ..0105V / Amp, Current conversion factot: ((5/1024) /.0105)*1000 = 465
 			// BTS7960B motor board: 22 sensor reading == 10.266A (22 * 465)/1000
-			triggerMilliamps = 10266;
+			tripMilliamps = 10266;
 			maxMilliAmps = 43000;
 			break;
 		case LMD18200:
@@ -61,14 +64,18 @@ MotorBoard::MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const
 			// send more than 5V to the Arduino GPIO
 			// Board with resistor outputs .83V/A, Current conversion factor: ((5/1024)/.83)*1000 = 5.88
 			// LM18200 motor board: 510 sensor reading == 3A (510 * 5.88)/1000
-			triggerMilliamps = 3000;
+			tripMilliamps = 3000;
 			maxMilliAmps = 3000;
 		case LMD18200_MAX471:
 			// MAX471 outputs 1V/A, Current conversion factor is ((5/1024)/1)*1000 = 4.88
 			// LMD18200 & MAX471 for curent sense: 615 sensor reading == 3A (615 * 4.88)/1000
-			triggerMilliamps = 3000;
+			tripMilliamps = 3000;
 			maxMilliAmps = 3000;
 			break;
+		}
+	}
+	if(_isProgTrack) {
+		tripMilliamps = 250;
 	}
 }
 
@@ -76,14 +83,14 @@ void MotorBoard::check() {
 	// if we have exceeded the CURRENT_SAMPLE_TIME we need to check if we are over/under current.
 	if(millis() - lastCheckTime > CURRENT_SAMPLE_TIME) {
 		lastCheckTime = millis();
-		reading = analogRead(sensePin) * CURRENT_SAMPLE_SMOOTHING + current * (1.0 - CURRENT_SAMPLE_SMOOTHING);
-		current = reading * CURRENT_CONVERSION_FACTOR; // get current in milliamps
-		if(current > triggerMilliamps && digitalRead(enablePin)) {
+		reading = analogRead(sensePin) * CURRENT_SAMPLE_SMOOTHING + reading * (1.0 - CURRENT_SAMPLE_SMOOTHING);
+		current = reading * currentConvFactor; // get current in milliamps
+		if(current > tripMilliamps && digitalRead(enablePin)) {
 			powerOff(false, true);
-			triggered=true;
-		} else if(current < triggerMilliamps && triggered) {
+			tripped=true;
+		} else if(current < tripMilliamps && tripped) {
 			powerOn();
-			triggered=false;
+			tripped=false;
 		}
 	}
 }
@@ -116,16 +123,15 @@ int MotorBoard::getLastCurrent() {
 	return current;
 }
 
-int MotorBoard::getTriggerMilliAmps() {
-	// return the value that will trigger track shutoff for overcurrent
-	return triggerMilliamps;
+int MotorBoard::getTripMilliAmps() {
+	// return the value that will trip track shutoff for overcurrent
+	return tripMilliamps;
 }
 
 int MotorBoard::getMaxMilliAmps() {
 	// returnt the maximum current handling capability of the motor board
 	return maxMilliAmps;
 }
-
 
 void MotorBoard::showStatus() {
 	if(digitalRead(enablePin) == LOW) {
@@ -141,10 +147,10 @@ MotorBoard *MotorBoardManager::boards[MAX_MOTOR_BOARDS] = { NULL, NULL, NULL, NU
 MotorBoard *MotorBoardManager::boards[MAX_MOTOR_BOARDS] = { NULL, NULL, NULL, NULL, NULL, NULL };
 #endif
 
-void MotorBoardManager::registerBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name) {
+void MotorBoardManager::registerBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, int currentConvFactor, bool isProgTrack, const char *name) {
 	for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
 		if(boards[i] == NULL) {
-			boards[i] = new MotorBoard(sensePin, enablePin, type, name);
+			boards[i] = new MotorBoard(sensePin, enablePin, type, currentConvFactor, isProgTrack, name);
 			return;
 		}
 	}
@@ -218,11 +224,15 @@ void MotorBoardManager::parse(const char *com) {
 			break;
 		case 'c':
 			if(strlen(com) == 1) {
-				CommManager::printf("<a %d %d %d %d>", boards[0]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTriggerMilliAmps(), boards[0]->getMaxMilliAmps());
+				// CommManager::printf("<a %d %d %d %d>", boards[0]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTripMilliAmps(), boards[0]->getMaxMilliAmps());
+				// fnd - Don't want to break JMRI. Need to fix JMRI before using the above line instead of this one:
+				CommManager::printf("<a %d>", boards[0]->getLastRead());
 			} else {
 				for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
 					if(boards[i] != NULL && strcasecmp(boards[i]->getName(), com+2) == 0) {
-						CommManager::printf("<a %s %d %d %d>", boards[i]->getName(), boards[i]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTriggerMilliAmps(), boards[0]->getMaxMilliAmps());
+						// CommManager::printf("<a %s %d %d %d>", boards[i]->getName(), boards[i]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTripMilliAmps(), boards[0]->getMaxMilliAmps());
+						// When we fix JMRI's current monitor, we can use the above line instead of the below one
+						CommManager::printf("<a %s %d>", boards[i]->getName(), boards[i]->getLastRead());						
 						return;
 					}
 				}
