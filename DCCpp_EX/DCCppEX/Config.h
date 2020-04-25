@@ -98,6 +98,9 @@ Part of DCC++ BASE STATION for the Arduino
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
+// Allows using a pin as a trigger for a scope or analyzer so we can capture only
+// the important parts of the data stream
+//
 // USE_TRIGGERPIN: Enable code that switches the trigger pin on and off at end
 //                 of the preamble. This takes some clock cycles in the
 //                 interrupt routine for the main track.

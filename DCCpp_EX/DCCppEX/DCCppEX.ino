@@ -284,6 +284,12 @@ void setup(){
 
   CommManager::showInitInfo();
 
+#ifdef USE_TRIGGERPIN
+  // Set up testpin
+  pinMode(TRIGGERPIN,OUTPUT);
+  digitalWrite(TRIGGERPIN,LOW);
+#endif
+
   // CONFIGURE TIMER_1 TO OUTPUT 50% DUTY CYCLE DCC SIGNALS ON OC1B INTERRUPT PINS
 
   // Direction Pin for Motor Shield Channel A - MAIN OPERATIONS TRACK
@@ -472,7 +478,16 @@ void setup(){
 // NOW USE THE ABOVE MACRO TO CREATE THE CODE FOR EACH INTERRUPT
 
 ISR(TIMER1_COMPB_vect){              // set interrupt service for OCR1B of TIMER-1 which flips direction bit of Motor Shield Channel A controlling Main Track
+#ifdef USE_TRIGGERPIN
+#ifndef USE_TRIGGERPIN_PER_BIT
+  if (mainRegs.currentBit == PREAMBLE_MAIN)
+#endif
+     digitalWrite(TRIGGERPIN,HIGH);
+#endif 
   DCC_SIGNAL(mainRegs,1)
+  #ifdef USE_TRIGGERPIN
+  digitalWrite(TRIGGERPIN,LOW);
+#endif
 }
 
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)    // Configuration for UNO or NANO

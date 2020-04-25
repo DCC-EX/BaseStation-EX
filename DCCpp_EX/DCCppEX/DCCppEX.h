@@ -67,6 +67,14 @@ Part of DCC++ BASE STATION for the Arduino
 
 #endif
 
+////////////////////////////////////////////////////////////////////////////////////
+//  Set trigger pin for data analysis if enabled.
+////////////////////////////////////////////////////////////////////////////////////
+#ifdef USE_TRIGGERPIN
+#define TRIGGERPIN 6                     // Should work on UNO and MEGA
+#endif
+
+
 /////////////////////////////////////////////////////////////////////////////////////
 // SELECT MOTOR SHIELD       current in milliamps computed from ((Vcc/1024)/volts_per_amp) * 1000
 //                           VCC is the voltage range of the Arduino sensor pin (5v) while 1024
