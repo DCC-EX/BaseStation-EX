@@ -90,7 +90,7 @@ Part of DCC++ BASE STATION for the Arduino
 // DEFINE PIN THAT WILL BE TIED TO GROUND TO DISPLAY DETAILED CONFIGURATION INFORMATION
 //
 // Note: With the Arduino power disconnected, place a jumper between this pin and ground.
-//       When the Arduino is rebooted, detailed infomration will be displayed on the 
+//       When the Arduino is rebooted, detailed information will be displayed on the 
 //       serial connection and the Arduino will halt. Remove the jumper and reboot for
 //       normal operation
 
