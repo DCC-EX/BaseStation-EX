@@ -264,9 +264,9 @@ void setup(){
 
   EEStore::init();                                         // initialize and load Turnout and Sensor definitions stored in EEPROM
 
-  pinMode(A5,INPUT);                                       // if pin A5 is grounded upon start-up, print system configuration and halt
-  digitalWrite(A5,HIGH);
-  if(!digitalRead(A5))
+  pinMode(SHOW_CONFIG_PIN,INPUT);                                       // if pin SHOW_CONFIG_PIN is grounded upon start-up, print system configuration and halt
+  digitalWrite(SHOW_CONFIG_PIN,HIGH);
+  if(!digitalRead(SHOW_CONFIG_PIN))
     showConfiguration();
 
   CommManager::printf("<iDCC++ BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
@@ -482,7 +482,7 @@ ISR(TIMER3_COMPB_vect){              // set interrupt service for OCR3B of TIMER
 
 ///////////////////////////////////////////////////////////////////////////////
 // PRINT CONFIGURATION INFO TO SERIAL PORT REGARDLESS OF INTERFACE TYPE
-// - ACTIVATED ON STARTUP IF SHOW_CONFIG_PIN IS TIED HIGH
+// - ACTIVATED ON STARTUP IF SHOW_CONFIG_PIN IS TIED TO GROUND
 
 void showConfiguration(){
   Serial.print("\n*** DCC++ CONFIGURATION ***\n");
