@@ -123,7 +123,17 @@ Part of DCC++ BASE STATION for the Arduino
 //
 // This shows the status and version at startup. This takes RAM. You can comment
 // this line if you need to increase MAX_MAIN_REGISTERS(at least on the UNO)
+
 #define SHOWCONFIG
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// This is different from the above config display which only shows one line at startup
+// This defines a pin that when jumpered to ground before powering up the Arduinio, 
+// will display more detailed settings for diagnostics. You must remove the jumper and
+// restart the Arduino to return to normal operation
+
+#define SHOW_CONFIG_DETAIL_PIN A5
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -132,7 +142,7 @@ Part of DCC++ BASE STATION for the Arduino
 //                cutout this should be at least 16 bits.
 // PERAMBLE_PROG: Length of the preamble on the programming track. Per standard this
 //                should be at least 22 bits 
-//
+
 #define PREAMBLE_MAIN 16
 #define PREAMBLE_PROG 22
 
