@@ -3,11 +3,11 @@
 SerialCommand.cpp
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 
-// DCC++ BASE STATION COMMUNICATES VIA THE SERIAL PORT USING SINGLE-CHARACTER TEXT COMMANDS
+// DCC++ EX BASE STATION COMMUNICATES VIA THE SERIAL PORT USING SINGLE-CHARACTER TEXT COMMANDS
 // WITH OPTIONAL PARAMTERS, AND BRACKETED BY < AND > SYMBOLS.  SPACES BETWEEN PARAMETERS
 // ARE REQUIRED.  SPACES ANYWHERE ELSE ARE IGNORED.  A SPACE BETWEEN THE SINGLE-CHARACTER
 // COMMAND AND THE FIRST PARAMETER IS ALSO NOT REQUIRED.
@@ -218,7 +218,7 @@ void SerialCommand::parse(const char *com){
  *    CV: the number of the Configuration Variable memory location in the decoder to write to (1-1024)
  *    VALUE: the value to be written to the Configuration Variable memory location (0-255)
  *    CALLBACKNUM: an arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs that call this function
- *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ Interface) that call this function
+ *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ EX Interface) that call this function
  *
  *    returns: <r CALLBACKNUM|CALLBACKSUB|CV Value)
  *    where VALUE is a number from 0-255 as read from the requested CV, or -1 if verificaiton read fails
@@ -236,7 +236,7 @@ void SerialCommand::parse(const char *com){
  *    BIT: the bit number of the Configurarion Variable memory location to write (0-7)
  *    VALUE: the value of the bit to be written (0-1)
  *    CALLBACKNUM: an arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs that call this function
- *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ Interface) that call this function
+ *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ EX Interface) that call this function
  *
  *    returns: <r CALLBACKNUM|CALLBACKSUB|CV BIT VALUE)
  *    where VALUE is a number from 0-1 as read from the requested CV bit, or -1 if verificaiton read fails
@@ -252,7 +252,7 @@ void SerialCommand::parse(const char *com){
  *
  *    CV: the number of the Configuration Variable memory location in the decoder to read from (1-1024)
  *    CALLBACKNUM: an arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs that call this function
- *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ Interface) that call this function
+ *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ EX Interface) that call this function
  *
  *    returns: <r CALLBACKNUM|CALLBACKSUB|CV VALUE)
  *    where VALUE is a number from 0-255 as read from the requested CV, or -1 if read could not be verified
@@ -298,14 +298,14 @@ void SerialCommand::parse(const char *com){
       MotorBoardManager::parse(com);
       break;
 
-/***** READ STATUS OF DCC++ BASE STATION  ****/
+/***** READ STATUS OF DCC++ EX BASE STATION  ****/
 
     case 's':      // <s>
 /*
  *    returns status messages containing track power status, throttle status, turn-out status, and a version number
  *    NOTE: this is very useful as a first command for an interface to send to this sketch in order to verify connectivity and update any GUI to reflect actual throttle and turn-out settings
  *
- *    returns: series of status messages that can be read by an interface to determine status of DCC++ Base Station and important settings
+ *    returns: series of status messages that can be read by an interface to determine status of DCC++ EX Base Station and important settings
  */
       MotorBoardManager::showStatus();
       for(int i=1;i<=MAX_MAIN_REGISTERS;i++){
@@ -313,7 +313,7 @@ void SerialCommand::parse(const char *com){
           continue;
         CommManager::printf("<T%d %d %d>", i, mRegs->speedTable[i]>0 ? mRegs->speedTable[i] : -mRegs->speedTable[i], mRegs->speedTable[i]>0 ? 1 : 0);
       }
-      CommManager::printf("<iDCC++ BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
+      CommManager::printf("<iDCC++ EX BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
       CommManager::showInitInfo();
       Turnout::show();
       Output::show();

@@ -3,7 +3,7 @@
 DCCppEX.h
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 
@@ -37,7 +37,7 @@ Part of DCC++ BASE STATION for the Arduino
 
   #if COMM_INTERFACE != 0                 // Serial was not selected
 
-    #error CANNOT COMPILE - DCC++ FOR THE UNO CAN ONLY USE SERIAL COMMUNICATION - PLEASE SELECT THIS IN THE CONFIG FILE
+    #error CANNOT COMPILE - DCC++ EX FOR THE UNO CAN ONLY USE SERIAL COMMUNICATION - PLEASE SELECT THIS IN THE CONFIG FILE
 
   #endif
 
@@ -50,7 +50,7 @@ Part of DCC++ BASE STATION for the Arduino
 
   #if COMM_INTERFACE != 0                 // Serial was not selected
 
-    #error CANNOT COMPILE - DCC++ FOR THE UNO CAN ONLY USE SERIAL COMMUNICATION - PLEASE SELECT THIS IN THE CONFIG FILE
+    #error CANNOT COMPILE - DCC++ EX FOR THE UNO CAN ONLY USE SERIAL COMMUNICATION - PLEASE SELECT THIS IN THE CONFIG FILE
 
   #endif
 
@@ -63,7 +63,7 @@ Part of DCC++ BASE STATION for the Arduino
 
 #else
 
-  #error CANNOT COMPILE - DCC++ ONLY WORKS WITH AN ARDUINO UNO, NANO 328, OR ARDUINO MEGA 1280/2560
+  #error CANNOT COMPILE - DCC++ EX ONLY WORKS WITH AN ARDUINO UNO, NANO 328, OR ARDUINO MEGA 1280/2560
 
 #endif
 
@@ -205,7 +205,7 @@ Part of DCC++ BASE STATION for the Arduino
 /////////////////////////////////////////////////////////////////////////////////////
 
 // If SHOW_PACKETS is set to 1, then for select main operations track commands that modify an internal DCC packet register,
-// if printFlag for that command is also set to 1, DCC++ BASE STATION will additionally return the 
+// if printFlag for that command is also set to 1, DCC++ EX BASE STATION will additionally return the 
 // DCC packet contents of the modified register in the following format:
 
 //    <* REG: B1 B2 ... Bn CSUM / REPEAT>

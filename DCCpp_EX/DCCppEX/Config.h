@@ -3,7 +3,7 @@
 Config.h
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 
@@ -33,9 +33,9 @@ Part of DCC++ BASE STATION for the Arduino
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// NOTE: Only the Mega currently supports networking since pin 4 is in use by DCC++
+// NOTE: Only the Mega currently supports networking since pin 4 is in use by DCC++ EX
 //       and creates a conflict with the Ethernet Shield's need for pin 4. For the Mega,
-//       DCC++ uses pin 2 instead of pin 4. This could be changed in the future but
+//       DCC++ EX uses pin 2 instead of pin 4. This could be changed in the future but
 //       could cause issues with people with old UNO jumper settings applying an update
 //
 // DEFINE COMMUNICATIONS INTERFACE

@@ -3,12 +3,12 @@
 Accessories.cpp
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 /**********************************************************************
 
-DCC++ BASE STATION can keep track of the direction of any turnout that is controlled
+DCC++ EX BASE STATION can keep track of the direction of any turnout that is controlled
 by a DCC stationary accessory decoder.  All turnouts, as well as any other DCC accessories
 connected in this fashion, can always be operated using the DCC BASE STATION Accessory command:
 

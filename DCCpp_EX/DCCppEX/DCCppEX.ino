@@ -1,6 +1,6 @@
 /**********************************************************************
 
-DCC++ BASE STATION
+DCC++ EX BASE STATION
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@ COPYRIGHT (c) 2013-2016 Gregg E. Berman
 **********************************************************************/
 /**********************************************************************
 
-DCC++ BASE STATION is a C++ program written for the Arduino Uno and Arduino Mega
+DCC++ EX BASE STATION is a C++ program written for the Arduino Uno and Arduino Mega
 using the Arduino IDE 1.6.6.
 
 It allows a standard Arduino Uno or Mega with an Arduino Motor Shield (as well as others)
@@ -27,7 +27,7 @@ to be used as a fully-functioning digital command and control (DCC) base station
 for controlling model train layouts that conform to current National Model
 Railroad Association (NMRA) DCC standards.
 
-This version of DCC++ BASE STATION supports:
+This version of DCC++ EX BASE STATION supports:
 
   * 2-byte and 4-byte locomotive addressing
   * Simultaneous control of multiple locomotives
@@ -43,7 +43,7 @@ This version of DCC++ BASE STATION supports:
       - set/clear specific configuration variable bits
       - read configuration variable bytes
 
-DCC++ BASE STATION is controlled with simple text commands received via
+DCC++ EX BASE STATION is controlled with simple text commands received via
 the Arduino's serial interface.  Users can type these commands directly
 into the Arduino IDE Serial Monitor, or can send such commands from another
 device or computer program.
@@ -54,21 +54,21 @@ communications instead of using serial communications.
 DCC++ CONTROLLER, available separately under a similar open-source
 license, is a Java program written using the Processing library and Processing IDE
 that provides a complete and configurable graphic interface to control model train layouts
-via the DCC++ BASE STATION.
+via the DCC++ EX BASE STATION.
 
 With the exception of a standard 15V power supply that can be purchased in
 any electronics store, no additional hardware is required.
 
-Neither DCC++ BASE STATION nor DCC++ CONTROLLER use any known proprietary or
+Neither DCC++ EX BASE STATION nor DCC++ CONTROLLER use any known proprietary or
 commercial hardware, software, interfaces, specifications, or methods related
 to the control of model trains using NMRA DCC standards.  Both programs are wholly
 original, developed by the author, and are not derived from any known commercial,
 free, or open-source model railroad control packages by any other parties.
 
-However, DCC++ BASE STATION and DCC++ CONTROLLER do heavily rely on the IDEs and
+However, DCC++ EX BASE STATION and DCC++ CONTROLLER do heavily rely on the IDEs and
 embedded libraries associated with Arduino and Processing.  Tremendous thanks to those
 responsible for these terrific open-source initiatives that enable programs like
-DCC++ to be developed and distributed in the same fashion.
+DCC++ EX to be developed and distributed in the same fashion.
 
 REFERENCES:
 
@@ -77,12 +77,12 @@ REFERENCES:
   Processing:                  http://processing.org/
   GNU General Public License:  http://opensource.org/licenses/GPL-3.0
 
-BRIEF NOTES ON THE THEORY AND OPERATION OF DCC++ BASE STATION:
+BRIEF NOTES ON THE THEORY AND OPERATION OF DCC++ EX BASE STATION:
 
-DCC++ BASE STATION for the Uno and Nano configures the OC0B interrupt pin associated with Timer 0,
+DCC++ EX BASE STATION for the Uno and Nano configures the OC0B interrupt pin associated with Timer 0,
 and the OC1B interupt pin associated with Timer 1, to generate separate 0-5V
 unipolar signals that each properly encode zero and one bits conforming with
-DCC timing standards.  When compiled for the Mega, DCC++ BASE STATION uses OC3B instead of OC0B.
+DCC timing standards.  When compiled for the Mega, DCC++ EX BASE STATION uses OC3B instead of OC0B.
 
 Series of DCC bit streams are bundled into Packets that each form the basis of
 a standard DCC instruction.  Packets are stored in Packet Registers that contain
@@ -97,7 +97,7 @@ to every cab so that if an engine should momentarily lose electrical connectivit
 it will very quickly receive another throttle control signal as soon as connectivity is
 restored (such as when a train passes over a rough portion of track or the frog of a turnout).
 
-DCC++ Base Station therefore sequentially loops through each main operations track packet register
+DCC++ EX Base Station therefore sequentially loops through each main operations track packet register
 that has been loaded with a throttle control setting for a given cab.  For each register, it
 transmits the appropriate DCC packet bits to the track, then moves onto the next register
 without any pausing to ensure continuous bi-polar power is being provided to the tracks.
@@ -135,7 +135,7 @@ When configured as such, the CHANNEL A and CHANNEL B outputs of the Motor Shield
 connected directly to the tracks.  This software assumes CHANNEL A is connected
 to the Main Operations Track, and CHANNEL B is connected to the Programming Track.
 
-DCC++ BASE STATION in split into multiple modules, each with its own header file:
+DCC++ EX BASE STATION in split into multiple modules, each with its own header file:
 
   DCCppEX  :        declares required global objects and contains initial Arduino setup()
                     and Arduino loop() functions, as well as interrupt code for OC0B and OC1B.
@@ -162,7 +162,7 @@ DCC++ BASE STATION in split into multiple modules, each with its own header file
   EEStore:          contains methods to store, update, and load various DCC settings and status
                     (e.g. the states of all defined turnouts) in the EEPROM for recall after power-up
 
-DCC++ BASE STATION is configured through the Config.h file that contains all user-definable parameters
+DCC++ EX BASE STATION is configured through the Config.h file that contains all user-definable parameters
 
 **********************************************************************/
 
@@ -221,7 +221,7 @@ void setup(){
     lcdDisplay.setBacklight(255);
     lcdDisplay.clear();
     lcdDisplay.setCursor(0, 0);
-    lcdDisplay.print("DCC++ v");
+    lcdDisplay.print("DCC++ EX v");
     lcdDisplay.print(VERSION);
     lcdDisplay.setCursor(0, 1);
     #if COMM_INTERFACE >= 1
@@ -278,7 +278,7 @@ void setup(){
   if(!digitalRead(SHOW_CONFIG_DETAIL_PIN))
     showConfiguration();
 
-  CommManager::printf("<iDCC++ BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
+  CommManager::printf("<iDCC++ EX BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
 
   SerialCommand::init(&mainRegs, &progRegs);   // create structure to read and parse commands from serial line
 
@@ -424,7 +424,7 @@ void setup(){
 // DCC ZERO and DCC ONE bits.
 
 // These are hardware-driven interrupts that will be called automatically when triggered regardless of what
-// DCC++ BASE STATION was otherwise processing.  But once inside the interrupt, all other interrupt routines are temporarily disabled.
+// DCC++ EX BASE STATION was otherwise processing.  But once inside the interrupt, all other interrupt routines are temporarily disabled.
 // Since a short pulse only lasts for 116 microseconds, and there are TWO separate interrupts
 // (one for Main Track Registers and one for the Program Track Registers), the interrupt code must complete
 // in much less than 58 microseconds, otherwise there would be no time for the rest of the program to run.  Worse, if the logic
@@ -510,7 +510,7 @@ ISR(TIMER3_COMPB_vect){              // set interrupt service for OCR3B of TIMER
 // - ACTIVATED ON STARTUP IF SHOW_CONFIG_PIN IS TIED HIGH
 
 void showConfiguration(){
-  Serial.print("\n*** DCC++ CONFIGURATION ***\n");
+  Serial.print("\n*** DCC++ EX CONFIGURATION ***\n");
 
   Serial.print("\nVERSION:      ");
   Serial.print(VERSION);
