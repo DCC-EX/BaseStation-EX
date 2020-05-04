@@ -60,7 +60,7 @@ void CommManager::showInitInfo() {
 
 // This routine sends DCC++ EX output and responses to all the devices connected via comm interfaces
 void CommManager::printf(const char *fmt, ...) {
-	char buf[256] = {0};
+	char buf[128] = {0};
 	va_list args;
 	va_start(args, fmt);
 	vsnprintf(buf, sizeof(buf), fmt, args);
