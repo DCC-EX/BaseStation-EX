@@ -21,7 +21,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define  CURRENT_SAMPLE_TIME        1
 #endif
 
-MotorBoard::MotorBoard (byte _sensePin, int _enablePin, MOTOR_BOARD_TYPE _type, int _currentConvFactor, bool _isProgTrack, const char *_name) {
+MotorBoard::MotorBoard (uint8_t _sensePin, uint8_t _enablePin, MOTOR_BOARD_TYPE _type, int _currentConvFactor, bool _isProgTrack, const char *_name) {
 	this->sensePin=_sensePin;
 	this->enablePin=_enablePin;
 	this->name=_name;
