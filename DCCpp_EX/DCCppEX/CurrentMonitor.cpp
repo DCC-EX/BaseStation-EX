@@ -21,7 +21,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define  CURRENT_SAMPLE_TIME        1
 #endif
 
-MotorBoard::MotorBoard (int _sensePin, int _enablePin, MOTOR_BOARD_TYPE _type, int _currentConvFactor, bool _isProgTrack, const char *_name) {
+MotorBoard::MotorBoard (byte _sensePin, int _enablePin, MOTOR_BOARD_TYPE _type, int _currentConvFactor, bool _isProgTrack, const char *_name) {
 	this->sensePin=_sensePin;
 	this->enablePin=_enablePin;
 	this->name=_name;
@@ -141,14 +141,14 @@ void MotorBoard::showStatus() {
 	}
 }
 
-#if MAX_MOTOR_BOARDS > 6
+#if MAX_MOTOR_BOARDS > 2
 MotorBoard *MotorBoardManager::boards[MAX_MOTOR_BOARDS] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 #else
-MotorBoard *MotorBoardManager::boards[MAX_MOTOR_BOARDS] = { NULL, NULL, NULL, NULL, NULL, NULL };
+MotorBoard *MotorBoardManager::boards[MAX_MOTOR_BOARDS] = { NULL, NULL };
 #endif
 
-void MotorBoardManager::registerBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, int currentConvFactor, bool isProgTrack, const char *name) {
-	for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
+void MotorBoardManager::registerBoard(uint8_t sensePin, uint8_t enablePin, MOTOR_BOARD_TYPE type, int currentConvFactor, bool isProgTrack, const char *name) {
+	for(uint8_t i = 0; i < MAX_MOTOR_BOARDS; i++) {
 		if(boards[i] == NULL) {
 			boards[i] = new MotorBoard(sensePin, enablePin, type, currentConvFactor, isProgTrack, name);
 			return;
@@ -157,7 +157,7 @@ void MotorBoardManager::registerBoard(int sensePin, int enablePin, MOTOR_BOARD_T
 }
 
 void MotorBoardManager::check() {
-	for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
+	for(uint8_t i = 0; i < MAX_MOTOR_BOARDS; i++) {
 		if(boards[i] != NULL) {
 			boards[i]->check();
 		}
@@ -165,7 +165,7 @@ void MotorBoardManager::check() {
 }
 
 void MotorBoardManager::powerOnAll() {
-	for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
+	for(uint8_t i = 0; i < MAX_MOTOR_BOARDS; i++) {
 		if(boards[i] != NULL) {
 			boards[i]->powerOn(false);
 		}
@@ -180,7 +180,7 @@ void MotorBoardManager::powerOnAll() {
 }
 
 void MotorBoardManager::powerOffAll() {
-	for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
+	for(uint8_t i = 0; i < MAX_MOTOR_BOARDS; i++) {
 		if(boards[i] != NULL) {
 			boards[i]->powerOff(false);
 		}
@@ -200,7 +200,7 @@ void MotorBoardManager::parse(const char *com) {
 			if(strlen(com) == 1) {
 				powerOffAll();
 			} else {
-				for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
+				for(uint8_t i = 0; i < MAX_MOTOR_BOARDS; i++) {
 					if(boards[i] != NULL && strcasecmp(boards[i]->getName(), com+2) == 0) {
 						boards[i]->powerOff();
 						return;
@@ -213,7 +213,7 @@ void MotorBoardManager::parse(const char *com) {
 			if(strlen(com) == 1) {
 				powerOnAll();
 			} else {
-				for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
+				for(uint8_t i = 0; i < MAX_MOTOR_BOARDS; i++) {
 					if(boards[i] != NULL && strcasecmp(boards[i]->getName(), com+2) == 0) {
 						boards[i]->powerOn();
 						return;
@@ -228,7 +228,7 @@ void MotorBoardManager::parse(const char *com) {
 				// fnd - Don't want to break JMRI. Need to fix JMRI before using the above line instead of this one:
 				CommManager::printf("<a %d>", boards[0]->getLastRead());
 			} else {
-				for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
+				for(uint8_t i = 0; i < MAX_MOTOR_BOARDS; i++) {
 					if(boards[i] != NULL && strcasecmp(boards[i]->getName(), com+2) == 0) {
 						// CommManager::printf("<a %s %d %d %d>", boards[i]->getName(), boards[i]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTripMilliAmps(), boards[0]->getMaxMilliAmps());
 						// When we fix JMRI's current monitor, we can use the above line instead of the below one
@@ -243,7 +243,7 @@ void MotorBoardManager::parse(const char *com) {
 }
 
 void MotorBoardManager::showStatus() {
-	for(int i = 0; i < MAX_MOTOR_BOARDS; i++) {
+	for(uint8_t i = 0; i < MAX_MOTOR_BOARDS; i++) {
 		if(boards[i] != NULL) {
 			boards[i]->showStatus();
 		}

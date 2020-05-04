@@ -14,12 +14,13 @@ Part of DCC++ EX BASE STATION for the Arduino
 
 enum MOTOR_BOARD_TYPE { ARDUINO_SHIELD, POLOLU, BTS7960B_5A, BTS7960B_10A, LMD18200, LMD18200_MAX471 };
 
-// cap the number of motor boards at the maximum number of analog inputs
-#define MAX_MOTOR_BOARDS NUM_ANALOG_INPUTS
+// cap the number of motor boards to 2 for 1 MAIN and 1 PROG track.
+// we have to be carfule on the Uno, but on a Mega, we could set this equal NUM_ANALOG_INPUTS
+#define MAX_MOTOR_BOARDS 2
 
 class MotorBoard {
 public:
-	MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, int currentConvFactor, bool isProgTrack, const char *name);
+	MotorBoard(uint8_t sensePin, uint8_t enablePin, MOTOR_BOARD_TYPE type, int currentConvFactor, bool isProgTrack, const char *name);
 	void check();
 	void powerOn(bool announce=true);
 	void powerOff(bool announce=true, bool overCurrent=false);
@@ -32,8 +33,8 @@ public:
 		return name;
 	}
 private:
-	int sensePin;
-	int enablePin;
+	uint8_t sensePin;
+	uint8_t enablePin;
 	const char *name;
 	float current;             // converted current in milliAmps
 	float reading;             // raw current pin reading
@@ -46,7 +47,7 @@ private:
 
 class MotorBoardManager {
 public:
-	static void registerBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, int currentConvFactor, bool isProgTrack, const char *name);
+	static void registerBoard(uint8_t sensePin, uint8_t enablePin, MOTOR_BOARD_TYPE type, int currentConvFactor, bool isProgTrack, const char *name);
 	static void check();
 	static void powerOnAll();
 	static void powerOffAll();

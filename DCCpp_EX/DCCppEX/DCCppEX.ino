@@ -510,49 +510,49 @@ ISR(TIMER3_COMPB_vect){              // set interrupt service for OCR3B of TIMER
 // - ACTIVATED ON STARTUP IF SHOW_CONFIG_PIN IS TIED HIGH
 
 void showConfiguration(){
-  Serial.print("\n*** DCC++ EX CONFIGURATION ***\n");
+  Serial.print(F("\n*** DCC++ EX CONFIGURATION ***\n"));
 
-  Serial.print("\nVERSION:      ");
-  Serial.print(VERSION);
-  Serial.print("\nCOMPILED:     ");
-  Serial.print(__DATE__);
-  Serial.print(" ");
-  Serial.print(__TIME__);
+  Serial.print(F("\nVERSION:      "));
+  Serial.print(F(VERSION));
+  Serial.print(F("\nCOMPILED:     "));
+  Serial.print(F(__DATE__));
+  Serial.print(F(" "));
+  Serial.print(F(__TIME__));
 
-  Serial.print("\nARDUINO:      ");
-  Serial.print(ARDUINO_TYPE);
+  Serial.print(F("\nARDUINO:      "));
+  Serial.print(F(ARDUINO_TYPE));
 
-  Serial.print("\n\nMOTOR SHIELD: ");
-  Serial.print(MOTOR_SHIELD_NAME);
+  Serial.print(F("\n\nMOTOR SHIELD: "));
+  Serial.print(F(MOTOR_SHIELD_NAME));
 
-  Serial.print("\n\nDCC SIG MAIN: ");
+  Serial.print(F("\n\nDCC SIG MAIN: "));
   Serial.print(DCC_SIGNAL_PIN_MAIN);
-  Serial.print("\n   DIRECTION: ");
+  Serial.print(F("\n   DIRECTION: "));
   Serial.print(DIRECTION_MOTOR_CHANNEL_PIN_A);
-  Serial.print("\n      ENABLE: ");
+  Serial.print(F("\n      ENABLE: "));
   Serial.print(SIGNAL_ENABLE_PIN_MAIN);
-  Serial.print("\n     CURRENT: ");
+  Serial.print(F("\n     CURRENT: "));
   Serial.print(CURRENT_MONITOR_PIN_MAIN);
 
-  Serial.print("\n\nDCC SIG PROG: ");
+  Serial.print(F("\n\nDCC SIG PROG: "));
   Serial.print(DCC_SIGNAL_PIN_PROG);
-  Serial.print("\n   DIRECTION: ");
+  Serial.print(F("\n   DIRECTION: "));
   Serial.print(DIRECTION_MOTOR_CHANNEL_PIN_B);
-  Serial.print("\n      ENABLE: ");
+  Serial.print(F("\n      ENABLE: "));
   Serial.print(SIGNAL_ENABLE_PIN_PROG);
-  Serial.print("\n     CURRENT: ");
+  Serial.print(F("\n     CURRENT: "));
   Serial.print(CURRENT_MONITOR_PIN_PROG);
 
-  Serial.print("\n\nNUM TURNOUTS: ");
+  Serial.print(F("\n\nNUM TURNOUTS: "));
   Serial.print(EEStore::eeStore->data.nTurnouts);
-  Serial.print("\n     SENSORS: ");
+  Serial.print(F("\n     SENSORS: "));
   Serial.print(EEStore::eeStore->data.nSensors);
-  Serial.print("\n     OUTPUTS: ");
+  Serial.print(F("\n     OUTPUTS: "));
   Serial.print(EEStore::eeStore->data.nOutputs);
 
-  Serial.print("\n\nINTERFACE(s):\n");
+  Serial.print(F("\n\nINTERFACE(s):\n"));
   CommManager::showConfiguration();
-  Serial.print("\n\nPROGRAM HALTED - PLEASE RESTART ARDUINO");
+  Serial.print(F("\n\nPROGRAM HALTED - PLEASE RESTART ARDUINO"));
   while(true);
 }
 

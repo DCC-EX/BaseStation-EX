@@ -31,7 +31,7 @@ void HardwareSerialInterface::process() {
 }
 
 void HardwareSerialInterface::showConfiguration() {
-	Serial.print("Hardware Serial - Speed:");
+	Serial.print(F("Hardware Serial - Speed:"));
 	Serial.println(baud);
 }
 

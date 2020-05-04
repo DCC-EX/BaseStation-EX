@@ -370,7 +370,7 @@ void SerialCommand::parse(const char *com){
  *    SERIAL COMMUNICAITON WILL BE INTERUPTED ONCE THIS COMMAND IS ISSUED - MUST RESET BOARD OR RE-OPEN SERIAL WINDOW TO RE-ESTABLISH COMMS
  */
 
-    Serial.println("\nEntering Diagnostic Mode...");
+    Serial.println(F("\nEntering Diagnostic Mode..."));
     delay(1000);
 
     bitClear(TCCR1B,CS12);    // set Timer 1 prescale=8 - SLOWS NORMAL SPEED BY FACTOR OF 8
