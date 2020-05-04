@@ -313,7 +313,7 @@ void SerialCommand::parse(const char *com){
           continue;
         CommManager::printf("<T%d %d %d>", i, mRegs->speedTable[i]>0 ? mRegs->speedTable[i] : -mRegs->speedTable[i], mRegs->speedTable[i]>0 ? 1 : 0);
       }
-      CommManager::printf("<iDCC++ EX BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
+      CommManager::printf("<i DCC++ EX BASE STATION %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
       CommManager::showInitInfo();
       Turnout::show();
       Output::show();

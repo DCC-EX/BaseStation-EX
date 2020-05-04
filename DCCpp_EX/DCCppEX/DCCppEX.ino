@@ -278,7 +278,7 @@ void setup(){
   if(!digitalRead(SHOW_CONFIG_DETAIL_PIN))
     showConfiguration();
 
-  CommManager::printf("<iDCC++ EX BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
+  CommManager::printf("<i DCC++ EX BASE STATION %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
 
   SerialCommand::init(&mainRegs, &progRegs);   // create structure to read and parse commands from serial line
 
