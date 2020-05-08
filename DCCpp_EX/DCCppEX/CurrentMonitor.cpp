@@ -43,7 +43,7 @@ MotorBoard::MotorBoard (uint8_t _sensePin, uint8_t _enablePin, MOTOR_BOARD_TYPE 
 		case POLOLU:
 			// Board outputs .525V / Amp, Current conversion factor: ((5/1024)/.525))*1000 = 9.30
 			// Pololu motor board: 160 sensor reading == 1.493A (160 * 9.30)/1000
-			tripMilliamps = 1490;
+			tripMilliamps = 2500;
 			maxMilliAmps = 3000;
 			break;
 		case BTS7960B_5A:
