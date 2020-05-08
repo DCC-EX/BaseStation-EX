@@ -56,7 +56,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 	#define WIFI_SSID ""
 	#define WIFI_PASSWORD ""
 
-	// The WIFI_SERIAL_RX and WIFI_SERIAL_TX config values are not used on the Mega2650 which
+	// The WIFI_SERIAL_RX and WIFI_SERIAL_TX config values are not used on the Mega2560 which
 	// has multiple Serial interfaces.  For Mega2560 the default is Serial1.
 	//#define WIFI_SERIAL_RX
 	//#define WIFI_SERIAL_TX
@@ -85,16 +85,19 @@ Part of DCC++ EX BASE STATION for the Arduino
 //
 // DEFINE PORT TO USE FOR ETHERNET COMMUNICATIONS INTERFACE
 //
+// Uncomment to use Ethernet
 
-#define ETHERNET_PORT 2560
+// #define ETHERNET_PORT 2560
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // DEFINE MAC ADDRESS ARRAY FOR ETHERNET COMMUNICATIONS INTERFACE
 //
-// Note: This is not used with ESP8266 WiFi modules.
+// Uncomment to use with Ethernet Shields
+//
+// NOTE: This is not used with ESP8266 WiFi modules.
 
-#define MAC_ADDRESS {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEF }
+// #define MAC_ADDRESS {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEF }
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -117,7 +120,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 //
 // Define only of you need the store to EEPROM feature. This takes RAM and
 // you may need to use less MAX_MAIN_REGISTERS to compensate (at least on the UNO)
-//#define EESTORE
+#define EESTORE
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -133,7 +136,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 // will display more detailed settings for diagnostics. You must remove the jumper and
 // restart the Arduino to return to normal operation
 
-#define SHOW_CONFIG_DETAIL_PIN A5
+#define SHOW_CONFIG_DETAIL_PIN A2
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -143,7 +146,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 // PERAMBLE_PROG: Length of the preamble on the programming track. Per standard this
 //                should be at least 22 bits 
 
-#define PREAMBLE_MAIN 16
+#define PREAMBLE_MAIN 16 // TODO: Finish configurable preamble code
 #define PREAMBLE_PROG 22
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -151,10 +154,16 @@ Part of DCC++ EX BASE STATION for the Arduino
 // DEFINE LCD SCREEN USAGE BY THE BASE STATION
 //
 // Note: This feature requires an I2C enabled LCD screen using a PCF8574 based chipset.
+//       or one using a Hitachi  HD44780.
 //
-// #define ENABLE_LCD
+// To enable, uncomment the line below and make sure only the correct LIB_TYPE line
+// is uncommented
+
+//#define ENABLE_LCD
 
 #ifdef ENABLE_LCD
+    #define LIB_TYPE_PCF8574
+	//#define LIB_TYPE_I2C
 	// This defines the I2C address for the LCD device
 	#define LCD_ADDRESS 0x3F
 

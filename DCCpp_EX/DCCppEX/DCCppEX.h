@@ -223,9 +223,14 @@ Part of DCC++ EX BASE STATION for the Arduino
 
 #ifdef ENABLE_LCD
 #include <Wire.h>
-#include <LiquidCrystal_PCF8574.h>
+  #ifdef LIB_TYPE_PCF8574
+    #include <LiquidCrystal_PCF8574.h>
+    extern LiquidCrystal_PCF8574 lcdDisplay;
+  #elif LIB_TYPE_I2C
+    #include <LiquidCrystal_I2C.h>
+    extern LiquidCrystal_I2C lcdDisplay;
+  #endif
 extern bool lcdEnabled;
-extern LiquidCrystal_PCF8574 lcdDisplay;
 #endif
 
 #endif

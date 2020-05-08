@@ -183,7 +183,11 @@ DCC++ EX BASE STATION is configured through the Config.h file that contains all 
 
 #ifdef ENABLE_LCD
 bool lcdEnabled = false;
-LiquidCrystal_PCF8574 lcdDisplay(LCD_ADDRESS);
+  #ifdef LIB_TYPE_PCF8574
+    LiquidCrystal_PCF8574 lcdDisplay(LCD_ADDRESS);
+  #elif LIB_TYPE_I2C
+    LiquidCrystal_I2C lcdDisplay(LCD_ADDRESS);
+  #endif
 #endif
 
 void showConfiguration();
@@ -306,7 +310,6 @@ void setup(){
   pinMode(DIRECTION_MOTOR_CHANNEL_PIN_A,INPUT);      // ensure this pin is not active! Direction will be controlled by DCC SIGNAL instead (below)
   digitalWrite(DIRECTION_MOTOR_CHANNEL_PIN_A,LOW);
 
-  pinMode(DCC_SIGNAL_PIN_MAIN, OUTPUT);      // THIS ARDUINO OUTsPUT PIN MUST BE PHYSICALLY CONNECTED TO THE PIN FOR DIRECTION-A OF MOTOR CHANNEL-A
   pinMode(DCC_SIGNAL_PIN_MAIN, OUTPUT);      // THIS ARDUINO OUTsPUT PIN MUST BE PHYSICALLY CONNECTED TO THE PIN FOR DIRECTION-A OF MOTOR CHANNEL-A
 
   bitSet(TCCR1A,WGM10);     // set Timer 1 to FAST PWM, with TOP=OCR1A

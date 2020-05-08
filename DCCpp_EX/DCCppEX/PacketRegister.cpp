@@ -203,6 +203,7 @@ void RegisterList::readCV(const char *s) volatile{
   int bValue;
   int c,d,base;
   int cv, callBack, callBackSub;
+  uint8_t count;
 
   if(sscanf(s,"%d %d %d",&cv,&callBack,&callBackSub) != 3) {         // cv = 1-1024
     return;
@@ -218,6 +219,8 @@ void RegisterList::readCV(const char *s) volatile{
     c=0;
     d=0;
     base=0;
+    count=0;
+
     for(int j=0;j<ACK_BASE_COUNT;j++) {
       base+=analogRead(CURRENT_MONITOR_PIN_PROG);
     }
@@ -229,10 +232,15 @@ void RegisterList::readCV(const char *s) volatile{
   loadPacket(0,bRead,3,5);                  // NMRA recommends 5 verify packets
   loadPacket(0,idlePacket,2,6);             // NMRA recommends 6 idle or reset packets for decoder recovery time
 
-    for(int j=0;j<ACK_SAMPLE_COUNT;j++){
-      c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
+    for(int j=0;j<ACK_SAMPLE_COUNT;j++){  // TODO remove old code when tested
+     // c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
+      c=((analogRead(CURRENT_MONITOR_PIN_PROG))-base)*CURRENT_CONVERSION_FACTOR;
       if(c>ACK_SAMPLE_THRESHOLD) {
-        d=1;
+        count++;
+        if (count==3){
+          d=1;
+          break;
+        }
       }
     }
      bitWrite(bValue,i,d);
@@ -241,6 +249,7 @@ void RegisterList::readCV(const char *s) volatile{
   c=0;
   d=0;
   base=0;
+  count=0;
 
   for(int j=0;j<ACK_BASE_COUNT;j++) {
     base+=analogRead(CURRENT_MONITOR_PIN_PROG);
@@ -254,13 +263,20 @@ void RegisterList::readCV(const char *s) volatile{
   loadPacket(0,bRead,3,5);              // NMRA recommends 5 verify packets
   loadPacket(0,idlePacket,2,6);      // NMRA recommends 6 idle or reset packets for decoder recovery time
   
-  for(int j=0;j<ACK_SAMPLE_COUNT;j++){
-    c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
-    if(c>ACK_SAMPLE_THRESHOLD)
-      d=1;
+  for(int j=0;j<ACK_SAMPLE_COUNT;j++){  // TODO remove old code when tested
+   // c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
+    c=((analogRead(CURRENT_MONITOR_PIN_PROG))-base)*CURRENT_CONVERSION_FACTOR;
+    if(c>ACK_SAMPLE_THRESHOLD){
+      count++;
+      if (count==3){
+        d=1;
+        loadPacket(0,resetPacket,2,1);      // Final reset packet completed (and decoder begins to respond)
+        break;
+      }
+    }
   }
-  
-  loadPacket(0,resetPacket,2,1);        // Final reset packet completed (and decoder begins to respond)
+// TODO remove this line after testing
+// loadPacket(0,resetPacket,2,1);        // Final reset packet completed (and decoder begins to respond)
   
   if(d==0)    // verify unsuccessful
     bValue=-1;
@@ -275,6 +291,7 @@ void RegisterList::writeCVByte(const char *s) volatile{
   int bValue;
   int c,d,base;
   int cv, callBack, callBackSub;
+  uint8_t count;
 
   if(sscanf(s,"%d %d %d %d",&cv,&bValue,&callBack,&callBackSub)!=4)          // cv = 1-1024
     return;
@@ -284,32 +301,49 @@ void RegisterList::writeCVByte(const char *s) volatile{
   bWrite[1]=lowByte(cv);
   bWrite[2]=bValue;
 
- 
+ // TODO remove comented line when tested
   loadPacket(0,resetPacket,2,3);        // NMRA recommends starting with 3 reset packets
-  loadPacket(0,bWrite,3,5);             // NMRA recommends 5 verify packets
-  loadPacket(0,bWrite,2,6);            // NMRA recommends 6 write or reset packets for decoder recovery time
-    
+  loadPacket(0,bWrite,3,5);             // NMRA recommends 5 write packets
+  //loadPacket(0,bWrite,2,6);           // NMRA recommends 6 write or reset packets for decoder recovery time
+  loadPacket(0,idlePacket,2,6);
+
   c=0;
   d=0;
   base=0;
+  count=0;
 
-  for(int j=0;j<ACK_BASE_COUNT;j++)
+  for(int j=0;j<ACK_BASE_COUNT;j++) {
     base+=analogRead(CURRENT_MONITOR_PIN_PROG);
+  }
   base/=ACK_BASE_COUNT;
   
   bWrite[0]=0x74+(highByte(cv)&0x03);   // set-up to re-verify entire byte
 
+// TODO NMRA says reset, write then reset IF we got a verify
   loadPacket(0,resetPacket,2,3);        // NMRA recommends starting with 3 reset packets
   loadPacket(0,bWrite,3,5);             // NMRA recommends 5 verify packets
   loadPacket(0,bWrite,3,6);             // NMRA recommends 6 write or reset packets for decoder recovery time
   
+  //for(int j=0;j<ACK_SAMPLE_COUNT;j++){
+  //  c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
+  //  CommManager::printf("<f%d>", c);
+  //  if(c>ACK_SAMPLE_THRESHOLD)
+  //    d=1;
+ // } TODO remove all this code after testing
+
   for(int j=0;j<ACK_SAMPLE_COUNT;j++){
-    c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
-    if(c>ACK_SAMPLE_THRESHOLD)
-      d=1;
+    c=((analogRead(CURRENT_MONITOR_PIN_PROG))-base)*CURRENT_CONVERSION_FACTOR;
+    if(c>ACK_SAMPLE_THRESHOLD){
+      count++;
+      if (count==3){
+        d=1;
+        loadPacket(0,resetPacket,2,1);
+        break; // TODO Or should we finish the other 100 or so interations to let the decoder settle and do this below?
+      }
+    }
   }
-  
-  loadPacket(0,resetPacket,2,1);        // Final reset packet (and decoder begins to respond)
+ // TODO remove after testing
+//  loadPacket(0,resetPacket,2,1);        // Final reset packet (and decoder begins to respond)
   
   if(d==0)    // verify unsuccessful
     bValue=-1;
@@ -324,6 +358,7 @@ void RegisterList::writeCVBit(const char *s) volatile{
   int bNum,bValue;
   int c,d,base;
   int cv, callBack, callBackSub;
+  uint8_t count;
 
   if(sscanf(s,"%d %d %d %d %d",&cv,&bNum,&bValue,&callBack,&callBackSub)!=5)          // cv = 1-1024
     return;
@@ -334,30 +369,40 @@ void RegisterList::writeCVBit(const char *s) volatile{
   bWrite[0]=0x78+(highByte(cv)&0x03);   // any CV>1023 will become modulus(1024) due to bit-mask of 0x03
   bWrite[1]=lowByte(cv);
   bWrite[2]=0xF0+bValue*8+bNum;
+
   loadPacket(0,resetPacket,2,3);        // NMRA recommends starting with 3 reset packets
   loadPacket(0,bWrite,3,5);             // NMRA recommends 5 verify packets
-  loadPacket(0,bWrite,3,6);             // NMRA recommends 6 write or reset packets for decoder recovery time
-      
+ // loadPacket(0,bWrite,3,6);             // NMRA recommends 6 write or reset packets for decoder recovery time
+  loadPacket(0,idlePacket,2,6);   // TODO remove old line after testing
+  
   c=0;
   d=0;
   base=0;
+  count=0;
 
   for(int j=0;j<ACK_BASE_COUNT;j++)
     base+=analogRead(CURRENT_MONITOR_PIN_PROG);
   base/=ACK_BASE_COUNT;
   
   bitClear(bWrite[2],4);              // change instruction code from Write Bit to Verify Bit
+
   loadPacket(0,resetPacket,2,3);      // NMRA recommends starting with 3 reset packets
   loadPacket(0,bWrite,3,5);           // NMRA recommends 5 verify packets
   loadPacket(0,bWrite,3,6);           // NMRA recommends 6 write or reset packets for decoder recovery time
     
-  for(int j=0;j<ACK_SAMPLE_COUNT;j++){
-    c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
-    if(c>ACK_SAMPLE_THRESHOLD)
-      d=1;
+  for(int j=0;j<ACK_SAMPLE_COUNT;j++){ // TODO remove old line after testing
+     c=((analogRead(CURRENT_MONITOR_PIN_PROG))-base)*CURRENT_CONVERSION_FACTOR;
+    //c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
+    if(c>ACK_SAMPLE_THRESHOLD) {
+      count++;
+      if (count==3){
+        d=1;
+        loadPacket(0,resetPacket,2,1); 
+      }     // Final reset packetcompleted (and decoder begins to respond)
+    }
   }
   
-  loadPacket(0,resetPacket,2,1);      // Final reset packetcompleted (and decoder begins to respond)
+//  loadPacket(0,resetPacket,2,1);      // Final reset packetcompleted (and decoder begins to respond)
 
   if(d==0)    // verify unsuccessful
     bValue=-1;
