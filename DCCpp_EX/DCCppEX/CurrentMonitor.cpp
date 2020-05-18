@@ -27,7 +27,7 @@ MotorBoard::MotorBoard (uint8_t _sensePin, uint8_t _enablePin, MOTOR_BOARD_TYPE 
 	this->name=_name;
 	this->current=0;
 	this->reading=0;
-	//this->triggerMilliamps=0;
+	//this->triggerMilliamps=0; TODO clean this up
 	//this->maxMilliAmps=0;
 	this->currentConvFactor=_currentConvFactor;
 	this->tripped=false;
@@ -81,16 +81,19 @@ MotorBoard::MotorBoard (uint8_t _sensePin, uint8_t _enablePin, MOTOR_BOARD_TYPE 
 
 void MotorBoard::check() {
 	// if we have exceeded the CURRENT_SAMPLE_TIME we need to check if we are over/under current.
-	if(millis() - lastCheckTime > CURRENT_SAMPLE_TIME) {
+	if(millis() - lastCheckTime > CURRENT_SAMPLE_TIME) { // TODO can we integrate this with the readBaseCurrent and ackDetect routines?
 		lastCheckTime = millis();
 		reading = analogRead(sensePin) * CURRENT_SAMPLE_SMOOTHING + reading * (1.0 - CURRENT_SAMPLE_SMOOTHING);
-		current = reading * currentConvFactor; // get current in milliamps
-		if(current > tripMilliamps && digitalRead(enablePin)) {
+		current = (reading * currentConvFactor)/100; // get current in milliamps
+		if(current > tripMilliamps && digitalRead(enablePin)) { // TODO convert this to integer match
 			powerOff(false, true);
 			tripped=true;
-		} else if(current < tripMilliamps && tripped) {
-			powerOn();
-			tripped=false;
+			lastTripTime=millis();
+		} else if(current < tripMilliamps && tripped) { // TODO need to put a delay in here so it only tries after X seconds
+			if (millis() - lastTripTime > 100000) {  // TODO make this a global constant
+			  powerOn();
+			  tripped=false;
+			}
 		}
 	}
 }
@@ -225,7 +228,7 @@ void MotorBoardManager::parse(const char *com) {
 		case 'c':
 			if(strlen(com) == 1) {
 				// CommManager::printf("<a %d %d %d %d>", boards[0]->getLastRead(), boards[0]->getLastCurrent() , boards[0]->getTripMilliAmps(), boards[0]->getMaxMilliAmps());
-				// fnd - Don't want to break JMRI. Need to fix JMRI before using the above line instead of this one:
+				// TODO - Don't want to break JMRI. Need to fix JMRI before using the above line instead of this one:
 				CommManager::printf("<a %d>", boards[0]->getLastRead());
 			} else {
 				for(uint8_t i = 0; i < MAX_MOTOR_BOARDS; i++) {

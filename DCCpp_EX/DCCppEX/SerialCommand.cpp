@@ -117,8 +117,8 @@ void SerialCommand::parse(const char *com){
  *
  *    OR
  *
- *    ADDRESS = INT((N - 1) / 4) + 1
- *    SUBADDRESS = (N - 1) % 4
+ *    ADDRESS = INT((N - 1) / 4) + 1  (or INT(N + 3)/4()
+ *    SUBADDRESS = (N - 1) % 4        (or (N-(ADDRESS*4)) + 3;)
  *
  *    returns: NONE
  */

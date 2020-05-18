@@ -427,24 +427,27 @@ void setup(){
 // DCC ZERO and DCC ONE bits.
 
 // These are hardware-driven interrupts that will be called automatically when triggered regardless of what
-// DCC++ EX BASE STATION was otherwise processing.  But once inside the interrupt, all other interrupt routines are temporarily disabled.
-// Since a short pulse only lasts for 116 microseconds, and there are TWO separate interrupts
-// (one for Main Track Registers and one for the Program Track Registers), the interrupt code must complete
-// in much less than 58 microseconds, otherwise there would be no time for the rest of the program to run.  Worse, if the logic
-// of the interrupt code ever caused it to run longer than 58 microseconds, an interrupt trigger would be missed, the OCNA and OCNB
-// registers would not be updated, and the net effect would be a DCC signal that keeps sending the same DCC bit repeatedly until the
-// interrupt code completes and can be called again.
+// DCC++ EX BASE STATION was otherwise processing.  But once inside the interrupt, all other interrupt routines
+// are temporarily disabled. Since a short pulse only lasts for 116 microseconds, and there are TWO separate 
+// interrupts (one for Main Track Registers and one for the Program Track Registers), the interrupt code must 
+// complete in much less than 58 microseconds, otherwise there would be no time for the rest of the program 
+// to run.  Worse, if the logic of the interrupt code ever caused it to run longer than 58 microseconds, an 
+// interrupt trigger would be missed, the OCNA and OCNB registers would not be updated, and the net effect 
+// would be a DCC signal that keeps sending the same DCC bit repeatedly until the interrupt code completes 
+// and can be called again.
 
-// A significant portion of this entire program is designed to do as much of the heavy processing of creating a properly-formed
-// DCC bit stream upfront, so that the interrupt code below can be as simple and efficient as possible.
+// A significant portion of this entire program is designed to do as much of the heavy processing of creating
+// a properly-DCC bit stream upfront, so that the interrupt code below can be as simple and efficient as possible.
 
-// Note that we need to create two very similar copies of the code --- one for the Main Track OC1B interrupt and one for the
-// Programming Track OCOB interrupt.  But rather than create a generic function that incurrs additional overhead, we create a macro
-// that can be invoked with proper paramters for each interrupt.  This slightly increases the size of the code base by duplicating
-// some of the logic for each interrupt, but saves additional time.
+// Note that we need to create two very similar copies of the code --- one for the Main Track OC1B interrupt 
+// and one for the Programming Track OCOB interrupt.  But rather than create a generic function that incurrs 
+// additional overhead, we create a macro that can be invoked with proper paramters for each interrupt.  
+// This slightly increases the size of the code base by duplicating some of the logic for each interrupt, 
+// but saves additional time.
 
-// As structured, the interrupt code below completes at an average of just under 6 microseconds with a worse-case of just under 11 microseconds
-// when a new register is loaded and the logic needs to switch active register packet pointers.
+// As structured, the interrupt code below completes at an average of just under 6 microseconds with a worse-case
+// of just under 11 microseconds when a new register is loaded and the logic needs to switch active register
+// packet pointers.
 
 // THE INTERRUPT CODE MACRO:  R=REGISTER LIST (mainRegs or progRegs), and N=TIMER (0 or 1)
 
@@ -510,7 +513,7 @@ ISR(TIMER3_COMPB_vect){              // set interrupt service for OCR3B of TIMER
 
 ///////////////////////////////////////////////////////////////////////////////
 // PRINT CONFIGURATION INFO TO SERIAL PORT REGARDLESS OF INTERFACE TYPE
-// - ACTIVATED ON STARTUP IF SHOW_CONFIG_PIN IS TIED HIGH
+// - ACTIVATED ON STARTUP IF SHOW_CONFIG_DETAIL_PIN IS TIED TO GROUND
 
 void showConfiguration(){
   Serial.print(F("\n*** DCC++ EX CONFIGURATION ***\n"));

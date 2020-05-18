@@ -37,12 +37,13 @@ private:
 	uint8_t enablePin;
 	const char *name;
 	float current;             // converted current in milliAmps
-	float reading;             // raw current pin reading
+	float reading;             // raw current sense pin reading
 	int tripMilliamps;         // the current that will trip the overcurrent condition
 	int maxMilliAmps;          // the maximum current supported by the motor board
 	int currentConvFactor;     // a multiplier constant to get current from pin reading
 	bool tripped;
 	long int lastCheckTime;
+	long int lastTripTime;
 };
 
 class MotorBoardManager {

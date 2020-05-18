@@ -97,7 +97,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
   // ((5/1024)/1.65) * 1000
-  #define CURRENT_CONVERSION_FACTOR 2.96
+  #define CURRENT_CONVERSION_FACTOR 296 // 2.96 * 100 so we can do integer math later
 
 #elif MOTOR_SHIELD_TYPE == 1
 
@@ -113,7 +113,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 8
 
   // (5/1024) /.525 * 1000
-  #define CURRENT_CONVERSION_FACTOR 9.30
+  #define CURRENT_CONVERSION_FACTOR 930 // 9.30* 100 so we can do integer math later
 
 #elif MOTOR_SHIELD_TYPE == 2
 
@@ -128,8 +128,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
-  // (5/1024) /.0105 * 1000  fnd-not .125?
-  #define CURRENT_CONVERSION_FACTOR 465
+  #define CURRENT_CONVERSION_FACTOR 46500 // TODO verify this value
 
   #elif MOTOR_SHIELD_TYPE == 3
 
@@ -145,7 +144,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
   // (5/1024) /.0105 * 1000
-  #define CURRENT_CONVERSION_FACTOR 465
+  #define CURRENT_CONVERSION_FACTOR 46500  // 456 * 100 so we can do integer math later 
 
    #elif MOTOR_SHIELD_TYPE == 4
    // uses current sense resister of 2.2 kOhms between pin 8 and ground.
@@ -168,7 +167,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
   // (5/1024) /.83* 1000
-  #define CURRENT_CONVERSION_FACTOR 5.88
+  #define CURRENT_CONVERSION_FACTOR 588  // 5.88 * 100 so we can do integer math later
 
   #elif MOTOR_SHIELD_TYPE == 5
 
@@ -184,7 +183,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
   // (5/1024) /1 * 1000
-  #define CURRENT_CONVERSION_FACTOR 4.88
+  #define CURRENT_CONVERSION_FACTOR 488  // 4.88 * 100 so we can do integer math later
 
 #else
 

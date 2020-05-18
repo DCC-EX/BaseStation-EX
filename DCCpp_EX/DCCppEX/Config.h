@@ -23,7 +23,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 //  4 = LMD18200 MOTOR DRIVER MODULE    (MAX 55V/3A  PER CHANNEL)  LMD18200 Motor Driver Board (6A Max actual instantaneous peak)
 //  5 = MAX 471 CURRENT SENSE MODULE    (MAX 28V/3A  PER CHANNEL)  MAX 471 connected to an LMD18200 Motor Driver
 
-#define MOTOR_SHIELD_TYPE   0
+#define MOTOR_SHIELD_TYPE 0
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -46,7 +46,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 //  3 = Seeed Studio Ethernet/SD-Card Shield W5200
 //  4 = ESP8266 WiFi module
 
-#define COMM_INTERFACE   0
+#define COMM_INTERFACE 0
 
 #if COMM_INTERFACE == 4
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -120,6 +120,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 //
 // Define only of you need the store to EEPROM feature. This takes RAM and
 // you may need to use less MAX_MAIN_REGISTERS to compensate (at least on the UNO)
+
 #define EESTORE
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +158,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 //       or one using a Hitachi  HD44780.
 //
 // To enable, uncomment the line below and make sure only the correct LIB_TYPE line
-// is uncommented
+// is uncommented below to select the library used for your LCD backpack
 
 //#define ENABLE_LCD
 
