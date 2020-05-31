@@ -197,7 +197,7 @@ void RegisterList::writeTextPacket(const char *s) volatile{
 } // RegisterList::writeTextPacket()
 
 ///////////////////////////////////////////////////////////////////////////////
-//byte RegisterList::ackDetect(unsigned int base) volatile{ TODO work in progress
+//byte RegisterList::ackDetect(unsigned int base) volatile{ TODO work in progress. Factoring this routine to this function breaks the code
 //  int c=0;
 //  byte count=0;
 //  byte d=0;
@@ -245,7 +245,7 @@ void RegisterList::readCV(const char *s) volatile{
   int current;
   unsigned int base;
   byte count=0;
-  byte d=0; // TODO can remove this by factoring it into functions
+  byte d=0;
   int ackThreshold;
 
   ackThreshold = ACK_SAMPLE_THRESHOLD/((CURRENT_CONVERSION_FACTOR)/100);
@@ -291,8 +291,7 @@ void RegisterList::readCV(const char *s) volatile{
   current=0;
   d=0;
   count=0;
-  //base=readBaseCurrent();
-  
+   
   base=readBaseCurrent();
 
   bRead[0]=0x74+(highByte(cv)&0x03);     // set-up to re-verify entire byte
@@ -302,7 +301,7 @@ void RegisterList::readCV(const char *s) volatile{
   loadPacket(0,bRead,3,5);              // NMRA recommends 5 verify packets
   loadPacket(0,idlePacket,2,6);      // NMRA recommends 6 idle or reset packets for decoder recovery time
   
-  for(int j=0;j<ACK_SAMPLE_COUNT;j++){  // TODO remove old code when tested
+  for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
       if(current > ackThreshold) {
         count++;
@@ -363,7 +362,7 @@ void RegisterList::writeCVByte(const char *s) volatile{
   loadPacket(0,bWrite,3,5);             // NMRA recommends 5 verify packets
   loadPacket(0,bWrite,3,6);             // NMRA recommends 6 write or reset packets for decoder recovery time
   
-  for(int j=0;j<ACK_SAMPLE_COUNT;j++){  // TODO remove old code when tested
+  for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
       if(current > ackThreshold) {
         count++;
@@ -425,7 +424,7 @@ void RegisterList::writeCVBit(const char *s) volatile{
   loadPacket(0,bWrite,3,5);           // NMRA recommends 5 verify packets
   loadPacket(0,bWrite,3,6);           // NMRA recommends 6 write or reset packets for decoder recovery time
     
- for(int j=0;j<ACK_SAMPLE_COUNT;j++){  // TODO remove old code when tested
+ for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
       if(current > ackThreshold) {
         count++;

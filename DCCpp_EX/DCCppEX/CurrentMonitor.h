@@ -42,8 +42,8 @@ private:
 	int maxMilliAmps;          // the maximum current supported by the motor board
 	int currentConvFactor;     // a multiplier constant to get current from pin reading
 	bool tripped;
-	long int lastCheckTime;
-	long int lastTripTime;
+	unsigned long int lastCheckTime;
+	unsigned long int lastTripTime;
 };
 
 class MotorBoardManager {

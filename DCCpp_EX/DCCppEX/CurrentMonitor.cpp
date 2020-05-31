@@ -27,8 +27,6 @@ MotorBoard::MotorBoard (uint8_t _sensePin, uint8_t _enablePin, MOTOR_BOARD_TYPE 
 	this->name=_name;
 	this->current=0;
 	this->reading=0;
-	//this->triggerMilliamps=0; TODO clean this up
-	//this->maxMilliAmps=0;
 	this->currentConvFactor=_currentConvFactor;
 	this->tripped=false;
 	this->lastCheckTime=0; {
@@ -85,11 +83,11 @@ void MotorBoard::check() {
 		lastCheckTime = millis();
 		reading = analogRead(sensePin) * CURRENT_SAMPLE_SMOOTHING + reading * (1.0 - CURRENT_SAMPLE_SMOOTHING);
 		current = (reading * currentConvFactor)/100; // get current in milliamps
-		if(current > tripMilliamps && digitalRead(enablePin)) { // TODO convert this to integer match
+		if(current > tripMilliamps && digitalRead(enablePin)) { // TODO convert this to integer math
 			powerOff(false, true);
 			tripped=true;
 			lastTripTime=millis();
-		} else if(current < tripMilliamps && tripped) { // TODO need to put a delay in here so it only tries after X seconds
+		} else if(current < tripMilliamps && tripped) {
 			if (millis() - lastTripTime > 100000) {  // TODO make this a global constant
 			  powerOn();
 			  tripped=false;
