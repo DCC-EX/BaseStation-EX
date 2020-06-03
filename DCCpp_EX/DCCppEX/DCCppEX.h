@@ -155,7 +155,7 @@ Part of DCC++ EX BASE STATION for the Arduino
    // So 1A would send .83V to the Arduino sense pin.
    // That means with a 2200 Ohm resistor to a 5V arduinio pin, that is .83V / Amp
 
-  #define MOTOR_SHIELD_NAME "LMD18200 ONBOARD CURRENT SENSE"
+  #define MOTOR_SHIELD_NAME "LMD18200" //Onboard current sense
   
   #define SIGNAL_ENABLE_PIN_MAIN 3
   #define SIGNAL_ENABLE_PIN_PROG 11
@@ -171,7 +171,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 
   #elif MOTOR_SHIELD_TYPE == 5
 
-  #define MOTOR_SHIELD_NAME "LMD18200 MAX471 CURRENT SENSE"
+  #define MOTOR_SHIELD_NAME "LMD18200/MAX471" // Using MAX471 for current sense
 
   #define SIGNAL_ENABLE_PIN_MAIN 3
   #define SIGNAL_ENABLE_PIN_PROG 11
