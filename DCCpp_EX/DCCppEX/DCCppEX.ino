@@ -1,6 +1,6 @@
 /**********************************************************************
 
-DCC++ BASE STATION
+DCC++ EX BASE STATION
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@ COPYRIGHT (c) 2013-2016 Gregg E. Berman
 **********************************************************************/
 /**********************************************************************
 
-DCC++ BASE STATION is a C++ program written for the Arduino Uno and Arduino Mega
+DCC++ EX BASE STATION is a C++ program written for the Arduino Uno and Arduino Mega
 using the Arduino IDE 1.6.6.
 
 It allows a standard Arduino Uno or Mega with an Arduino Motor Shield (as well as others)
@@ -27,14 +27,14 @@ to be used as a fully-functioning digital command and control (DCC) base station
 for controlling model train layouts that conform to current National Model
 Railroad Association (NMRA) DCC standards.
 
-This version of DCC++ BASE STATION supports:
+This version of DCC++ EX BASE STATION supports:
 
   * 2-byte and 4-byte locomotive addressing
   * Simultaneous control of multiple locomotives
   * 128-step speed throttling
   * Cab functions F0-F28
   * Activate/de-activate accessory functions using 512 addresses, each with 4 sub-addresses
-      - includes optional functionailty to monitor and store of the direction of any connected turnouts
+      - includes optional functionality to monitor and store the direction of any connected turnouts
   * Programming on the Main Operations Track
       - write configuration variable bytes
       - set/clear specific configuration variable bits
@@ -43,7 +43,7 @@ This version of DCC++ BASE STATION supports:
       - set/clear specific configuration variable bits
       - read configuration variable bytes
 
-DCC++ BASE STATION is controlled with simple text commands received via
+DCC++ EX BASE STATION is controlled with simple text commands received via
 the Arduino's serial interface.  Users can type these commands directly
 into the Arduino IDE Serial Monitor, or can send such commands from another
 device or computer program.
@@ -54,21 +54,21 @@ communications instead of using serial communications.
 DCC++ CONTROLLER, available separately under a similar open-source
 license, is a Java program written using the Processing library and Processing IDE
 that provides a complete and configurable graphic interface to control model train layouts
-via the DCC++ BASE STATION.
+via the DCC++ EX BASE STATION.
 
 With the exception of a standard 15V power supply that can be purchased in
 any electronics store, no additional hardware is required.
 
-Neither DCC++ BASE STATION nor DCC++ CONTROLLER use any known proprietary or
+Neither DCC++ EX BASE STATION nor DCC++ CONTROLLER use any known proprietary or
 commercial hardware, software, interfaces, specifications, or methods related
 to the control of model trains using NMRA DCC standards.  Both programs are wholly
 original, developed by the author, and are not derived from any known commercial,
 free, or open-source model railroad control packages by any other parties.
 
-However, DCC++ BASE STATION and DCC++ CONTROLLER do heavily rely on the IDEs and
+However, DCC++ EX BASE STATION and DCC++ CONTROLLER do heavily rely on the IDEs and
 embedded libraries associated with Arduino and Processing.  Tremendous thanks to those
 responsible for these terrific open-source initiatives that enable programs like
-DCC++ to be developed and distributed in the same fashion.
+DCC++ EX to be developed and distributed in the same fashion.
 
 REFERENCES:
 
@@ -77,12 +77,12 @@ REFERENCES:
   Processing:                  http://processing.org/
   GNU General Public License:  http://opensource.org/licenses/GPL-3.0
 
-BRIEF NOTES ON THE THEORY AND OPERATION OF DCC++ BASE STATION:
+BRIEF NOTES ON THE THEORY AND OPERATION OF DCC++ EX BASE STATION:
 
-DCC++ BASE STATION for the Uno configures the OC0B interrupt pin associated with Timer 0,
+DCC++ EX BASE STATION for the Uno and Nano configures the OC0B interrupt pin associated with Timer 0,
 and the OC1B interupt pin associated with Timer 1, to generate separate 0-5V
 unipolar signals that each properly encode zero and one bits conforming with
-DCC timing standards.  When compiled for the Mega, DCC++ BASE STATION uses OC3B instead of OC0B.
+DCC timing standards.  When compiled for the Mega, DCC++ EX BASE STATION uses OC3B instead of OC0B.
 
 Series of DCC bit streams are bundled into Packets that each form the basis of
 a standard DCC instruction.  Packets are stored in Packet Registers that contain
@@ -95,21 +95,21 @@ registers numbered 1 through MAX_MAIN_REGISTERS (as defined in DCCppEX.h).
 It is generally considered good practice to continuously send throttle control packets
 to every cab so that if an engine should momentarily lose electrical connectivity with the tracks,
 it will very quickly receive another throttle control signal as soon as connectivity is
-restored (such as when a trin passes over  rough portion of track or the frog of a turnout).
+restored (such as when a train passes over a rough portion of track or the frog of a turnout).
 
-DCC++ Base Station therefore sequentially loops through each main operations track packet regsiter
+DCC++ EX Base Station therefore sequentially loops through each main operations track packet register
 that has been loaded with a throttle control setting for a given cab.  For each register, it
 transmits the appropriate DCC packet bits to the track, then moves onto the next register
 without any pausing to ensure continuous bi-polar power is being provided to the tracks.
 Updates to the throttle setting stored in any given packet register are done in a double-buffered
-fashion and the sequencer is pointed to that register immediately after being changes so that updated DCC bits
+fashion and the sequencer is pointed to that register immediately after being changed so that updated DCC bits
 can be transmitted to the appropriate cab without delay or any interruption in the bi-polar power signal.
 The cabs identified in each stored throttle setting should be unique across registers.  If two registers
 contain throttle setting for the same cab, the throttle in the engine will oscillate between the two,
-which is probably not a desireable outcome.
+which is probably not a desirable outcome.
 
 For both the main operations track and the programming track there is also a special packet register with id=0
-that is used to store all other DCC packets that do not require continious transmittal to the tracks.
+that is used to store all other DCC packets that do not require continuous transmittal to the tracks.
 This includes DCC packets to control decoder functions, set accessory decoders, and read and write Configuration Variables.
 It is common practice that transmittal of these one-time packets is usually repeated a few times to ensure
 proper receipt by the receiving decoder.  DCC decoders are designed to listen for repeats of the same packet
@@ -135,7 +135,7 @@ When configured as such, the CHANNEL A and CHANNEL B outputs of the Motor Shield
 connected directly to the tracks.  This software assumes CHANNEL A is connected
 to the Main Operations Track, and CHANNEL B is connected to the Programming Track.
 
-DCC++ BASE STATION in split into multiple modules, each with its own header file:
+DCC++ EX BASE STATION in split into multiple modules, each with its own header file:
 
   DCCppEX  :        declares required global objects and contains initial Arduino setup()
                     and Arduino loop() functions, as well as interrupt code for OC0B and OC1B.
@@ -162,7 +162,7 @@ DCC++ BASE STATION in split into multiple modules, each with its own header file
   EEStore:          contains methods to store, update, and load various DCC settings and status
                     (e.g. the states of all defined turnouts) in the EEPROM for recall after power-up
 
-DCC++ BASE STATION is configured through the Config.h file that contains all user-definable parameters
+DCC++ EX BASE STATION is configured through the Config.h file that contains all user-definable parameters
 
 **********************************************************************/
 
@@ -183,7 +183,11 @@ DCC++ BASE STATION is configured through the Config.h file that contains all use
 
 #ifdef ENABLE_LCD
 bool lcdEnabled = false;
-LiquidCrystal_PCF8574 lcdDisplay(LCD_ADDRESS);
+  #ifdef LIB_TYPE_PCF8574
+    LiquidCrystal_PCF8574 lcdDisplay(LCD_ADDRESS);
+  #elif LIB_TYPE_I2C
+    LiquidCrystal_I2C lcdDisplay(LCD_ADDRESS);
+  #endif
 #endif
 
 void showConfiguration();
@@ -221,7 +225,7 @@ void setup(){
     lcdDisplay.setBacklight(255);
     lcdDisplay.clear();
     lcdDisplay.setCursor(0, 0);
-    lcdDisplay.print("DCC++ v");
+    lcdDisplay.print("DCC++ EX v");
     lcdDisplay.print(VERSION);
     lcdDisplay.setCursor(0, 1);
     #if COMM_INTERFACE >= 1
@@ -237,14 +241,23 @@ void setup(){
 #endif
 
 #if MOTOR_SHIELD_TYPE == 0
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::ARDUINO_SHIELD, "MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::ARDUINO_SHIELD, "PROG");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::ARDUINO_SHIELD, CURRENT_CONVERSION_FACTOR, false, "MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::ARDUINO_SHIELD, CURRENT_CONVERSION_FACTOR, true, "PROG");
 #elif MOTOR_SHIELD_TYPE == 1
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::POLOLU, "MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::POLOLU, "PROG");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::POLOLU, CURRENT_CONVERSION_FACTOR, false, "MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::POLOLU, CURRENT_CONVERSION_FACTOR, truen "PROG");
 #elif MOTOR_SHIELD_TYPE == 2
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_5A, "MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_5A, "PROG");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_5A, CURRENT_CONVERSION_FACTOR, false,"MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_5A, CURRENT_CONVERSION_FACTOR, true"PROG");
+#elif MOTOR_SHIELD_TYPE == 3
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_10A, CURRENT_CONVERSION_FACTOR, false,"MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_10A, CURRENT_CONVERSION_FACTOR, true"PROG");
+#elif MOTOR_SHIELD_TYPE == 4
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::LMD18200, CURRENT_CONVERSION_FACTOR, false, "MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::LMD18200, CURRENT_CONVERSION_FACTOR, true"PROG");
+#elif MOTOR_SHIELD_TYPE == 5
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::LMD18200_MAX47, CURRENT_CONVERSION_FACTOR, false,"MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::LMD18200_MAX47, "PROG");
 #endif
 
 #if COMM_INTERFACE != 4 || (COMM_INTERFACE == 4 && !defined(USE_SERIAL_FOR_WIFI))
@@ -264,16 +277,22 @@ void setup(){
 
   EEStore::init();                                         // initialize and load Turnout and Sensor definitions stored in EEPROM
 
-  pinMode(A5,INPUT);                                       // if pin A5 is grounded upon start-up, print system configuration and halt
-  digitalWrite(A5,HIGH);
-  if(!digitalRead(A5))
+  pinMode(SHOW_CONFIG_DETAIL_PIN,INPUT);                                       // if pin SHOW_CONFIG_DETAIL_PIN is grounded upon start-up, print system configuration and halt
+  digitalWrite(SHOW_CONFIG_DETAIL_PIN,HIGH);
+  if(!digitalRead(SHOW_CONFIG_DETAIL_PIN))
     showConfiguration();
 
-  CommManager::printf("<iDCC++ BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
+  CommManager::printf("<iDCC++ EX BASE STATION %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
 
   SerialCommand::init(&mainRegs, &progRegs);   // create structure to read and parse commands from serial line
 
   CommManager::showInitInfo();
+
+#ifdef USE_TRIGGERPIN
+  // Set up testpin
+  pinMode(TRIGGERPIN,OUTPUT);
+  digitalWrite(TRIGGERPIN,LOW);
+#endif
 
   // CONFIGURE TIMER_1 TO OUTPUT 50% DUTY CYCLE DCC SIGNALS ON OC1B INTERRUPT PINS
 
@@ -291,7 +310,7 @@ void setup(){
   pinMode(DIRECTION_MOTOR_CHANNEL_PIN_A,INPUT);      // ensure this pin is not active! Direction will be controlled by DCC SIGNAL instead (below)
   digitalWrite(DIRECTION_MOTOR_CHANNEL_PIN_A,LOW);
 
-  pinMode(DCC_SIGNAL_PIN_MAIN, OUTPUT);      // THIS ARDUINO OUPUT PIN MUST BE PHYSICALLY CONNECTED TO THE PIN FOR DIRECTION-A OF MOTOR CHANNEL-A
+  pinMode(DCC_SIGNAL_PIN_MAIN, OUTPUT);      // THIS ARDUINO OUTsPUT PIN MUST BE PHYSICALLY CONNECTED TO THE PIN FOR DIRECTION-A OF MOTOR CHANNEL-A
 
   bitSet(TCCR1A,WGM10);     // set Timer 1 to FAST PWM, with TOP=OCR1A
   bitSet(TCCR1A,WGM11);
@@ -316,7 +335,7 @@ void setup(){
 
   // CONFIGURE EITHER TIMER_0 (UNO) OR TIMER_3 (MEGA) TO OUTPUT 50% DUTY CYCLE DCC SIGNALS ON OC0B (UNO) OR OC3B (MEGA) INTERRUPT PINS
 
-#ifdef ARDUINO_AVR_UNO      // Configuration for UNO
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)   // Configuration for UNO or NANO
 
   // Directon Pin for Motor Shield Channel B - PROGRAMMING TRACK
   // Controlled by Arduino 8-bit TIMER 0 / OC0B Interrupt Pin
@@ -408,24 +427,27 @@ void setup(){
 // DCC ZERO and DCC ONE bits.
 
 // These are hardware-driven interrupts that will be called automatically when triggered regardless of what
-// DCC++ BASE STATION was otherwise processing.  But once inside the interrupt, all other interrupt routines are temporarily diabled.
-// Since a short pulse only lasts for 116 microseconds, and there are TWO separate interrupts
-// (one for Main Track Registers and one for the Program Track Registers), the interrupt code must complete
-// in much less than 58 microsends, otherwise there would be no time for the rest of the program to run.  Worse, if the logic
-// of the interrupt code ever caused it to run longer than 58 microsends, an interrupt trigger would be missed, the OCNA and OCNB
-// registers would not be updated, and the net effect would be a DCC signal that keeps sending the same DCC bit repeatedly until the
-// interrupt code completes and can be called again.
+// DCC++ EX BASE STATION was otherwise processing.  But once inside the interrupt, all other interrupt routines
+// are temporarily disabled. Since a short pulse only lasts for 116 microseconds, and there are TWO separate 
+// interrupts (one for Main Track Registers and one for the Program Track Registers), the interrupt code must 
+// complete in much less than 58 microseconds, otherwise there would be no time for the rest of the program 
+// to run.  Worse, if the logic of the interrupt code ever caused it to run longer than 58 microseconds, an 
+// interrupt trigger would be missed, the OCNA and OCNB registers would not be updated, and the net effect 
+// would be a DCC signal that keeps sending the same DCC bit repeatedly until the interrupt code completes 
+// and can be called again.
 
-// A significant portion of this entire program is designed to do as much of the heavy processing of creating a properly-formed
-// DCC bit stream upfront, so that the interrupt code below can be as simple and efficient as possible.
+// A significant portion of this entire program is designed to do as much of the heavy processing of creating
+// a properly-DCC bit stream upfront, so that the interrupt code below can be as simple and efficient as possible.
 
-// Note that we need to create two very similar copies of the code --- one for the Main Track OC1B interrupt and one for the
-// Programming Track OCOB interrupt.  But rather than create a generic function that incurrs additional overhead, we create a macro
-// that can be invoked with proper paramters for each interrupt.  This slightly increases the size of the code base by duplicating
-// some of the logic for each interrupt, but saves additional time.
+// Note that we need to create two very similar copies of the code --- one for the Main Track OC1B interrupt 
+// and one for the Programming Track OCOB interrupt.  But rather than create a generic function that incurrs 
+// additional overhead, we create a macro that can be invoked with proper paramters for each interrupt.  
+// This slightly increases the size of the code base by duplicating some of the logic for each interrupt, 
+// but saves additional time.
 
-// As structured, the interrupt code below completes at an average of just under 6 microseconds with a worse-case of just under 11 microseconds
-// when a new register is loaded and the logic needs to switch active register packet pointers.
+// As structured, the interrupt code below completes at an average of just under 6 microseconds with a worse-case
+// of just under 11 microseconds when a new register is loaded and the logic needs to switch active register
+// packet pointers.
 
 // THE INTERRUPT CODE MACRO:  R=REGISTER LIST (mainRegs or progRegs), and N=TIMER (0 or 1)
 
@@ -462,10 +484,19 @@ void setup(){
 // NOW USE THE ABOVE MACRO TO CREATE THE CODE FOR EACH INTERRUPT
 
 ISR(TIMER1_COMPB_vect){              // set interrupt service for OCR1B of TIMER-1 which flips direction bit of Motor Shield Channel A controlling Main Track
+#ifdef USE_TRIGGERPIN
+#ifndef USE_TRIGGERPIN_PER_BIT
+  if (mainRegs.currentBit == PREAMBLE_MAIN)
+#endif
+     digitalWrite(TRIGGERPIN,HIGH);
+#endif 
   DCC_SIGNAL(mainRegs,1)
+  #ifdef USE_TRIGGERPIN
+  digitalWrite(TRIGGERPIN,LOW);
+#endif
 }
 
-#ifdef ARDUINO_AVR_UNO      // Configuration for UNO
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)    // Configuration for UNO or NANO
 
 ISR(TIMER0_COMPB_vect){              // set interrupt service for OCR1B of TIMER-0 which flips direction bit of Motor Shield Channel B controlling Prog Track
   DCC_SIGNAL(progRegs,0)
@@ -482,52 +513,52 @@ ISR(TIMER3_COMPB_vect){              // set interrupt service for OCR3B of TIMER
 
 ///////////////////////////////////////////////////////////////////////////////
 // PRINT CONFIGURATION INFO TO SERIAL PORT REGARDLESS OF INTERFACE TYPE
-// - ACTIVATED ON STARTUP IF SHOW_CONFIG_PIN IS TIED HIGH
+// - ACTIVATED ON STARTUP IF SHOW_CONFIG_DETAIL_PIN IS TIED TO GROUND
 
 void showConfiguration(){
-  Serial.print("\n*** DCC++ CONFIGURATION ***\n");
+  Serial.print(F("\n*** DCC++ EX CONFIGURATION ***\n"));
 
-  Serial.print("\nVERSION:      ");
-  Serial.print(VERSION);
-  Serial.print("\nCOMPILED:     ");
-  Serial.print(__DATE__);
-  Serial.print(" ");
-  Serial.print(__TIME__);
+  Serial.print(F("\nVERSION:      "));
+  Serial.print(F(VERSION));
+  Serial.print(F("\nCOMPILED:     "));
+  Serial.print(F(__DATE__));
+  Serial.print(F(" "));
+  Serial.print(F(__TIME__));
 
-  Serial.print("\nARDUINO:      ");
-  Serial.print(ARDUINO_TYPE);
+  Serial.print(F("\nARDUINO:      "));
+  Serial.print(F(ARDUINO_TYPE));
 
-  Serial.print("\n\nMOTOR SHIELD: ");
-  Serial.print(MOTOR_SHIELD_NAME);
+  Serial.print(F("\n\nMOTOR SHIELD: "));
+  Serial.print(F(MOTOR_SHIELD_NAME));
 
-  Serial.print("\n\nDCC SIG MAIN: ");
+  Serial.print(F("\n\nDCC SIG MAIN: "));
   Serial.print(DCC_SIGNAL_PIN_MAIN);
-  Serial.print("\n   DIRECTION: ");
+  Serial.print(F("\n   DIRECTION: "));
   Serial.print(DIRECTION_MOTOR_CHANNEL_PIN_A);
-  Serial.print("\n      ENABLE: ");
+  Serial.print(F("\n      ENABLE: "));
   Serial.print(SIGNAL_ENABLE_PIN_MAIN);
-  Serial.print("\n     CURRENT: ");
+  Serial.print(F("\n     CURRENT: "));
   Serial.print(CURRENT_MONITOR_PIN_MAIN);
 
-  Serial.print("\n\nDCC SIG PROG: ");
+  Serial.print(F("\n\nDCC SIG PROG: "));
   Serial.print(DCC_SIGNAL_PIN_PROG);
-  Serial.print("\n   DIRECTION: ");
+  Serial.print(F("\n   DIRECTION: "));
   Serial.print(DIRECTION_MOTOR_CHANNEL_PIN_B);
-  Serial.print("\n      ENABLE: ");
+  Serial.print(F("\n      ENABLE: "));
   Serial.print(SIGNAL_ENABLE_PIN_PROG);
-  Serial.print("\n     CURRENT: ");
+  Serial.print(F("\n     CURRENT: "));
   Serial.print(CURRENT_MONITOR_PIN_PROG);
 
-  Serial.print("\n\nNUM TURNOUTS: ");
+  Serial.print(F("\n\nNUM TURNOUTS: "));
   Serial.print(EEStore::eeStore->data.nTurnouts);
-  Serial.print("\n     SENSORS: ");
+  Serial.print(F("\n     SENSORS: "));
   Serial.print(EEStore::eeStore->data.nSensors);
-  Serial.print("\n     OUTPUTS: ");
+  Serial.print(F("\n     OUTPUTS: "));
   Serial.print(EEStore::eeStore->data.nOutputs);
 
-  Serial.print("\n\nINTERFACE(s):\n");
+  Serial.print(F("\n\nINTERFACE(s):\n"));
   CommManager::showConfiguration();
-  Serial.print("\n\nPROGRAM HALTED - PLEASE RESTART ARDUINO");
+  Serial.print(F("\n\nPROGRAM HALTED - PLEASE RESTART ARDUINO"));
   while(true);
 }
 

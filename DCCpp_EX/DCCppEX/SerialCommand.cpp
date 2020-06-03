@@ -3,11 +3,11 @@
 SerialCommand.cpp
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 
-// DCC++ BASE STATION COMMUNICATES VIA THE SERIAL PORT USING SINGLE-CHARACTER TEXT COMMANDS
+// DCC++ EX BASE STATION COMMUNICATES VIA THE SERIAL PORT USING SINGLE-CHARACTER TEXT COMMANDS
 // WITH OPTIONAL PARAMTERS, AND BRACKETED BY < AND > SYMBOLS.  SPACES BETWEEN PARAMETERS
 // ARE REQUIRED.  SPACES ANYWHERE ELSE ARE IGNORED.  A SPACE BETWEEN THE SINGLE-CHARACTER
 // COMMAND AND THE FIRST PARAMETER IS ALSO NOT REQUIRED.
@@ -117,8 +117,8 @@ void SerialCommand::parse(const char *com){
  *
  *    OR
  *
- *    ADDRESS = INT((N - 1) / 4) + 1
- *    SUBADDRESS = (N - 1) % 4
+ *    ADDRESS = INT((N - 1) / 4) + 1  (or INT(N + 3)/4()
+ *    SUBADDRESS = (N - 1) % 4        (or (N-(ADDRESS*4)) + 3;)
  *
  *    returns: NONE
  */
@@ -218,7 +218,7 @@ void SerialCommand::parse(const char *com){
  *    CV: the number of the Configuration Variable memory location in the decoder to write to (1-1024)
  *    VALUE: the value to be written to the Configuration Variable memory location (0-255)
  *    CALLBACKNUM: an arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs that call this function
- *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ Interface) that call this function
+ *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ EX Interface) that call this function
  *
  *    returns: <r CALLBACKNUM|CALLBACKSUB|CV Value)
  *    where VALUE is a number from 0-255 as read from the requested CV, or -1 if verificaiton read fails
@@ -236,7 +236,7 @@ void SerialCommand::parse(const char *com){
  *    BIT: the bit number of the Configurarion Variable memory location to write (0-7)
  *    VALUE: the value of the bit to be written (0-1)
  *    CALLBACKNUM: an arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs that call this function
- *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ Interface) that call this function
+ *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ EX Interface) that call this function
  *
  *    returns: <r CALLBACKNUM|CALLBACKSUB|CV BIT VALUE)
  *    where VALUE is a number from 0-1 as read from the requested CV bit, or -1 if verificaiton read fails
@@ -252,7 +252,7 @@ void SerialCommand::parse(const char *com){
  *
  *    CV: the number of the Configuration Variable memory location in the decoder to read from (1-1024)
  *    CALLBACKNUM: an arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs that call this function
- *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ Interface) that call this function
+ *    CALLBACKSUB: a second arbitrary integer (0-32767) that is ignored by the Base Station and is simply echoed back in the output - useful for external programs (e.g. DCC++ EX Interface) that call this function
  *
  *    returns: <r CALLBACKNUM|CALLBACKSUB|CV VALUE)
  *    where VALUE is a number from 0-255 as read from the requested CV, or -1 if read could not be verified
@@ -286,22 +286,26 @@ void SerialCommand::parse(const char *com){
 
     case 'c':     // <c>
 /*
- *    reads current being drawn on main operations track
+ *    reads current being drawn on main operations track. 
  *
- *    returns: <a CURRENT>
- *    where CURRENT = 0-1024, based on exponentially-smoothed weighting scheme
+ *    returns <a READING CURRENT TRIPMILLIAMPS MAXMILLIAMPS>
+ *
+ *    READING = 0-1023 - exponentially smoothed weighted value from the raw reading on the current sense pin of the Arduino
+ *    CURRENT = - current calculated from the READING and the CURRENT_CONVERSION_FACTOR for the current sense device
+ *    TRIPMILLIAMPS = the value in milliamps that will trip the overcurrent shutdown of the track
+ *    MAXMILLIAMPS = the maxiumum supported current of the motor board
  */
       MotorBoardManager::parse(com);
       break;
 
-/***** READ STATUS OF DCC++ BASE STATION  ****/
+/***** READ STATUS OF DCC++ EX BASE STATION  ****/
 
     case 's':      // <s>
 /*
  *    returns status messages containing track power status, throttle status, turn-out status, and a version number
  *    NOTE: this is very useful as a first command for an interface to send to this sketch in order to verify connectivity and update any GUI to reflect actual throttle and turn-out settings
  *
- *    returns: series of status messages that can be read by an interface to determine status of DCC++ Base Station and important settings
+ *    returns: series of status messages that can be read by an interface to determine status of DCC++ EX Base Station and important settings
  */
       MotorBoardManager::showStatus();
       for(int i=1;i<=MAX_MAIN_REGISTERS;i++){
@@ -309,7 +313,7 @@ void SerialCommand::parse(const char *com){
           continue;
         CommManager::printf("<T%d %d %d>", i, mRegs->speedTable[i]>0 ? mRegs->speedTable[i] : -mRegs->speedTable[i], mRegs->speedTable[i]>0 ? 1 : 0);
       }
-      CommManager::printf("<iDCC++ BASE STATION FOR ARDUINO %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
+      CommManager::printf("<iDCC++ EX BASE STATION %s / %s: V-%s / %s %s>", ARDUINO_TYPE, MOTOR_SHIELD_NAME, VERSION, __DATE__, __TIME__);
       CommManager::showInitInfo();
       Turnout::show();
       Output::show();
@@ -366,14 +370,14 @@ void SerialCommand::parse(const char *com){
  *    SERIAL COMMUNICAITON WILL BE INTERUPTED ONCE THIS COMMAND IS ISSUED - MUST RESET BOARD OR RE-OPEN SERIAL WINDOW TO RE-ESTABLISH COMMS
  */
 
-    Serial.println("\nEntering Diagnostic Mode...");
+    Serial.println(F("\nEntering Diagnostic Mode..."));
     delay(1000);
 
     bitClear(TCCR1B,CS12);    // set Timer 1 prescale=8 - SLOWS NORMAL SPEED BY FACTOR OF 8
     bitSet(TCCR1B,CS11);
     bitClear(TCCR1B,CS10);
 
-    #ifdef ARDUINO_AVR_UNO      // Configuration for UNO
+    #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)     // Configuration for UNO or Nano
 
       bitSet(TCCR0B,CS02);    // set Timer 0 prescale=256 - SLOWS NORMAL SPEED BY A FACTOR OF 4
       bitClear(TCCR0B,CS01);

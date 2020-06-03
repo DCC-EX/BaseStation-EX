@@ -3,7 +3,7 @@
 CurrentMonitor.h
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 
@@ -12,35 +12,43 @@ Part of DCC++ BASE STATION for the Arduino
 
 #include "Arduino.h"
 
-enum MOTOR_BOARD_TYPE { ARDUINO_SHIELD, POLOLU, BTS7960B_5A, BTS7960B_10A };
+enum MOTOR_BOARD_TYPE { ARDUINO_SHIELD, POLOLU, BTS7960B_5A, BTS7960B_10A, LMD18200, LMD18200_MAX471 };
 
-// cap the number of motor boards at the maximum number of analog inputs
-#define MAX_MOTOR_BOARDS NUM_ANALOG_INPUTS
+// cap the number of motor boards to 2 for 1 MAIN and 1 PROG track.
+// we have to be carfule on the Uno, but on a Mega, we could set this equal NUM_ANALOG_INPUTS
+#define MAX_MOTOR_BOARDS 2
 
 class MotorBoard {
 public:
-	MotorBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name);
+	MotorBoard(uint8_t sensePin, uint8_t enablePin, MOTOR_BOARD_TYPE type, int currentConvFactor, bool isProgTrack, const char *name);
 	void check();
 	void powerOn(bool announce=true);
 	void powerOff(bool announce=true, bool overCurrent=false);
 	int getLastRead();
+	int getLastCurrent();
+	int getTripMilliAmps();
+	int getMaxMilliAmps();
 	void showStatus();
 	const char *getName() {
 		return name;
 	}
 private:
-	int sensePin;
-	int enablePin;
+	uint8_t sensePin;
+	uint8_t enablePin;
 	const char *name;
-	float current;
-	bool triggered;
-	long int lastCheckTime;
-	int triggerValue;
+	float current;             // converted current in milliAmps
+	float reading;             // raw current sense pin reading
+	int tripMilliamps;         // the current that will trip the overcurrent condition
+	int maxMilliAmps;          // the maximum current supported by the motor board
+	int currentConvFactor;     // a multiplier constant to get current from pin reading
+	bool tripped;
+	unsigned long int lastCheckTime;
+	unsigned long int lastTripTime;
 };
 
 class MotorBoardManager {
 public:
-	static void registerBoard(int sensePin, int enablePin, MOTOR_BOARD_TYPE type, const char *name);
+	static void registerBoard(uint8_t sensePin, uint8_t enablePin, MOTOR_BOARD_TYPE type, int currentConvFactor, bool isProgTrack, const char *name);
 	static void check();
 	static void powerOnAll();
 	static void powerOffAll();
@@ -51,4 +59,3 @@ private:
 };
 
 #endif
-

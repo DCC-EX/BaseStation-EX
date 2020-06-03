@@ -3,12 +3,12 @@
 Accessories.cpp
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 /**********************************************************************
 
-DCC++ BASE STATION can keep track of the direction of any turnout that is controlled
+DCC++ EX BASE STATION can keep track of the direction of any turnout that is controlled
 by a DCC stationary accessory decoder.  All turnouts, as well as any other DCC accessories
 connected in this fashion, can always be operated using the DCC BASE STATION Accessory command:
 
@@ -63,8 +63,10 @@ the directions of any Turnouts being monitored or controlled by a separate inter
 #include "CommInterface.h"
 #include "SerialCommand.h"
 #include "DCCppEX.h"
+#ifdef EESTORE
 #include "EEStore.h"
 #include <EEPROM.h>
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -73,8 +75,10 @@ void Turnout::activate(int s){
   data.tStatus=(s>0);                                    // if s>0 set turnout=ON, else if zero or negative set turnout=OFF
   sprintf(c,"a %d %d %d",data.address,data.subAddress,data.tStatus);
   SerialCommand::parse(c);
+#ifdef EESTORE
   if(num>0)
     EEPROM.put(num,data.tStatus);
+#endif
   CommManager::printf("<H %d %d>", data.id, data.tStatus);
 }
 
@@ -123,6 +127,10 @@ void Turnout::show(int n){
     } else {
       CommManager::printf("<H %d %d>", tt->data.id, tt->data.tStatus);
     }
+    if(tt->data.tStatus==0)
+       CommManager::printf(" 0>");
+     else
+       CommManager::printf(" 1>"); 
   }
 }
 
@@ -162,6 +170,7 @@ void Turnout::load(){
   struct TurnoutData data;
   Turnout *tt;
 
+#ifdef EESTORE
   for(int i=0;i<EEStore::eeStore->data.nTurnouts;i++){
     EEPROM.get(EEStore::pointer(),data);
     tt=create(data.id,data.address,data.subAddress);
@@ -169,6 +178,7 @@ void Turnout::load(){
     tt->num=EEStore::pointer();
     EEStore::advance(sizeof(tt->data));
   }
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -177,6 +187,7 @@ void Turnout::store(){
   Turnout *tt;
 
   tt=firstTurnout;
+#ifdef EESTORE
   EEStore::eeStore->data.nTurnouts=0;
 
   while(tt!=NULL){
@@ -186,7 +197,7 @@ void Turnout::store(){
     tt=tt->nextTurnout;
     EEStore::eeStore->data.nTurnouts++;
   }
-
+#endif  
 }
 ///////////////////////////////////////////////////////////////////////////////
 

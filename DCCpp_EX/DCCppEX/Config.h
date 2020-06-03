@@ -3,19 +3,27 @@
 Config.h
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 
 /////////////////////////////////////////////////////////////////////////////////////
+//  NOTE: Before connecting these boards and selecting one in this software
+//        check the quick install guides!!! Some of these boards require a voltage
+//        generating resitor on the current sense pin of the device. Failure to select
+//        the correct resistor could damage the sense pin on your Arduino or destroy
+//        the device.
 //
 // DEFINE MOTOR_SHIELD_TYPE ACCORDING TO THE FOLLOWING TABLE:
 //
-//  0 = ARDUINO MOTOR SHIELD          (MAX 18V/2A PER CHANNEL)
-//  1 = POLOLU MC33926 MOTOR SHIELD   (MAX 28V/3A PER CHANNEL)
-//  2 = BTS7960B                      (MAX 27V/43A PER CHANNEL)
+//  0 = ARDUINO MOTOR SHIELD            (MAX 18V/2A  PER CHANNEL)  Arduino Motor shield Rev3 based on the L298
+//  1 = POLOLU MC33926 MOTOR SHIELD     (MAX 28V/2.5 PER CHANNEL)  Pololu MC33926 Motor Driver (shield or carrier)
+//  2 = BTS7960B_5A                     (MAX 27V/5A  PER CHANNEL)  Infineon Technologies BTS 7960 Motor Driver Module. Max Output 5A (43A actual max)
+//  3 = BTS7906B_10A                    (MAX 27V/10A PER CHANNEL)  Infineon Technologies BTS 7960 Motor Driver Module. Max Output 10A (43A actual max)
+//  4 = LMD18200 MOTOR DRIVER MODULE    (MAX 55V/3A  PER CHANNEL)  LMD18200 Motor Driver Board (6A Max actual instantaneous peak)
+//  5 = MAX 471 CURRENT SENSE MODULE    (MAX 28V/3A  PER CHANNEL)  MAX 471 connected to an LMD18200 Motor Driver
 
-#define MOTOR_SHIELD_TYPE   0
+#define MOTOR_SHIELD_TYPE 0
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -25,6 +33,11 @@ Part of DCC++ BASE STATION for the Arduino
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
+// NOTE: Only the Mega currently supports networking since pin 4 is in use by DCC++ EX
+//       and creates a conflict with the Ethernet Shield's need for pin 4. For the Mega,
+//       DCC++ EX uses pin 2 instead of pin 4. This could be changed in the future but
+//       could cause issues with people with old UNO jumper settings applying an update
+//
 // DEFINE COMMUNICATIONS INTERFACE
 //
 //  0 = Built-in Serial Port
@@ -33,7 +46,7 @@ Part of DCC++ BASE STATION for the Arduino
 //  3 = Seeed Studio Ethernet/SD-Card Shield W5200
 //  4 = ESP8266 WiFi module
 
-#define COMM_INTERFACE   0
+#define COMM_INTERFACE 0
 
 #if COMM_INTERFACE == 4
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +56,7 @@ Part of DCC++ BASE STATION for the Arduino
 	#define WIFI_SSID ""
 	#define WIFI_PASSWORD ""
 
-	// The WIFI_SERIAL_RX and WIFI_SERIAL_TX config values are not used on the Mega2650 which
+	// The WIFI_SERIAL_RX and WIFI_SERIAL_TX config values are not used on the Mega2560 which
 	// has multiple Serial interfaces.  For Mega2560 the default is Serial1.
 	//#define WIFI_SERIAL_RX
 	//#define WIFI_SERIAL_TX
@@ -72,28 +85,86 @@ Part of DCC++ BASE STATION for the Arduino
 //
 // DEFINE PORT TO USE FOR ETHERNET COMMUNICATIONS INTERFACE
 //
+// Uncomment to use Ethernet
 
-#define ETHERNET_PORT 2560
+// #define ETHERNET_PORT 2560
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // DEFINE MAC ADDRESS ARRAY FOR ETHERNET COMMUNICATIONS INTERFACE
 //
-// Note: This is not used with ESP8266 WiFi modules.
+// Uncomment to use with Ethernet Shields
+//
+// NOTE: This is not used with ESP8266 WiFi modules.
 
-#define MAC_ADDRESS {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEF }
+// #define MAC_ADDRESS {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEF }
 
 /////////////////////////////////////////////////////////////////////////////////////
+//
+// Allows using a pin as a trigger for a scope or analyzer so we can capture only
+// the important parts of the data stream
+//
+// USE_TRIGGERPIN: Enable code that switches the trigger pin on and off at end
+//                 of the preamble. This takes some clock cycles in the
+//                 interrupt routine for the main track.
+// USE_TRIGGERPIN_PER_BIT: As above but for every bit. This only makes sense
+//                 if USE_TRIGGERPIN is set.
+//
+// The value of the TRIGGERPIN is defined in DCCppEX.h because it might
+// be board specific
+//
+//#define USE_TRIGGERPIN
+//#define USE_TRIGGERPIN_PER_BIT
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Define only of you need the store to EEPROM feature. This takes RAM and
+// you may need to use less MAX_MAIN_REGISTERS to compensate (at least on the UNO)
+
+#define EESTORE
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// This shows the status and version at startup. This takes RAM. You can comment
+// this line if you need to increase MAX_MAIN_REGISTERS(at least on the UNO)
+
+#define SHOWCONFIG
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// This is different from the above config display which only shows one line at startup
+// This defines a pin that when jumpered to ground before powering up the Arduinio, 
+// will display more detailed settings for diagnostics. You must remove the jumper and
+// restart the Arduino to return to normal operation
+
+#define SHOW_CONFIG_DETAIL_PIN A2
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// PREAMBLE_MAIN: Length of the preamble on the main track. Per standard this should
+//                be at least 14 bits but if some equipment wants to insert a RailCom
+//                cutout this should be at least 16 bits.
+// PERAMBLE_PROG: Length of the preamble on the programming track. Per standard this
+//                should be at least 22 bits 
+
+#define PREAMBLE_MAIN 16 // TODO: Finish configurable preamble code
+#define PREAMBLE_PROG 22
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // DEFINE LCD SCREEN USAGE BY THE BASE STATION
 //
 // Note: This feature requires an I2C enabled LCD screen using a PCF8574 based chipset.
+//       or one using a Hitachi  HD44780.
 //
-// #define ENABLE_LCD
+// To enable, uncomment the line below and make sure only the correct LIB_TYPE line
+// is uncommented below to select the library used for your LCD backpack
+
+//#define ENABLE_LCD
 
 #ifdef ENABLE_LCD
+    #define LIB_TYPE_PCF8574
+	//#define LIB_TYPE_I2C
 	// This defines the I2C address for the LCD device
 	#define LCD_ADDRESS 0x3F
 

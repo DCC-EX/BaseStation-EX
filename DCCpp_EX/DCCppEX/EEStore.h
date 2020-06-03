@@ -3,14 +3,14 @@
 EEStore.h
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 
 #ifndef EEStore_h
 #define EEStore_h
 
-#define  EESTORE_ID "DCC++"
+#define  EESTORE_ID "DCC++EX"
 
 struct EEStoreData{
   char id[sizeof(EESTORE_ID)];

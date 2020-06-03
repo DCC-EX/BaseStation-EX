@@ -3,12 +3,12 @@
 Outputs.cpp
 COPYRIGHT (c) 2013-2016 Gregg E. Berman
 
-Part of DCC++ BASE STATION for the Arduino
+Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 /**********************************************************************
 
-DCC++ BASE STATION supports optional OUTPUT control of any unused Arduino Pins for custom purposes.
+DCC++ EX BASE STATION supports optional OUTPUT control of any unused Arduino Pins for custom purposes.
 Pins can be activited or de-activated.  The default is to set ACTIVE pins HIGH and INACTIVE pins LOW.
 However, this default behavior can be inverted for any pin in which case ACTIVE=LOW and INACTIVE=HIGH.
 
