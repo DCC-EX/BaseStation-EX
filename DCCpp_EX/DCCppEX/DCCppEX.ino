@@ -56,7 +56,7 @@ license, is a Java program written using the Processing library and Processing I
 that provides a complete and configurable graphic interface to control model train layouts
 via the DCC++ EX BASE STATION.
 
-With the exception of a standard 15V power supply that can be purchased in
+With the exception of a standard 15Vdc power supply that can be purchased in
 any electronics store, no additional hardware is required.
 
 Neither DCC++ EX BASE STATION nor DCC++ CONTROLLER use any known proprietary or
@@ -80,7 +80,7 @@ REFERENCES:
 BRIEF NOTES ON THE THEORY AND OPERATION OF DCC++ EX BASE STATION:
 
 DCC++ EX BASE STATION for the Uno and Nano configures the OC0B interrupt pin associated with Timer 0,
-and the OC1B interupt pin associated with Timer 1, to generate separate 0-5V
+and the OC1B interupt pin associated with Timer 1, to generate separate 0-5Vdc
 unipolar signals that each properly encode zero and one bits conforming with
 DCC timing standards.  When compiled for the Mega, DCC++ EX BASE STATION uses OC3B instead of OC0B.
 
@@ -149,20 +149,28 @@ DCC++ EX BASE STATION in split into multiple modules, each with its own header f
 
   CurrentMonitor:   contains methods to separately monitor and report the current drawn from CHANNEL A and
                     CHANNEL B of the Arduino Motor Shield's, and shut down power if a short-circuit overload
-                    is detected
+                    is detected.
 
   Accessories:      contains methods to operate and store the status of any optionally-defined turnouts controlled
                     by a DCC stationary accessory decoder.
 
   Sensor:           contains methods to monitor and report on the status of optionally-defined infrared
-                    sensors embedded in the Main Track and connected to various pins on the Arudino Uno
+                    sensors embedded in the Main Track and connected to various pins on the Arudino Uno.
 
-  Outputs:          contains methods to configure one or more Arduino pins as an output for your own custom use
+  Outputs:          contains methods to configure one or more Arduino pins as an output for your own custom use.
 
-  EEStore:          contains methods to store, update, and load various DCC settings and status
-                    (e.g. the states of all defined turnouts) in the EEPROM for recall after power-up
+  EEStore:          contains methods to store, update, and load various DCC settings and status.
+                    (e.g. the states of all defined turnouts) in the EEPROM for recall after power-up.
 
-DCC++ EX BASE STATION is configured through the Config.h file that contains all user-definable parameters
+DCC++ EX BASE STATION is configured through the Config.h file that contains all user-definable parameters.
+
+The following Additional modules have been extended in this DCC++ EX version from the original Comm.h module after May 2020.  
+They contain methods to communications & interfaces to various Serial & Wifi devices.
+
+  Comminterface:
+  ComminterfaceSerial
+  ComminterfaceESP:
+  ComminterfaceEthernet:
 
 **********************************************************************/
 
