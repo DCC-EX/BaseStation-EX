@@ -228,8 +228,8 @@ void RegisterList::writeTextPacket(const char *s) volatile{
 
 ///////////////////////////////////////////////////////////////////////////////
 
-unsigned int RegisterList::readBaseCurrent() volatile {
-  unsigned int base=0;
+int RegisterList::readBaseCurrent() volatile {
+  int base=0;
   for(int j=0;j<ACK_BASE_COUNT;j++)
     base+=analogRead(CURRENT_MONITOR_PIN_PROG);
   base/=ACK_BASE_COUNT;
@@ -276,6 +276,7 @@ void RegisterList::readCV(const char *s) volatile{
   
     for(int j=0;j<ACK_SAMPLE_COUNT;j++){
       current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
+      current=current*(CURRENT_CONVERSION_FACTOR/100);
       if(current > ackThreshold) {
         count++;
         if (count==2){
@@ -303,6 +304,7 @@ void RegisterList::readCV(const char *s) volatile{
   
   for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
+    current=current*(CURRENT_CONVERSION_FACTOR/100);    
       if(current > ackThreshold) {
         count++;
         if (count==2){

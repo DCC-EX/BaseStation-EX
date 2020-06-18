@@ -12,12 +12,16 @@ Part of DCC++ EX BASE STATION for the Arduino
 
 #include "PacketRegister.h"
 
+// R24 ********************************
+const uint16_t this_node = 05;   // Node address referenced in networkFunctions.h
+// R24 ********************************
+
 struct SerialCommand{
   static volatile RegisterList *mRegs, *pRegs;
   static void init(volatile RegisterList *, volatile RegisterList *);
   static void parse(const char *);
 }; // SerialCommand
-  
+
 #endif
 
 
