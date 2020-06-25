@@ -1,10 +1,30 @@
 Introduction & Thanks
 Updates from Team Leads
+ - Chris, David, Haba - code
+ - Dex - installer
+ - Mani - web
+Status of last action items (old business)
+- library approach
+- coding standards
+- removing comments, including them in documentation
+- reduce thread size on trainboard, organize information
+- are jumpers a thing of the past? (library/single timer approach)
+- railcom support
+- ESP8266 networking
+- method for handling turnouts, inputs, outputs, etc.(Railcom? RS485)
+- JMRI integration (code for new commands and throttle with sockets or REST)
+  Twindad is gone
+- Modbus support
+- software switching of main and prog tracks
+- current sense/ack detect (in testing)
+- accessory addressing (not covered, but we need a new command for linear addr.)
+- evangelizing (media, Bodnar, Bunza, Ron's T&T, Todd)
+New Business
 Licensing
-Development Priorities
+Development Priorities (our top 3)
 Hardware
 - FireBox
-- ESP32
+- ESP32 Project (Mike)
 - Throttle
 UKBloke
  - API
