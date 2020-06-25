@@ -13,6 +13,7 @@ Status of last action items (old business)
 - ESP8266 networking
 - method for handling turnouts, inputs, outputs, etc.(Railcom? RS485)
 - JMRI integration (code for new commands and throttle with sockets or REST)
+  https://groups.io/g/jmriusers/message/176109 (issue on power msg to JMRI)
   Twindad is gone
 - Modbus support
 - software switching of main and prog tracks
