@@ -198,6 +198,7 @@ void showConfiguration();
 volatile RegisterList mainRegs(MAX_MAIN_REGISTERS);    // create list of registers for MAX_MAIN_REGISTER Main Track Packets
 volatile RegisterList progRegs(2);                     // create a shorter list of only two registers for Program Track Packets
 
+
 ///////////////////////////////////////////////////////////////////////////////
 // MAIN ARDUINO LOOP
 ///////////////////////////////////////////////////////////////////////////////
@@ -214,6 +215,20 @@ void loop(){
 ///////////////////////////////////////////////////////////////////////////////
 
 void setup(){
+
+// RF24 **********
+// init network objects
+//RF24 radio(9, 10);               // nRF24L01 (CE,CSN)
+//RF24 radio(10, 9);             // Alt config
+//RF24Network network(radio);      // Include the radio in the network
+//SPI.begin();
+//radio.begin();
+//network.begin(90, this_node); //(channel, node address)
+//radio.setDataRate(RF24_2MBPS); // Max baud rate
+//#define SYS_ID "Child Node Framework"
+//#define RF_VERSION "1.001.0001"  // have to rename this since DCC++ uses VERSION
+// RF24 **********
+
 
 #ifdef ENABLE_LCD
   Wire.begin();

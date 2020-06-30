@@ -5,8 +5,8 @@
  * Supports Serial and nRF2401 Radio Communicataions
  * 
  */
-//#include <SPI.h>
-//#include <RF24.h>
+#include <SPI.h>
+#include <RF24.h>
 #include <RF24Network.h>
 
 typedef struct PKT_DEF {
