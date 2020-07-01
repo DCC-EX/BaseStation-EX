@@ -54,7 +54,7 @@ void SerialCommand::init(volatile RegisterList *_mRegs, volatile RegisterList *_
   SPI.begin();
   network.begin(90, this_node); //(channel, node address)
   radio.setDataRate(RF24_2MBPS); 
-  radio.begin; // // Max baud rate
+  radio.begin(); // // Max baud rate
   // RF24 **************
  } // SerialCommand:SerialCommand
 
