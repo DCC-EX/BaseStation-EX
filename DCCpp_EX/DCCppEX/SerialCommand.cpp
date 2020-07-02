@@ -23,6 +23,21 @@ Part of DCC++ EX BASE STATION for the Arduino
 #include "CommInterface.h"
 #include "CurrentMonitor.h"
 
+// RF24 **************************
+#include "networkFunctions.h"  
+#include "RF24.h"
+#include "RF24Network.h"
+int ID;
+int THROW;
+String function, option, data;
+#define SYS_ID "Child Node Framework"
+#define RF_VERSION "1.001.0001"  // have to rename this since DCC++ uses VERSION
+// init network objects
+RF24 radio(9, 10);               // nRF24L01 (CE,CSN)
+//RF24 radio(10, 9);             // Alt config
+RF24Network network(radio);      // Include the radio in the network
+// RF24 **************************
+
 extern int __heap_start, *__brkval;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,7 +50,13 @@ volatile RegisterList *SerialCommand::pRegs;
 void SerialCommand::init(volatile RegisterList *_mRegs, volatile RegisterList *_pRegs){
   mRegs=_mRegs;
   pRegs=_pRegs;
-} // SerialCommand:SerialCommand
+  //RF24 ****************
+  SPI.begin();
+  network.begin(90, this_node); //(channel, node address)
+  radio.setDataRate(RF24_2MBPS); 
+  radio.begin(); // // Max baud rate
+  // RF24 **************
+ } // SerialCommand:SerialCommand
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -140,7 +161,13 @@ void SerialCommand::parse(const char *com){
  *   USED TO CREATE/EDIT/REMOVE/SHOW TURNOUT DEFINITIONS
  */
       Turnout::parse(com+1);
+// RF24 **************************
+      function ="1";
+      option = ID;
+      data = THROW;
+      sendPacket(this_node, function, option, data);
       break;
+// RF24 **************************
 
 /***** CREATE/EDIT/REMOVE/SHOW & OPERATE AN OUTPUT PIN  ****/
 
