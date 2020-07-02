@@ -239,7 +239,7 @@ int RegisterList::readBaseCurrent() volatile {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-unsigned int RegisterList::readBaseCurrent() volatile {
+int RegisterList::readBaseCurrent() volatile {
   unsigned int base=0;
   for(int j=0;j<ACK_BASE_COUNT;j++)
     base+=analogRead(CURRENT_MONITOR_PIN_PROG);
