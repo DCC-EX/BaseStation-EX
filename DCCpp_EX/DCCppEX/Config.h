@@ -166,7 +166,7 @@ Part of DCC++ EX BASE STATION for the Arduino
     #define LIB_TYPE_PCF8574
 	//#define LIB_TYPE_I2C
 	// This defines the I2C address for the LCD device
-	#define LCD_ADDRESS 0x27 //commond defaults are 0x27 and 0x3F
+	#define LCD_ADDRESS 0x27 //common defaults are 0x27 and 0x3F
 
 	// This defines the number of columns the LCD device has
 	#define LCD_COLUMNS 16
