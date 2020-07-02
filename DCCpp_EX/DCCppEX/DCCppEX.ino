@@ -56,7 +56,7 @@ license, is a Java program written using the Processing library and Processing I
 that provides a complete and configurable graphic interface to control model train layouts
 via the DCC++ EX BASE STATION.
 
-With the exception of a standard 15V power supply that can be purchased in
+With the exception of a standard 15Vdc power supply that can be purchased in
 any electronics store, no additional hardware is required.
 
 Neither DCC++ EX BASE STATION nor DCC++ CONTROLLER use any known proprietary or
@@ -149,18 +149,18 @@ DCC++ EX BASE STATION in split into multiple modules, each with its own header f
 
   CurrentMonitor:   contains methods to separately monitor and report the current drawn from CHANNEL A and
                     CHANNEL B of the Arduino Motor Shield's, and shut down power if a short-circuit overload
-                    is detected
+                    is detected.
 
   Accessories:      contains methods to operate and store the status of any optionally-defined turnouts controlled
                     by a DCC stationary accessory decoder.
 
   Sensor:           contains methods to monitor and report on the status of optionally-defined infrared
-                    sensors embedded in the Main Track and connected to various pins on the Arudino Uno
+                    sensors embedded in the Main Track and connected to various pins on the Arudino Uno.
 
-  Outputs:          contains methods to configure one or more Arduino pins as an output for your own custom use
+  Outputs:          contains methods to configure one or more Arduino pins as an output for your own custom use.
 
-  EEStore:          contains methods to store, update, and load various DCC settings and status
-                    (e.g. the states of all defined turnouts) in the EEPROM for recall after power-up
+  EEStore:          contains methods to store, update, and load various DCC settings and status.
+                    (e.g. the states of all defined turnouts) in the EEPROM for recall after power-up.
 
 DCC++ EX BASE STATION is configured through the Config.h file that contains all user-definable parameters
 
