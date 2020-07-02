@@ -78,6 +78,7 @@ MotorBoard::MotorBoard (uint8_t _sensePin, uint8_t _enablePin, MOTOR_BOARD_TYPE 
 	if(_isProgTrack) {
 		tripCurrentMilliAmps = 250;
 	}
+	// convert these back internally to pin readings to speed computation
 	tripCurrentReading = tripCurrentMilliAmps/currentConvFactor;
 	maxCurrentReading = maxCurrentMilliamps/currentConvFactor;
 }
@@ -134,7 +135,7 @@ int MotorBoard::getLastCurrent() {
 
 int MotorBoard::getTripMilliAmps() {
 	// return the value that will trip track shutoff for overcurrent
-	tripCurrent=tripCurrentReading * currentConvFactor;
+	tripCurrent = tripCurrentReading * currentConvFactor;
 	return tripCurrent;
 }
 
