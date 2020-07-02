@@ -296,6 +296,14 @@ void SerialCommand::parse(const char *com){
  */
       MotorBoardManager::parse(com);
       break;
+    
+    case 'C':
+/*
+ *    Test for a new command or to roll this into the small c command above
+ * 
+ */
+      MotorBoardManager::parse(com);
+      break;
 
 /***** READ STATUS OF DCC++ EX BASE STATION  ****/
 
@@ -481,5 +489,7 @@ void SerialCommand::parse(const char *com){
       break;
   } // switch
 }; // SerialCommand::parse
+
+// TODO How about a case else to send a <X> for an invalid command?
 
 ///////////////////////////////////////////////////////////////////////////////
