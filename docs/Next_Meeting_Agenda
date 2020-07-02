@@ -4,7 +4,7 @@ Updates from Team Leads
  - Dex - installer
  - Mani - web
 Status of last action items (old business)
-- library approach
+- library approach (Q:how to handle Aduino IDE install?
 - coding standards
 - removing comments, including them in documentation
 - reduce thread size on trainboard, organize information
