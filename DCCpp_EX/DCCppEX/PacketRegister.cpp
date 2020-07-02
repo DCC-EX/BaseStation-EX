@@ -196,35 +196,6 @@ void RegisterList::writeTextPacket(const char *s) volatile{
   loadPacket(nReg,b,nBytes,0,1);
 } // RegisterList::writeTextPacket()
 
-///////////////////////////////////////////////////////////////////////////////
-//byte RegisterList::ackDetect(unsigned int base) volatile{ TODO work in progress. Factoring this routine to this function breaks the code
-//  int c=0;
-//  byte count=0;
-//  byte d=0;
-//  for(int j=0;j<ACK_SAMPLE_COUNT;j++){  // TODO remove old code when tested
-//  // c=(analogRead(CURRENT_MONITOR_PIN_PROG)-base)*ACK_SAMPLE_SMOOTHING+c*(1.0-ACK_SAMPLE_SMOOTHING);
-//    //c=(unsigned int)((((analogRead(CURRENT_MONITOR_PIN_PROG))-base)*(unsigned long int)CURRENT_CONVERSION_FACTOR)/100);
-//   // c=(unsigned int)(((analogRead(CURRENT_MONITOR_PIN_PROG) * (unsigned long int)CURRENT_CONVERSION_FACTOR)/100) - base);
-//    c=((analogRead(CURRENT_MONITOR_PIN_PROG)*CURRENT_CONVERSION_FACTOR)/100) - base;
-//    //CommManager::printf("%d,",c);
-//    //if (c < base) {
-//    //  c=base;
-//    //}
-//    if(c > ACK_SAMPLE_THRESHOLD) {
-//      count++;
-//      if (count==2){
-//        CommManager::printf("%d,", c);
-//        d=1;  //TODO Issue a reset packet here?
-//        //break;
-//      }
-//    }
-// //   if (d==1){
-// //     printf("XX");
-// //     break;
-////    }
-//  }
-//  return d;
-//}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -248,7 +219,7 @@ void RegisterList::readCV(const char *s) volatile{
   byte d=0;
   int ackThreshold;
 
-  ackThreshold = ACK_SAMPLE_THRESHOLD/((CURRENT_CONVERSION_FACTOR)/100);
+  ackThreshold = ACK_SAMPLE_THRESHOLD/CURRENT_CONVERSION_FACTOR;
 
   if(sscanf(s,"%d %d %d",&cv,&callBack,&callBackSub) != 3) {         // cv = 1-1024
     return;
@@ -276,8 +247,7 @@ void RegisterList::readCV(const char *s) volatile{
   
     for(int j=0;j<ACK_SAMPLE_COUNT;j++){
       current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
-      current=current*(CURRENT_CONVERSION_FACTOR/100);
-      if(current > ackThreshold) {
+       if(current > ackThreshold) {
         count++;
         if (count==2){
           d=1;  
@@ -304,7 +274,6 @@ void RegisterList::readCV(const char *s) volatile{
   
   for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
-    current=current*(CURRENT_CONVERSION_FACTOR/100);    
       if(current > ackThreshold) {
         count++;
         if (count==2){
@@ -335,7 +304,7 @@ void RegisterList::writeCVByte(const char *s) volatile{
   byte d=0;
   int ackThreshold;
 
-  ackThreshold = ACK_SAMPLE_THRESHOLD/((CURRENT_CONVERSION_FACTOR)/100);
+  ackThreshold = ACK_SAMPLE_THRESHOLD/CURRENT_CONVERSION_FACTOR;
 
   if(sscanf(s,"%d %d %d %d",&cv,&bValue,&callBack,&callBackSub)!=4)          // cv = 1-1024
     return;
