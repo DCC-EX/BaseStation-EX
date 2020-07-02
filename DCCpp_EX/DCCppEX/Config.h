@@ -160,7 +160,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 // To enable, uncomment the line below and make sure only the correct LIB_TYPE line
 // is uncommented below to select the library used for your LCD backpack
 
-#define ENABLE_LCD
+//#define ENABLE_LCD
 
 #ifdef ENABLE_LCD
     #define LIB_TYPE_PCF8574
