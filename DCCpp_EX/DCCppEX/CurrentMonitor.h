@@ -37,7 +37,6 @@ private:
 	uint8_t enablePin;
 	const char *name;
 	float reading;              // raw current sense pin reading
-	float tripCurrent;          // computed trip current in milliAmps
 	int tripCurrentReading;     // the pin reading current that will trip the overcurrent condition
 	int tripCurrentMilliAmps;   // overcurrent user setting in milliAmps
 	int maxCurrentReading;      // the pin reading for maximum current supported by the motor board
