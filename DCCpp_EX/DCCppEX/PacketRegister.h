@@ -49,7 +49,7 @@ struct RegisterList{
   static byte bitMask[];
   RegisterList(int);
   byte ackDetect(unsigned int) volatile;
-  unsigned int readBaseCurrent() volatile;
+  int readBaseCurrent() volatile;
   void loadPacket(int, byte *, int, int, int=0) volatile;
   void setThrottle(const char *) volatile;
   void setFunction(const char *) volatile;

@@ -80,7 +80,7 @@ REFERENCES:
 BRIEF NOTES ON THE THEORY AND OPERATION OF DCC++ EX BASE STATION:
 
 DCC++ EX BASE STATION for the Uno and Nano configures the OC0B interrupt pin associated with Timer 0,
-and the OC1B interupt pin associated with Timer 1, to generate separate 0-5Vdc
+and the OC1B interupt pin associated with Timer 1, to generate separate 0-5V
 unipolar signals that each properly encode zero and one bits conforming with
 DCC timing standards.  When compiled for the Mega, DCC++ EX BASE STATION uses OC3B instead of OC0B.
 
@@ -162,15 +162,7 @@ DCC++ EX BASE STATION in split into multiple modules, each with its own header f
   EEStore:          contains methods to store, update, and load various DCC settings and status.
                     (e.g. the states of all defined turnouts) in the EEPROM for recall after power-up.
 
-DCC++ EX BASE STATION is configured through the Config.h file that contains all user-definable parameters.
-
-The following Additional modules have been extended in this DCC++ EX version from the original Comm.h module after May 2020.  
-They contain methods to communications & interfaces to various Serial & Wifi devices.
-
-  Comminterface:
-  ComminterfaceSerial
-  ComminterfaceESP:
-  ComminterfaceEthernet:
+DCC++ EX BASE STATION is configured through the Config.h file that contains all user-definable parameters
 
 **********************************************************************/
 
@@ -191,10 +183,10 @@ They contain methods to communications & interfaces to various Serial & Wifi dev
 
 #ifdef ENABLE_LCD
 bool lcdEnabled = false;
-  #ifdef LIB_TYPE_PCF8574
+  #if defined(LIB_TYPE_PCF8574)
     LiquidCrystal_PCF8574 lcdDisplay(LCD_ADDRESS);
-  #elif LIB_TYPE_I2C
-    LiquidCrystal_I2C lcdDisplay(LCD_ADDRESS);
+  #elif defined(LIB_TYPE_I2C)
+    LiquidCrystal_I2C lcdDisplay = LiquidCrystal_I2C(LCD_ADDRESS, LCD_COLUMNS, LCD_LINES);
   #endif
 #endif
 
@@ -205,6 +197,7 @@ void showConfiguration();
 
 volatile RegisterList mainRegs(MAX_MAIN_REGISTERS);    // create list of registers for MAX_MAIN_REGISTER Main Track Packets
 volatile RegisterList progRegs(2);                     // create a shorter list of only two registers for Program Track Packets
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // MAIN ARDUINO LOOP
@@ -253,19 +246,19 @@ void setup(){
   MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::ARDUINO_SHIELD, CURRENT_CONVERSION_FACTOR, true, "PROG");
 #elif MOTOR_SHIELD_TYPE == 1
   MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::POLOLU, CURRENT_CONVERSION_FACTOR, false, "MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::POLOLU, CURRENT_CONVERSION_FACTOR, truen "PROG");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::POLOLU, CURRENT_CONVERSION_FACTOR, true, "PROG");
 #elif MOTOR_SHIELD_TYPE == 2
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_5A, CURRENT_CONVERSION_FACTOR, false,"MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_5A, CURRENT_CONVERSION_FACTOR, true"PROG");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_5A, CURRENT_CONVERSION_FACTOR, false, "MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_5A, CURRENT_CONVERSION_FACTOR, true, "PROG");
 #elif MOTOR_SHIELD_TYPE == 3
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_10A, CURRENT_CONVERSION_FACTOR, false,"MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_10A, CURRENT_CONVERSION_FACTOR, true"PROG");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::BTS7960B_10A, CURRENT_CONVERSION_FACTOR, false, "MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::BTS7960B_10A, CURRENT_CONVERSION_FACTOR, true, "PROG");
 #elif MOTOR_SHIELD_TYPE == 4
   MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::LMD18200, CURRENT_CONVERSION_FACTOR, false, "MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::LMD18200, CURRENT_CONVERSION_FACTOR, true"PROG");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::LMD18200, CURRENT_CONVERSION_FACTOR, true, "PROG");
 #elif MOTOR_SHIELD_TYPE == 5
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::LMD18200_MAX47, CURRENT_CONVERSION_FACTOR, false,"MAIN");
-  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::LMD18200_MAX47, "PROG");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_MAIN, SIGNAL_ENABLE_PIN_MAIN, MOTOR_BOARD_TYPE::LMD18200_MAX471, CURRENT_CONVERSION_FACTOR, false, "MAIN");
+  MotorBoardManager::registerBoard(CURRENT_MONITOR_PIN_PROG, SIGNAL_ENABLE_PIN_PROG, MOTOR_BOARD_TYPE::LMD18200_MAX471, CURRENT_CONVERSION_FACTOR, true, "PROG");
 #endif
 
 #if COMM_INTERFACE != 4 || (COMM_INTERFACE == 4 && !defined(USE_SERIAL_FOR_WIFI))

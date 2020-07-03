@@ -35,7 +35,7 @@ volatile RegisterList *SerialCommand::pRegs;
 void SerialCommand::init(volatile RegisterList *_mRegs, volatile RegisterList *_pRegs){
   mRegs=_mRegs;
   pRegs=_pRegs;
-} // SerialCommand:SerialCommand
+ } // SerialCommand:SerialCommand
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -140,7 +140,6 @@ void SerialCommand::parse(const char *com){
  *   USED TO CREATE/EDIT/REMOVE/SHOW TURNOUT DEFINITIONS
  */
       Turnout::parse(com+1);
-      break;
 
 /***** CREATE/EDIT/REMOVE/SHOW & OPERATE AN OUTPUT PIN  ****/
 
@@ -289,11 +288,18 @@ void SerialCommand::parse(const char *com){
  *    reads current being drawn on main operations track. 
  *
  *    returns <a READING CURRENT TRIPMILLIAMPS MAXMILLIAMPS>
- *
  *    READING = 0-1023 - exponentially smoothed weighted value from the raw reading on the current sense pin of the Arduino
  *    CURRENT = - current calculated from the READING and the CURRENT_CONVERSION_FACTOR for the current sense device
  *    TRIPMILLIAMPS = the value in milliamps that will trip the overcurrent shutdown of the track
  *    MAXMILLIAMPS = the maxiumum supported current of the motor board
+ */
+      MotorBoardManager::parse(com);
+      break;
+    
+    case 'C':
+/*
+ *    Test for a new command or to roll this into the small c command above
+ * 
  */
       MotorBoardManager::parse(com);
       break;
@@ -482,5 +488,7 @@ void SerialCommand::parse(const char *com){
       break;
   } // switch
 }; // SerialCommand::parse
+
+// TODO How about a case else to send a <X> for an invalid command?
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -17,8 +17,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 // RELEASE VERSION
 /////////////////////////////////////////////////////////////////////////////////////
 
-#define VERSION "2.1.1"
-
+#define VERSION "2.1.2"
 
 /////////////////////////////////////////////////////////////////////////////////////
 // AUTO-SELECT ARDUINO BOARD
@@ -28,7 +27,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define ARDUINO_AVR_MEGA2560  
 #endif
 
-#if defined ARDUINO_AVR_UNO
+#if defined(ARDUINO_AVR_UNO)
 
   #define ARDUINO_TYPE    "UNO"
 
@@ -41,7 +40,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 
   #endif
 
-#elif defined ARDUINO_AVR_NANO
+#elif defined(ARDUINO_AVR_NANO)
 
   #define ARDUINO_TYPE    "NANO"
 
@@ -54,7 +53,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 
   #endif
 
-#elif defined  ARDUINO_AVR_MEGA2560
+#elif defined(ARDUINO_AVR_MEGA2560)
 
   #define ARDUINO_TYPE    "MEGA"
 
@@ -97,7 +96,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
   // ((5/1024)/1.65) * 1000
-  #define CURRENT_CONVERSION_FACTOR 296 // 2.96 * 100 so we can do integer math later
+  #define CURRENT_CONVERSION_FACTOR 2.96 // 2.96 * 100 so we can do integer math later
 
 #elif MOTOR_SHIELD_TYPE == 1
 
@@ -113,7 +112,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 8
 
   // (5/1024) /.525 * 1000
-  #define CURRENT_CONVERSION_FACTOR 930 // 9.30* 100 so we can do integer math later
+  #define CURRENT_CONVERSION_FACTOR 9.30 // 9.30* 100 so we can do integer math later
 
 #elif MOTOR_SHIELD_TYPE == 2
 
@@ -128,9 +127,9 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_A 12
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
-  #define CURRENT_CONVERSION_FACTOR 46500 // TODO verify this value
+  #define CURRENT_CONVERSION_FACTOR 465.00 // TODO verify this value
 
-  #elif MOTOR_SHIELD_TYPE == 3
+#elif MOTOR_SHIELD_TYPE == 3
 
   #define MOTOR_SHIELD_NAME "BTS7960B BASED MOTOR SHIELD 10A"
 
@@ -144,9 +143,9 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
   // (5/1024) /.0105 * 1000
-  #define CURRENT_CONVERSION_FACTOR 46500  // 456 * 100 so we can do integer math later 
+  #define CURRENT_CONVERSION_FACTOR 465.00  // 456 * 100 so we can do integer math later 
 
-   #elif MOTOR_SHIELD_TYPE == 4
+ #elif MOTOR_SHIELD_TYPE == 4
    // uses current sense resister of 2.2 kOhms between pin 8 and ground.
    // The LMD18200 delivers 377uA per Amp of output current and will report
    // current over its rating of 3A up to 6A! We have to take this into consideration
@@ -167,7 +166,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
   // (5/1024) /.83* 1000
-  #define CURRENT_CONVERSION_FACTOR 588  // 5.88 * 100 so we can do integer math later
+  #define CURRENT_CONVERSION_FACTOR 5.88  // 5.88 * 100 so we can do integer math later
 
   #elif MOTOR_SHIELD_TYPE == 5
 
@@ -183,7 +182,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define DIRECTION_MOTOR_CHANNEL_PIN_B 13
 
   // (5/1024) /1 * 1000
-  #define CURRENT_CONVERSION_FACTOR 488  // 4.88 * 100 so we can do integer math later
+  #define CURRENT_CONVERSION_FACTOR 4.88  // 4.88 * 100 so we can do integer math later
 
 #else
 
@@ -222,15 +221,13 @@ Part of DCC++ EX BASE STATION for the Arduino
 
 #ifdef ENABLE_LCD
 #include <Wire.h>
-  #ifdef LIB_TYPE_PCF8574
+  #if defined(LIB_TYPE_PCF8574)
     #include <LiquidCrystal_PCF8574.h>
     extern LiquidCrystal_PCF8574 lcdDisplay;
-  #elif LIB_TYPE_I2C
+  #elif defined(LIB_TYPE_I2C)
     #include <LiquidCrystal_I2C.h>
     extern LiquidCrystal_I2C lcdDisplay;
   #endif
 extern bool lcdEnabled;
 #endif
-
 #endif
-

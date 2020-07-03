@@ -17,7 +17,7 @@ struct SerialCommand{
   static void init(volatile RegisterList *, volatile RegisterList *);
   static void parse(const char *);
 }; // SerialCommand
-  
+
 #endif
 
 
