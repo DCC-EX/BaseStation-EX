@@ -25,7 +25,6 @@ MotorBoard::MotorBoard (uint8_t _sensePin, uint8_t _enablePin, MOTOR_BOARD_TYPE 
 	this->sensePin=_sensePin;
 	this->enablePin=_enablePin;
 	this->name=_name;
-	this->current=0;
 	this->reading=0;
 	this->tripCurrent=0;
 	this->maxCurrent=0;
@@ -129,8 +128,7 @@ int MotorBoard::getLastRead() {
 int MotorBoard::getLastCurrent() {
 	// return true current in MilliAmps
 	// TODO Add JMRI feature to call this
-	current = reading * currentConvFactor;
-	return current;
+	return reading * currentConvFactor;
 }
 
 int MotorBoard::getTripMilliAmps() {
