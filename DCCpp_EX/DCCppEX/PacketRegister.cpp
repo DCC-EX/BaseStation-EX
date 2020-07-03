@@ -247,7 +247,7 @@ void RegisterList::readCV(const char *s) volatile{
   
     for(int j=0;j<ACK_SAMPLE_COUNT;j++){
       current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
-       if(current > ackThreshold) {
+      if(current > ackThreshold) {
         count++;
         if (count==2){
           d=1;  
