@@ -27,7 +27,6 @@ MotorBoard::MotorBoard (uint8_t _sensePin, uint8_t _enablePin, MOTOR_BOARD_TYPE 
 	this->name=_name;
 	this->reading=0;
 	this->tripCurrent=0;
-	this->maxCurrent=0;
 	this->tripCurrentReading=0;
 	this->currentConvFactor=_currentConvFactor;
 	this->tripped=false;
@@ -139,8 +138,7 @@ int MotorBoard::getTripMilliAmps() {
 
 int MotorBoard::getMaxMilliAmps() {
 	// return the maximum current handling capability of the motor board
-	maxCurrent = maxCurrentReading * currentConvFactor;
-	return maxCurrent; // now it is in milliAmps
+	return maxCurrentReading * currentConvFactor; // now it is in milliAmps
 }
 
 void MotorBoard::showStatus() {
