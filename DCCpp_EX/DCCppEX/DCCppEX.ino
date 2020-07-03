@@ -183,9 +183,9 @@ DCC++ EX BASE STATION is configured through the Config.h file that contains all 
 
 #ifdef ENABLE_LCD
 bool lcdEnabled = false;
-  #if defined LIB_TYPE_PCF8574
+  #if defined(LIB_TYPE_PCF8574)
     LiquidCrystal_PCF8574 lcdDisplay(LCD_ADDRESS);
-  #elif defined LIB_TYPE_I2C
+  #elif defined(LIB_TYPE_I2C)
     LiquidCrystal_I2C lcdDisplay = LiquidCrystal_I2C(LCD_ADDRESS, LCD_COLUMNS, LCD_LINES);
   #endif
 #endif
