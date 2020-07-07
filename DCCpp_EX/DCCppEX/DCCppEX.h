@@ -17,7 +17,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 // RELEASE VERSION
 /////////////////////////////////////////////////////////////////////////////////////
 
-#define VERSION "2.1.2"
+#define VERSION "2.1.3"
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   #define ARDUINO_AVR_MEGA2560  
 #endif
 
-#if defined ARDUINO_AVR_UNO
+#if defined(ARDUINO_AVR_UNO)
 
   #define ARDUINO_TYPE    "UNO"
 
@@ -41,7 +41,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 
   #endif
 
-#elif defined ARDUINO_AVR_NANO
+#elif defined(ARDUINO_AVR_NANO)
 
   #define ARDUINO_TYPE    "NANO"
 
@@ -54,7 +54,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 
   #endif
 
-#elif defined  ARDUINO_AVR_MEGA2560
+#elif defined(ARDUINO_AVR_MEGA2560)
 
   #define ARDUINO_TYPE    "MEGA"
 
@@ -222,10 +222,10 @@ Part of DCC++ EX BASE STATION for the Arduino
 
 #ifdef ENABLE_LCD
 #include <Wire.h>
-  #if defined LIB_TYPE_PCF8574
+  #if defined(LIB_TYPE_PCF8574)
     #include <LiquidCrystal_PCF8574.h>
     extern LiquidCrystal_PCF8574 lcdDisplay;
-  #elif defined LIB_TYPE_I2C
+  #elif defined(LIB_TYPE_I2C)
     #include <LiquidCrystal_I2C.h>
     extern LiquidCrystal_I2C lcdDisplay;
   #endif
