@@ -243,6 +243,7 @@ void RegisterList::readCV(const char *s) volatile{
 
     loadPacket(0,resetPacket,2,3);            // NMRA recommends starting with 3 reset packets
     loadPacket(0,bRead,3,5);                  // NMRA recommends 5 verify packets
+    loadPacket(0,bRead,3,1);                  // Line for D&H decoders
     loadPacket(0,idlePacket,2,6);             // NMRA recommends 6 idle or reset packets for decoder recovery time
   
     for(int j=0;j<ACK_SAMPLE_COUNT;j++){
@@ -270,7 +271,8 @@ void RegisterList::readCV(const char *s) volatile{
 
   loadPacket(0,resetPacket,2,3);        // NMRA recommends starting with 3 reset packets
   loadPacket(0,bRead,3,5);              // NMRA recommends 5 verify packets
-  loadPacket(0,idlePacket,2,6);      // NMRA recommends 6 idle or reset packets for decoder recovery time
+  loadPacket(0,bRead,3,1);              // Line for D&H decoders
+  loadPacket(0,idlePacket,2,6);         // NMRA recommends 6 idle or reset packets for decoder recovery time
   
   for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
@@ -314,10 +316,10 @@ void RegisterList::writeCVByte(const char *s) volatile{
   bWrite[1]=lowByte(cv);
   bWrite[2]=bValue;
 
-  loadPacket(0,resetPacket,2,3);        // NMRA recommends starting with 3 reset packets
-  loadPacket(0,bWrite,3,5);             // NMRA recommends 5 write packets
+  loadPacket(0,resetPacket,2,1);        // NMRA recommends starting with 3 reset packets
+  loadPacket(0,bWrite,3,4);             // NMRA recommends 5 write packets
   //loadPacket(0,bWrite,2,6);           // NMRA recommends 6 write or reset packets for decoder recovery time
-  loadPacket(0,idlePacket,2,6);
+  loadPacket(0,idlePacket,2,10);
 
   base=0;
   current=0;
@@ -331,7 +333,7 @@ void RegisterList::writeCVByte(const char *s) volatile{
 // TODO NMRA says reset, write then reset IF we got a verify
   loadPacket(0,resetPacket,2,3);        // NMRA recommends starting with 3 reset packets
   loadPacket(0,bWrite,3,5);             // NMRA recommends 5 verify packets
-  loadPacket(0,bWrite,3,6);             // NMRA recommends 6 write or reset packets for decoder recovery time
+  loadPacket(0,bWrite,3,1);             // NMRA recommends 6 write or reset packets for decoder recovery time
   
   for(int j=0;j<ACK_SAMPLE_COUNT;j++){
     current=analogRead(CURRENT_MONITOR_PIN_PROG) - base;
