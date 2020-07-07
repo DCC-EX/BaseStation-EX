@@ -200,7 +200,7 @@ void RegisterList::writeTextPacket(const char *s) volatile{
 ///////////////////////////////////////////////////////////////////////////////
 
 int RegisterList::readBaseCurrent() volatile {
-  int base=0;
+  unsigned int base=0;
   for(int j=0;j<ACK_BASE_COUNT;j++)
     base+=analogRead(CURRENT_MONITOR_PIN_PROG);
   base/=ACK_BASE_COUNT;

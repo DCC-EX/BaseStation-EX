@@ -19,7 +19,6 @@ Part of DCC++ EX BASE STATION for the Arduino
 
 #define VERSION "2.1.3"
 
-
 /////////////////////////////////////////////////////////////////////////////////////
 // AUTO-SELECT ARDUINO BOARD
 /////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +129,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 
   #define CURRENT_CONVERSION_FACTOR 465.00 // TODO verify this value
 
-  #elif MOTOR_SHIELD_TYPE == 3
+#elif MOTOR_SHIELD_TYPE == 3
 
   #define MOTOR_SHIELD_NAME "BTS7960B BASED MOTOR SHIELD 10A"
 
@@ -146,7 +145,7 @@ Part of DCC++ EX BASE STATION for the Arduino
   // (5/1024) /.0105 * 1000
   #define CURRENT_CONVERSION_FACTOR 465.00  // 456 * 100 so we can do integer math later 
 
-   #elif MOTOR_SHIELD_TYPE == 4
+ #elif MOTOR_SHIELD_TYPE == 4
    // uses current sense resister of 2.2 kOhms between pin 8 and ground.
    // The LMD18200 delivers 377uA per Amp of output current and will report
    // current over its rating of 3A up to 6A! We have to take this into consideration
@@ -231,5 +230,4 @@ Part of DCC++ EX BASE STATION for the Arduino
   #endif
 extern bool lcdEnabled;
 #endif
-
 #endif

@@ -127,13 +127,11 @@ int MotorBoard::getLastCurrent() {
 	// return true current in MilliAmps
 	// TODO Add JMRI feature to call this
 	return reading * currentConvFactor;
-
 }
 
 int MotorBoard::getTripMilliAmps() {
 	// return the value that will trip track shutoff for overcurrent
 	return tripCurrentReading * currentConvFactor;
-
 }
 
 int MotorBoard::getMaxMilliAmps() {
