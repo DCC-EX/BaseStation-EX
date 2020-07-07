@@ -2,7 +2,7 @@
 
 Before contributing to this repository, please first discuss the change you wish to make via issue, or any other method with the owners of this repository before making a change. 
 
-Find us on our Discord here: XXX or on Trainboard: https://www.trainboard.com/highball/index.php?threads/dcc-update-project-2020.130071/
+Find us on our Discord here: https://discord.gg/y2sB4Fp or on Trainboard: https://www.trainboard.com/highball/index.php?threads/dcc-update-project-2020.130071/
 
 # Development Environment
 
