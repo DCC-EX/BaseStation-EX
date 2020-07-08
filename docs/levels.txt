@@ -15,3 +15,5 @@ Tinkerer, Advanced, Builder
 Expert, Developer, Engineer, Wizard
 
 Paths: Basic/Starter, Advanced, Wizard
+
+Or just Basic User and Tinkerer? Or Basic and Advanced?
