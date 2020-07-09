@@ -1,4 +1,4 @@
-What’s DCC++ EX
+# What's DCC++ EX
 ------------
 
 DCC++ EX is an open-source hardware and software system for the operation of DCC-equipped model railroads. It expands on the work of Gregg E. Berman's original DCC++ (which can be found here in the BaseStation-Classic repository)
@@ -9,7 +9,7 @@ The DCC++ EX Base Station consists of an Arduino micro controller fitted with an
 
 The DCC++ Controller provides operators with a customizable GUI to control their model railroad.  It is written in Java using the Processing graphics library and IDE and communicates with the DCC++ EX Base Station via a standard serial connection over a USB cable or wireless over BlueTooth.
 
-What’s in this Repository
+# What’s in this Repository
 -------------------------
 
 This repository, BaseStation-EX, contains a complete DCC++ EX Base Station sketch designed for compiling and uploading into an Arduino Uno, Mega, or Nano.  All sketch files are in the folder named DCCppEX. More information about the sketch can be found in the included PDF file.
@@ -32,6 +32,15 @@ The Master branch contains all of the Base Station functionality showed in the D
 * An embedded AutoPilot routine that randomly selects a train to run through the entire layout, after which it is brought back into its original siding and the the patterns repeats with another randomly-selected train.  This is the AutoPilot routine showed on the DCC++ YouTube channel.  It does not require any computer, nor DCC++ Controller to be running (DCC++ Controller contains a much more complicated 3-train Auto Pilot mode, also as shown on the DCC++ YouTube channel).
 
 Since these modules are very layout-specififc, they are not included in the Master branch.  However, they are included in the Development branch.  Please feel free to download and copy any relevant code to customize your own version of DCC++ Base Station.
+
+# How to find more information
+--------------------------
+
+[DCC++ EX WEB Page](https://dcc-ex.github.io "DCC++ EX WEB Page")
+
+[The DCC++ EX Discord and live support](https://discord.gg/y2sB4Fp "The DCC++ EX Discord Server")
+
+[TrainBoard DCC++ Forum](https://www.trainboard.com/highball/index.php?forums/dcc.177/ "TrainBoard DCC++ Forum")
 
 -May 2020
 
