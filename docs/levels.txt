@@ -12,7 +12,7 @@ Basic, Beginner, Starter, Operator, User
 
 Tinkerer, Advanced, Builder
 
-Expert, Developer, Engineer, Wizard
+Not Sure about this role: Expert, Developer, Engineer, Wizard
 
 Paths: Basic/Starter, Advanced, Wizard
 
