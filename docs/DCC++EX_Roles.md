@@ -6,7 +6,8 @@ You could be someone new to the hobby or someone picking up the hobby up again a
 As an DCC++EX Engineer,you just want to drive trains and don't want to have to deal with the details of the hardware or software involved. This role keeps  things simple.  This is the perfect place for someone who just wants wants to have a holiday set or to spend time enjoying a model railroad with a child. 
 
 *(Click here to learn more about the DCC++EX Engineer Role.)*
-**Note - probably want to put this in the Engineering Role**Once you are running your DCC++EX model railroad, you may want to do more just run your trains in a loop.  When you are ready, you can  learn about the Java Model RailRoad Interface (JMRI). JMRI is another application that allows you to control additional features of your model railroad.  (Click HERE to learn about JMRI) 
+
+**Note - probably want to put this in the Engineering Role** Once you are running your DCC++EX model railroad, you may want to do more just run your trains in a loop.  When you are ready, you can  learn about the Java Model RailRoad Interface (JMRI). JMRI is another application that allows you to control additional features of your model railroad.  (Click HERE to learn about JMRI) 
 
 
 ### Tinkerer (or Maker) (gear logo?)- likes the joy of putting things together themselves and learning how things work. 
