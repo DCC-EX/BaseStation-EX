@@ -67,6 +67,7 @@ the directions of any Turnouts being monitored or controlled by a separate inter
 #include "EEStore.h"
 #include <EEPROM.h>
 #endif
+#include "networkFunctions.h"  // RF24
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -143,6 +144,7 @@ void Turnout::parse(const char *c){
   switch(sscanf(c,"%d %d %d",&n,&s,&m)){
 
     case 2:                     // argument is string with id number of turnout followed by zero (not thrown) or one (thrown)
+      sendPacket(master_node00, "1", String(n), String(m)); // RF24 Turnout function is always 1
       t=get(n);
       if(t!=NULL)
         t->activate(s);

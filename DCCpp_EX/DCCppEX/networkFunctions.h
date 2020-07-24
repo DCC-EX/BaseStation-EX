@@ -5,10 +5,13 @@
  * Supports Serial and nRF2401 Radio Communicataions
  * 
  */
+#ifndef networkfunctions_h
+#define networkfunctions_h
+
 #include <SPI.h>
 #include <RF24.h>
 #include <RF24Network.h>
-
+#include <Arduino.h>
 typedef struct PKT_DEF {
   String function; // String is part of RF24Network
   String option;
@@ -29,8 +32,7 @@ struct PKT_DEF parsePKT(String packet) {
  while(delimIndex >= 0) {
    switch(segment){
      case 1:
-       pkt.function = packet.substring(lastDelim + 1, delimIndex);
- 
+       pkt.function = packet.substring(lastDelim + 1, delimIndex); 
        break;
      case 2:
        pkt.option = packet.substring(lastDelim + 1, delimIndex);
@@ -52,9 +54,9 @@ struct PKT_DEF parsePKT(String packet) {
  }
  return pkt;
 }
+
 PKT_DEF pollNet(){
- 
-  //*******************
+//*******************
  extern RF24Network network;
   char packetBuffer[PACKET_MAX_SIZE + 1] = ""; // initialize buffer to hold packet
   bool pkt_received = false;
@@ -84,6 +86,8 @@ void sendMessage(uint16_t to_node, char *data, int bytes){
 //****************************
  extern RF24Network network;
   RF24NetworkHeader header(to_node);
+  Serial.println("network.write");  //TODO remove log lines
+  Serial.println(data);
   network.write(header, data, bytes); // Send the data
  }
 void sendPacket(uint16_t to_node, String function, String option, String data){
@@ -91,3 +95,5 @@ void sendPacket(uint16_t to_node, String function, String option, String data){
   String message = delimiter + function + delimiter + option + delimiter + data;
   sendMessage(to_node, message.c_str(), message.length());
 }
+
+#endif

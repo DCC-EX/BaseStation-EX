@@ -167,7 +167,6 @@ DCC++ EX BASE STATION is configured through the Config.h file that contains all 
 **********************************************************************/
 
 // BEGIN BY INCLUDING THE HEADER FILES FOR EACH MODULE
-
 #include "DCCppEX.h"
 #include "PacketRegister.h"
 #include "CurrentMonitor.h"
@@ -180,6 +179,7 @@ DCC++ EX BASE STATION is configured through the Config.h file that contains all 
 #include "CommInterfaceSerial.h"
 #include "CommInterfaceESP.h"
 #include "CommInterfaceEthernet.h"
+#include "networkFunctions.h" // TODO fnd remove
 
 #ifdef ENABLE_LCD
 bool lcdEnabled = false;
@@ -191,6 +191,7 @@ bool lcdEnabled = false;
 #endif
 
 void showConfiguration();
+//void pollRF24();
 
 // NEXT DECLARE GLOBAL OBJECTS TO PROCESS AND STORE DCC PACKETS AND MONITOR TRACK CURRENTS.
 // NOTE REGISTER LISTS MUST BE DECLARED WITH "VOLATILE" QUALIFIER TO ENSURE THEY ARE PROPERLY UPDATED BY INTERRUPT ROUTINES
@@ -198,6 +199,14 @@ void showConfiguration();
 volatile RegisterList mainRegs(MAX_MAIN_REGISTERS);    // create list of registers for MAX_MAIN_REGISTER Main Track Packets
 volatile RegisterList progRegs(2);                     // create a shorter list of only two registers for Program Track Packets
 
+#define SYS_ID "Child Node Framework" // RF24
+#define RF_VERSION "1.001.0001"  // have to rename this since DCC++ uses VERSION
+//const uint16_t this_node = 05;   // Node address referenced in networkFunctions.h
+//const uint16_t master_node00 = 00; 
+// init network objects
+RF24 radio(9, 10);               // nRF24L01 (CE,CSN)
+//RF24 radio(10, 9);             // Alt config
+RF24Network network(radio);      // Include the radio in the network
 
 ///////////////////////////////////////////////////////////////////////////////
 // MAIN ARDUINO LOOP
@@ -207,7 +216,7 @@ void loop(){
   CommManager::update();      // check for and process any new commands
   MotorBoardManager::check();
   Sensor::check();    // check sensors for activate/de-activate
-
+ // pollRF24(); // poll the RF24 network
 } // loop
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -215,20 +224,11 @@ void loop(){
 ///////////////////////////////////////////////////////////////////////////////
 
 void setup(){
-
-// RF24 **********
-// init network objects
-//RF24 radio(9, 10);               // nRF24L01 (CE,CSN)
-//RF24 radio(10, 9);             // Alt config
-//RF24Network network(radio);      // Include the radio in the network
-//SPI.begin();
-//radio.begin();
-//network.begin(90, this_node); //(channel, node address)
-//radio.setDataRate(RF24_2MBPS); // Max baud rate
-//#define SYS_ID "Child Node Framework"
-//#define RF_VERSION "1.001.0001"  // have to rename this since DCC++ uses VERSION
-// RF24 **********
-
+// RF 24 ///////////////////////////////
+SPI.begin();
+radio.begin();
+network.begin(90, this_node); //(channel, node address)
+radio.setDataRate(RF24_2MBPS); // Max baud rate
 
 #ifdef ENABLE_LCD
   Wire.begin();
@@ -524,7 +524,29 @@ ISR(TIMER3_COMPB_vect){              // set interrupt service for OCR3B of TIMER
 }
 
 #endif
+/**  
+void pollRF24(){
+PKT_DEF mypkt = pollNet();
+  String delimiter = F("/"); // Packet delimiter character
+  // process the packet
+  // pkt.function == 0 will fall through
+  int func = mypkt.function.toInt();
+  if (func) {
+    switch (func) {
+        case 1:
+        Serial.println(F("Turnout control requested."));
+        break;
 
+      case 255: // Received a Ping
+        Serial.println(String(F("Ping received from node ")) + String(mypkt.source_node, OCT) + String(F(" with confirmation code ")) + mypkt.option);
+        sendPacket(mypkt.source_node, "255", "255", mypkt.option);
+        break;
+      default:
+        Serial.println(String(F("Function ")) + mypkt.function + String(F(" requested by node ")) + String(mypkt.source_node, OCT) + String(F(" is currently unavailable.")));
+        break;
+    } // switch
+  } // if
+**/
 
 ///////////////////////////////////////////////////////////////////////////////
 // PRINT CONFIGURATION INFO TO SERIAL PORT REGARDLESS OF INTERFACE TYPE
