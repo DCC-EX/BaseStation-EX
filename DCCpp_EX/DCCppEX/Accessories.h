@@ -37,8 +37,8 @@ struct Turnout{
 void sendMessage(uint16_t to_node, char *data, unsigned int bytes); //RF24
 void sendPacket(uint16_t to_node, String function, String option, String data);
 
-const uint16_t this_node = 05;   // Node address referenced in networkFunctions.h
-const uint16_t master_node00 = 00; 
+const uint16_t this_node = 05;
+const uint16_t master_node00 = 00;
 
 #endif
 

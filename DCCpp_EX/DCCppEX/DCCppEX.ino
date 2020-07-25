@@ -564,10 +564,11 @@ void sendPacket(uint16_t to_node, String function, String option, String data){ 
 void sendMessage(uint16_t to_node, char *data, unsigned int bytes){ // RF24
 //****************************
   // extern RF24Network network;
-//  RF24NetworkHeader header(to_node);
+  RF24NetworkHeader header(to_node);
+  Serial.println("");
   Serial.println("write");  //TODO remove log lines
   Serial.println(data);
- // network.write(header, data, bytes); // Send the data
+  network.write(header, data, bytes); // Send the data
  }
 
 void showConfiguration(){
