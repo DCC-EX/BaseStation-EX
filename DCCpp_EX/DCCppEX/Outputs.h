@@ -7,7 +7,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 
 **********************************************************************/
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 #ifndef Outputs_h
 #define Outputs_h

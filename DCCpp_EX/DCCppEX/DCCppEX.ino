@@ -179,7 +179,10 @@ DCC++ EX BASE STATION is configured through the Config.h file that contains all 
 #include "CommInterfaceSerial.h"
 #include "CommInterfaceESP.h"
 #include "CommInterfaceEthernet.h"
-#include "networkFunctions.h" // TODO fnd remove
+#include <SPI.h> // RF24
+#include <RF24.h>
+#include <RF24Network.h>
+//#include "networkFunctions.h" // TODO fnd remove
 
 #ifdef ENABLE_LCD
 bool lcdEnabled = false;
@@ -199,14 +202,15 @@ void showConfiguration();
 volatile RegisterList mainRegs(MAX_MAIN_REGISTERS);    // create list of registers for MAX_MAIN_REGISTER Main Track Packets
 volatile RegisterList progRegs(2);                     // create a shorter list of only two registers for Program Track Packets
 
-#define SYS_ID "Child Node Framework" // RF24
-#define RF_VERSION "1.001.0001"  // have to rename this since DCC++ uses VERSION
-//const uint16_t this_node = 05;   // Node address referenced in networkFunctions.h
-//const uint16_t master_node00 = 00; 
+#define SYS_ID "CNF" // RF24
+#define RF_VERSION "1.1.0"  // have to rename this since DCC++ uses VERSION
+
 // init network objects
+// RF 24 ///////////////////////////////
 RF24 radio(9, 10);               // nRF24L01 (CE,CSN)
 //RF24 radio(10, 9);             // Alt config
 RF24Network network(radio);      // Include the radio in the network
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // MAIN ARDUINO LOOP
@@ -224,7 +228,7 @@ void loop(){
 ///////////////////////////////////////////////////////////////////////////////
 
 void setup(){
-// RF 24 ///////////////////////////////
+
 SPI.begin();
 radio.begin();
 network.begin(90, this_node); //(channel, node address)
@@ -550,7 +554,21 @@ PKT_DEF mypkt = pollNet();
 
 ///////////////////////////////////////////////////////////////////////////////
 // PRINT CONFIGURATION INFO TO SERIAL PORT REGARDLESS OF INTERFACE TYPE
-// - ACTIVATED ON STARTUP IF SHOW_CONFIG_DETAIL_PIN IS TIED TO GROUND
+
+void sendPacket(uint16_t to_node, String function, String option, String data){ //F24
+  String delimiter = F("/"); // Packet delimiter character
+  String message = delimiter + function + delimiter + option + delimiter + data;
+  sendMessage(to_node, message.c_str(), message.length());
+}
+
+void sendMessage(uint16_t to_node, char *data, unsigned int bytes){ // RF24
+//****************************
+  // extern RF24Network network;
+//  RF24NetworkHeader header(to_node);
+  Serial.println("write");  //TODO remove log lines
+  Serial.println(data);
+ // network.write(header, data, bytes); // Send the data
+ }
 
 void showConfiguration(){
   Serial.print(F("\n*** DCC++ EX CONFIGURATION ***\n"));

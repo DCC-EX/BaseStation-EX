@@ -10,7 +10,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 #ifndef Sensor_h
 #define Sensor_h
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 #define  SENSOR_DECAY  0.03
 

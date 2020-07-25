@@ -10,7 +10,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 #ifndef CurrentMonitor_h
 #define CurrentMonitor_h
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 enum MOTOR_BOARD_TYPE { ARDUINO_SHIELD, POLOLU, BTS7960B_5A, BTS7960B_10A, LMD18200, LMD18200_MAX471 };
 

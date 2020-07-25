@@ -174,7 +174,3 @@ Part of DCC++ EX BASE STATION for the Arduino
 	// This defines the number of lines the LCD device has
 	#define LCD_LINES 2
 #endif
-
-// RF24 ///////////////////////////////////////////////////////
-#define this_node 5   // Node address referenced in networkFunctions.h
-#define master_node00 0

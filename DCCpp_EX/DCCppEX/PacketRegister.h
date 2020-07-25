@@ -10,7 +10,7 @@ Part of DCC++ EX BASE STATION for the Arduino
 #ifndef PacketRegister_h
 #define PacketRegister_h
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 // Define constants used for reading CVs from the Programming Track
 
