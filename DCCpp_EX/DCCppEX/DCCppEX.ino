@@ -564,11 +564,18 @@ void sendPacket(uint16_t to_node, String function, String option, String data){ 
 void sendMessage(uint16_t to_node, char *data, unsigned int bytes){ // RF24
 //****************************
   // extern RF24Network network;
+  bool result;
   RF24NetworkHeader header(to_node);
-  Serial.println("");
-  Serial.println("write");  //TODO remove log lines
-  Serial.println(data);
-  network.write(header, data, bytes); // Send the data
+ // Serial.println(data);
+  result = network.write(header, data, bytes); // Send the data
+  if (result) {
+    CommManager::printf("<H %s>", data); // return < H ID THROW > 
+    // CommManager::printf("<N1: %d.%d.%d.%d>", _localAddress[0], _localAddress[1], _localAddress[2], _localAddress[3]);
+  }
+  else {
+    CommManager::printf("<X>");
+  }
+  
  }
 
 void showConfiguration(){
