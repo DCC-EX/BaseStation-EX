@@ -1,3 +1,5 @@
+## PLEASE NOTE: All future development is on the CommandStation-EX repository. This is maintained here for historical reasons
+
 # What's DCC++ EX
 ------------
 
