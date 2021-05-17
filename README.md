@@ -1,6 +1,8 @@
 > **WARNING**: This is an old repository containing a partial re-write of DCC++ EX. It is maintained for  
 > historical reasons, and is not developed or bug-fixed. Please use https://github.com/DCC-EX/CommandStation-EX
 
+# DO NOT DOWNLOAD FROM THIS REPOSITORY, SEE COMMANDSTATION-EX INSTEAD
+
 # What's DCC++ EX
 
 DCC++ EX is an open-source hardware and software system for the operation of DCC-equipped model railroads. It expands on the work of Gregg E. Berman's original DCC++ (which can be found here in the BaseStation-Classic repository)
@@ -13,11 +15,11 @@ The DCC++ Controller provides operators with a customizable GUI to control their
 
 # What’s in this Repository
 
-This repository, BaseStation-EX, contains a complete DCC++ EX Base Station sketch designed for compiling and uploading into an Arduino Uno, Mega, or Nano.  All sketch files are in the folder named DCCppEX. More information about the sketch can be found in the included PDF file.
+This repository, BaseStation-EX, contains a the first version of DCC-EX, itself a continuation of the original DCC++ project, which has now been completely rewritten as DCC++ EX in the CommandStation-EX repository. It is a complete DCC++ EX Base Station sketch designed for compiling and uploading into an Arduino Uno, Mega, or Nano.  All sketch files are in the folder named DCCppEX. More information about the sketch can be found in the included PDF file.
 
 To utilize this sketch, simply download a zip file of this repository and open the file DCCppEX.ino within the DCCppEX folder using your Arduino IDE.  Please do not rename the folder containing the sketch code, nor add any files to that folder.  The Arduino IDE relies on the structure and name of the folder to properly display and compile the code.
 
-The latest production release of the Master branch is 2.0.1:
+The last production release of the Master branch is 2.0.1:
 
 * Supports the Arduino Uno, Arduino Mega, and Arduino Nano
 * Built-in configuration for both the original Arduino Motor Shield, Pololu MC33926 Motor Shield, LMD18200, and BTS7960B
@@ -34,5 +36,5 @@ The Master branch contains all of the Base Station functionality showed in the D
 
 Since these modules are very layout-specific, they are not included in the Master branch.  However, they are included in the Development branch.  Please feel free to download and copy any relevant code to customize your own version of DCC++ Base Station.
 
--May 2020 (Updated November 2020)
+-May 2020 (Updated November 2020) There will be no further updates, see https://github.com/DCC-EX/CommandStation-EX instead
 
